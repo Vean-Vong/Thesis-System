@@ -1,0 +1,265 @@
+<template>
+  <div class="q-pa-md">
+    <q-layout view="lHh Lpr lff" container style="height: 300px" class="shadow-2 rounded-borders">
+      <q-header elevated class="bg-cyan-8">
+        <q-toolbar>
+          <q-toolbar-title>Header</q-toolbar-title>
+          <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        </q-toolbar>
+      </q-header>
+
+      <q-drawer
+        v-model="drawer"
+        show-if-above
+        :width="200"
+        :breakpoint="400"
+      >
+      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px; border-right: 1px solid #ddd">
+                <q-list padding>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="inbox" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Inbox
+                        </q-item-section>
+                    </q-item>
+
+                    <q-item active clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="star" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Star
+                        </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="send" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Send
+                        </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="drafts" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Drafts
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </q-scroll-area>
+
+            <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+                <div class="absolute-bottom bg-transparent">
+                    <q-avatar size="56px" class="q-mb-sm">
+                        <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                    </q-avatar>
+                    <div class="text-weight-bold">Razvan Stoenescu</div>
+                    <div>@rstoenescu</div>
+                </div>
+            </q-img>
+        </q-drawer>
+        <q-drawer class="fixed" show-if-above v-model="leftDrawerOpen" side="left" bordered :width="200">
+            <q-scroll-area style="height: calc(100% - 150px); margin-top: 135px; border-right 0px solid #ddd">
+                <q-list padding class="q-pr-md">
+                    <q-expansion-item expand-separator icon="home" label="Class">
+                        <q-card>
+                            <q-card-section>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos
+                                corrupti
+                                commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit
+                                iste
+                                eveniet doloribus ullam aliquid.
+                            </q-card-section>
+                        </q-card>
+                    </q-expansion-item>
+                    <q-item clickable v-ripple :to="{ name: 'home' }">
+                        <q-item-section avatar>
+                            <q-icon name=" home" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Dashboard
+                        </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="dataset" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Classes
+                        </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-ripple :to="{ name: 'subject.index' }">
+                        <q-item-section avatar>
+                            <q-icon name="menu_book" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Subjects
+                        </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="groups_3" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Teacher
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="diversity_3" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Students
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="schedule_send" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Years
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="calendar_month" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Months
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="alarm_on" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Time
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="credit_score" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Score
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="checklist" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Attendence
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="gpp_good" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Role
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="settings" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Setting
+                        </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                            <q-icon name="logout" />
+                        </q-item-section>
+
+                        <q-item-section>
+                            Log-out
+                        </q-item-section>
+                    </q-item>
+
+                </q-list>
+            </q-scroll-area>
+
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+          <div class="absolute-bottom bg-transparent">
+            <q-avatar size="56px" class="q-mb-sm">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+            <div class="text-weight-bold">Razvan Stoenescu</div>
+            <div>@rstoenescu</div>
+          </div>
+        </q-img>
+      </q-drawer>
+
+      <q-page-container>
+        <q-page padding>
+          <p v-for="n in 15" :key="n">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit nihil praesentium molestias a adipisci, dolore vitae odit, quidem consequatur optio voluptates asperiores pariatur eos numquam rerum delectus commodi perferendis voluptate?
+          </p>
+        </q-page>
+      </q-page-container>
+    </q-layout>
+  </div>
+</template>
+
+<!-- table -->
+ <div class="q-pa-md">
+            <div class="bg-primary text-white shadow-1 text-bold rounded-borders q-px-sm q-py-xs text-h6 text-capitalize">
+                Role
+            </div>
+            <br>
+            <q-card>
+                <div class="q-pa-md">
+                    <div>
+                        <q-btn :to="{ name: 'role.create' }" class="q-pr-sm" unelevated color="primary" dense>
+                            <q-icon name="add" />
+                            Create
+                        </q-btn>
+                    </div>
+                    <div class="q-mt-md">
+                        <q-table class="shadow-0 bg-blue-1" :rows="rows" :columns="columns">
+                            <template v-slot:body-cell-action="props">
+                                <q-td :props="props">
+                                    <div>
+                                        <q-btn icon="edit" @click="onEdit(props.row.id)" color="primary" dense flat>
+                                            <q-tooltip class="bg-primary">Edit</q-tooltip>
+                                        </q-btn>
+                                        <q-btn icon="delete" @click="onDelet(props.row.id)" color="red" dense flat>
+                                            <q-tooltip class="bg-red">delete</q-tooltip>
+                                        </q-btn>
+                                    </div>
+                                </q-td>
+                            </template>
+                        </q-table>
+                    </div>
+                </div>
+            </q-card>
+</div>
+    
+
