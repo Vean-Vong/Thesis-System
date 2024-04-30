@@ -1,21 +1,19 @@
 export default class User {
 
     constructor(data) {
-        this.id = data.user.id;
-        this.name = data.user.name;      
-        this.email = data.user.email;    
-        this.owner = data.user.owner;        
-        this.admin = data.user.is_admin;
-        this.organization = data.user.organization
-        this.roles = data.user.roles;
-        this.permissions = data.user.permissions;
-        this.is_school = data.user.is_school;
+        this.id = data?.id;
+        this.username = data?.username;      
+        this.email = data?.email;    
+        this.owner = data?.owner;        
+        this.admin = data?.is_admin;
+        this.roles = data?.roles;
+        this.permissions = data?.permissions;
     }
 
     can(action) {
         let result = false;         
-        this.permissions.forEach(element => {                                    
-            if(element.name.includes(action) === true) {                                             
+        this.permissions?.forEach(element => {                                    
+            if(element.name == action) {                                             
                 result = true;
             }            
         });

@@ -12,23 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * This example uses Iconify Tools to import and clean up icons.
  * For Iconify Tools documentation visit https://docs.iconify.design/tools/tools2/
  */
-const fs_1 = require("fs");
-const path_1 = require("path");
+const node_fs_1 = require("node:fs");
+const node_path_1 = require("node:path");
 // Installation: npm install --save-dev @iconify/tools @iconify/utils @iconify/json @iconify/iconify
 const tools_1 = require("@iconify/tools");
 const utils_1 = require("@iconify/utils");
 const sources = {
     svg: [
-    // {
-    //   dir: 'svg',
-    //   monotone: true,
-    //   prefix: 'custom',
-    // },
-    // {
-    //   dir: 'emojis',
-    //   monotone: false,
-    //   prefix: 'emoji',
-    // },
+        {
+            dir: 'src/assets/images/iconify-svg',
+            monotone: false,
+            prefix: 'custom',
+        },
+        // {
+        //   dir: 'emojis',
+        //   monotone: false,
+        //   prefix: 'emoji',
+        // },
     ],
     icons: [
     // 'mdi:home',
@@ -42,7 +42,16 @@ const sources = {
         // Custom JSON file
         // 'json/gg.json',
         // Iconify JSON file (@iconify/json is a package name, /json/ is directory where files are, then filename)
-        require.resolve('@iconify-json/mdi/icons.json'),
+        require.resolve('@iconify-json/tabler/icons.json'),
+        {
+            filename: require.resolve('@iconify-json/fa/icons.json'),
+            icons: [
+                'facebook',
+                'google',
+                'twitter',
+                'circle',
+            ],
+        },
         // Custom file with only few icons
         // {
         //   filename: require.resolve('@iconify-json/line-md/icons.json'),
@@ -62,7 +71,7 @@ const component = '@iconify/vue';
 // Set to true to use require() instead of import
 const commonJS = false;
 // File to save bundle to
-const target = 'src/@iconify/icons-bundle.js';
+const target = (0, node_path_1.join)(__dirname, 'icons-bundle.js');
 /**
  * Do stuff!
  */
@@ -72,9 +81,9 @@ const target = 'src/@iconify/icons-bundle.js';
         ? `const { addCollection } = require('${component}');\n\n`
         : `import { addCollection } from '${component}';\n\n`;
     // Create directory for output if missing
-    const dir = (0, path_1.dirname)(target);
+    const dir = (0, node_path_1.dirname)(target);
     try {
-        await fs_1.promises.mkdir(dir, {
+        await node_fs_1.promises.mkdir(dir, {
             recursive: true,
         });
     }
@@ -104,7 +113,7 @@ const target = 'src/@iconify/icons-bundle.js';
             const item = sources.json[i];
             // Load icon set
             const filename = typeof item === 'string' ? item : item.filename;
-            let content = JSON.parse(await fs_1.promises.readFile(filename, 'utf8'));
+            let content = JSON.parse(await node_fs_1.promises.readFile(filename, 'utf8'));
             // Filter icons
             if (typeof item !== 'string' && item.icons?.length) {
                 const filteredContent = (0, utils_1.getIcons)(content, item.icons);
@@ -114,6 +123,12 @@ const target = 'src/@iconify/icons-bundle.js';
             }
             // Remove metadata and add to bundle
             removeMetaData(content);
+            for (const key in content) {
+                if (key === 'prefix' && content.prefix === 'tabler') {
+                    for (const k in content.icons)
+                        content.icons[k].body = content.icons[k].body.replace(/stroke-width="2"/g, 'stroke-width="1.5"');
+                }
+            }
             (0, utils_1.minifyIconSet)(content);
             bundle += `addCollection(${JSON.stringify(content)});\n`;
             console.log(`Bundled icons from ${filename}`);
@@ -150,7 +165,7 @@ const target = 'src/@iconify/icons-bundle.js';
                         await (0, tools_1.parseColors)(svg, {
                             defaultColor: 'currentColor',
                             callback: (attr, colorStr, color) => {
-                                return !color || (0, tools_1.isEmptyColor)(color)
+                                return (!color || (0, tools_1.isEmptyColor)(color))
                                     ? colorStr
                                     : 'currentColor';
                             },
@@ -175,7 +190,7 @@ const target = 'src/@iconify/icons-bundle.js';
         }
     }
     // Save to file
-    await fs_1.promises.writeFile(target, bundle, 'utf8');
+    await node_fs_1.promises.writeFile(target, bundle, 'utf8');
     console.log(`Saved ${target} (${bundle.length} bytes)`);
 })().catch(err => {
     console.error(err);

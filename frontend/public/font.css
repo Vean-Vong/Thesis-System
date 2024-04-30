@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "khmef2";
+  src: url("/font/KHMERMEF2.ttf");
+}
+
+.fontKMEF2 {
+  font-family: "khmef2" !important;
+}
+
+@font-face {
+  font-family: "khsieamreap";
+  src: url("/font/KHMEROSSIEMREAP.TTF");
+}
+
+.fontKSR {
+  font-family: "khsieamreap" !important;
+}
+
+@font-face {
+  font-family: "khbattambang";
+  src: url("/font/KHMEROSBATTAMBANG.TTF");
+}
+
+.fontKBTB {
+  font-family: "khbattambang" !important;
+}
+
+@font-face {
+  font-family: "tacteng";
+  src: url("/font/TACTENG.TTF");
+}
+
+.fontTacTeng {
+  font-family: "tacteng" !important;
+}

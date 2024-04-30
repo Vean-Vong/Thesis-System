@@ -1,19 +1,32 @@
+<script setup>
+const vm = getCurrentInstance()
+const buyNowUrl = ref(vm?.appContext.config.globalProperties.buyNowUrl || 'https://1.envato.market/vuexy_admin')
+
+watch(buyNowUrl, val => {
+  if (vm)
+    vm.appContext.config.globalProperties.buyNowUrl = val
+})
+</script>
+
 <template>
   <VBtn
+    id="buy-now-btn"
     color="error"
     class="product-buy-now"
-    href="https://themeselection.com/item/materio-vuetify-vuejs-admin-template/"
+    :href="buyNowUrl"
     target="_blank"
     rel="noopener noreferrer"
   >
-    Upgrade to Pro
+    Buy Now
   </VBtn>
 </template>
 
 <style lang="scss" scoped>
 .product-buy-now {
   position: fixed;
-  z-index: 4;
+
+  // To keep buy now button on top of v-layout. E.g. Email app
+  z-index: 999;
   inset-block-end: 5%;
   inset-inline-end: 79px;
 

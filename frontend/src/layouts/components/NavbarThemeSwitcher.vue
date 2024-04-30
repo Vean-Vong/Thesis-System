@@ -1,12 +1,16 @@
 <script setup>
 const themes = [
   {
+    name: 'system',
+    icon: 'tabler-device-laptop',
+  },
+  {
     name: 'light',
-    icon: 'mdi-weather-sunny',
+    icon: 'tabler-sun-high',
   },
   {
     name: 'dark',
-    icon: 'mdi-weather-night',
+    icon: 'tabler-moon',
   },
 ]
 </script>

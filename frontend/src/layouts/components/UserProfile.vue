@@ -1,31 +1,17 @@
 <script setup>
-import avatar1 from "@/assets/images/avatars/avatar-1.png";
-import { useAuthStore } from "@/store/module/auth.module";
-import constant from "@/constants";
-const store = useAuthStore();
-const avatarBadgeProps = {
-  dot: true,
-  location: "bottom right",
-  offsetX: 3,
-  offsetY: 3,
-  color: "success",
-  bordered: true,
-};
+import { useAuthStore } from "@/plugins/auth.module";
+import avatar1 from "@images/avatars/avatar-1.png";
+const user = useAuthStore().user;
 const onLogout = () => {
-  store.logout();
+  useAuthStore().logout();
 };
 </script>
 
 <template>
-  <VBadge v-bind="avatarBadgeProps">
-    <VAvatar style="cursor: pointer" color="primary" variant="tonal">
-      <!-- <VImg :src="avatar1" /> -->
-      <template v-if="store._user.photo_path">
-        <VImg :src="constant.storagePath + store._user.photo_path" />
-      </template>
-      <template v-else>
-        <VImg :src="avatar1" />
-      </template>
+  <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
+    <VAvatar class="cursor-pointer" color="primary" variant="tonal">
+      <VImg :src="avatar1" />
+
       <!-- SECTION Menu -->
       <VMenu activator="parent" width="230" location="bottom end" offset="14px">
         <VList>
@@ -33,48 +19,47 @@ const onLogout = () => {
           <VListItem>
             <template #prepend>
               <VListItemAction start>
-                <VBadge v-bind="avatarBadgeProps">
-                  <VAvatar color="primary" size="40" variant="tonal">
-                    <template v-if="store._user.photo_path">
-                      <VImg :src="constant.storagePath + store._user.photo_path" />
-                    </template>
-                    <template v-else>
-                      <VImg :src="avatar1" />
-                    </template>
+                <VBadge
+                  dot
+                  location="bottom right"
+                  offset-x="3"
+                  offset-y="3"
+                  color="success"
+                >
+                  <VAvatar color="primary" variant="tonal">
+                    <VImg :src="avatar1" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              {{ store._user.username }}
+              {{ user.username }}
             </VListItemTitle>
-            <VListItemSubtitle class="text-disabled">
-              {{ store._user.email }}
-            </VListItemSubtitle>
+            <VListItemSubtitle>{{ user.email }}</VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem link to="/account-settings">
+          <VListItem link to="/settings/account-settings">
             <template #prepend>
-              <VIcon class="me-2" icon="mdi-account-outline" size="22" />
+              <VIcon class="me-2" icon="mdi-cog" size="22" />
             </template>
 
-            <VListItemTitle>ព័ត៌មានផ្ទាល់ខ្លួន</VListItemTitle>
+            <VListItemTitle>{{ $t("Preference Settings") }}</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem @click="onLogout">
+          <VListItem @click.prevent="onLogout">
             <template #prepend>
-              <VIcon class="me-2" icon="mdi-logout-variant" size="22" />
+              <VIcon class="me-2" icon="tabler-logout" size="22" />
             </template>
 
-            <VListItemTitle>ចាកចេញ</VListItemTitle>
+            <VListItemTitle>{{ $t("Logout") }}</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>

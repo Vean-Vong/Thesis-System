@@ -9,6 +9,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AcademicClassController;
+use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExamController;
@@ -27,6 +28,8 @@ use App\Http\Controllers\TeacherController;
 */
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('refresh', [AuthController::class, 'refresh']);
+Route::post('app-settings-verify', [AppSettingController::class, 'verifySetting']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 

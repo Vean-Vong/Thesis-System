@@ -1,7 +1,6 @@
 <script setup>
-import { useTheme } from 'vuetify'
-import { useMainStore } from '@/store/main'
-const store = useMainStore()
+import { useThemeConfig } from '@core/composable/useThemeConfig'
+
 const props = defineProps({
   themes: {
     type: Array,
@@ -9,39 +8,36 @@ const props = defineProps({
   },
 })
 
-const vuetifyTheme = useTheme()
+const { theme } = useThemeConfig()
+
 const {
-  state: currentTheme,
+  state: currentThemeName,
   next: getNextThemeName,
   index: currentThemeIndex,
-} = useCycleList(props.themes.map(t => t.name), { initialValue: vuetifyTheme.global.name.value })
+} = useCycleList(props.themes.map(t => t.name), { initialValue: theme.value })
+
 const changeTheme = () => {
-  vuetifyTheme.global.name.value = getNextThemeName()
-
+  theme.value = getNextThemeName()
 }
-const getThemeIcon = computedWithControl(vuetifyTheme.global.name, () => {
-  const nextThemeIndex = currentThemeIndex.value + 1 === props.themes.length ? 0 : currentThemeIndex.value + 1
 
-  return props.themes[nextThemeIndex].icon
-})
-watch(vuetifyTheme.global.name, val => {
-  currentTheme.value = val 
-  store.setDarkMode(val)
- 
+// Update icon if theme is changed from other sources
+watch(theme, val => {
+  currentThemeName.value = val
 })
 </script>
 
 <template>
-  <VBtn
-    icon
-    variant="text"
-    color="default"
-    size="small"
-    @click="changeTheme"
-  >
+  <IconBtn @click="changeTheme">
     <VIcon
-      :icon="getThemeIcon"
-      size="24"
+      size="26"
+      :icon="props.themes[currentThemeIndex].icon"
     />
-  </VBtn>
+    <VTooltip
+      activator="parent"
+      open-delay="1000"
+      scroll-strategy="close"
+    >
+      <span class="text-capitalize">{{ currentThemeName }}</span>
+    </VTooltip>
+  </IconBtn>
 </template>

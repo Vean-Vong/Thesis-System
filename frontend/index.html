@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./src/assets/images/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/loader.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <!-- <link rel="icon" href="/favicon.ico" /> -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ប្រព័ន្ធគ្រប់គ្រងសាលារៀន</title>
-  <link rel="stylesheet" type="text/css" href="/loader.css" />
-</head>
-
-<body>
-  <div id="app">
-    <div id="loading-bg">
-      <!-- <div class="loading-logo">
-        <img src="/frontend//public" height="50" alt="Logo" />
-      </div> -->
-      <div class="loading">
-        <div class="effect-1 effects"></div>
-        <div class="effect-2 effects"></div>
-        <div class="effect-3 effects"></div>
+  <body>
+    <div id="app">
+      <div id="loading-bg" style="display: flex; gap: 5px">
+        <div class="loading-logo">
+          <img width="74" src="./src//assets/images/logo.png" alt="" />
+        </div>
+        <div class="loading">
+          <div class="effect-1 effects"></div>
+          <div class="effect-2 effects"></div>
+          <div class="effect-3 effects"></div>
+        </div>
       </div>
     </div>
-  </div>
-  <script type="module" src="/src/main.js"></script>
-  <script>
-    const loaderColor = localStorage.getItem('Materio-initial-loader-bg') || '#FFFFFF'
-    const primaryColor = localStorage.getItem('Materio-initial-loader-color') || '#9155FD'
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      const loaderColor =
+        localStorage.getItem("vuexy-initial-loader-bg") || "#FFFFFF";
+      const primaryColor =
+        localStorage.getItem("vuexy-initial-loader-color") || "#7367F0";
 
-    if (loaderColor)
-      document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
-    if (primaryColor)
-      document.documentElement.style.setProperty('--initial-loader-color', primaryColor)
+      if (loaderColor)
+        document.documentElement.style.setProperty(
+          "--initial-loader-bg",
+          loaderColor
+        );
 
-  </script>
-</body>
-
+      if (primaryColor)
+        document.documentElement.style.setProperty(
+          "--initial-loader-color",
+          primaryColor
+        );
+    </script>
+  </body>
 </html>

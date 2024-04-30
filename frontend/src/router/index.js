@@ -1,58 +1,38 @@
-import { setupLayouts } from 'virtual:generated-layouts'
-import { createRouter, createWebHistory } from 'vue-router'
-import routes from '~pages'
-import { useAuthStore } from '../store/module/auth.module'
+import { setupLayouts } from "virtual:generated-layouts";
+import { createRouter, createWebHistory } from "vue-router";
+import routes from "~pages";
+import { isUserLoggedIn } from "./utils";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    ...setupLayouts(routes),
-    {
-      path: '/request-update/preview/birth/:id',
-      name: 'birth.preview',
-      component: () => import('../views/preview/birth/[id].vue')
-    },
-    {
-      path: '/request-update/preview/birth-copy/:id',
-      name: 'birth-copies.preview',
-      component: () => import('../views/preview/birth-copy/[id].vue')
-    },
-    {
-      path: '/request-update/preview/married/:id',
-      name: 'married.preview',
-      component: () => import('../views/preview/married/[id].vue')
-    },
-    {
-      path: '/request-update/preview/married-copy/:id',
-      name: 'married-copy.preview',
-      component: () => import('../views/preview/married-copy/[id].vue')
-    },
-    {
-      path: '/request-update/preview/death/:id',
-      name: 'death.preview',
-      component: () => import('../views/preview/death/[id].vue')
-    },
-    {
-      path: '/request-update/preview/death-copy/:id',
-      name: 'death-copy.preview',
-      component: () => import('../views/preview/death-copy/[id].vue')
-    },
-    
-  ],
-  scrollBehavior() {
-    return { top: 0 }
-  },
-})
+  routes: [...setupLayouts(routes)],
+});
 
-router.beforeEach((to, from, next) => {
-  const guestRoute = ['login', 'register']  
-  if (useAuthStore().authenticated && useAuthStore().accessToken) {
-      if (guestRoute.includes(to.name)) next({ name: 'index' })
-      else next()
+// Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
+router.beforeEach((to) => {
+  const isLoggedIn = isUserLoggedIn();
+
+  document.title = to.meta.title + " - AVEC";
+  
+  if (isLoggedIn) {
+    if (to.name == "login" || to.path == "/") {
+      // if (canNavigate(to)) {
+      //   if (to.meta.redirectIfLoggedIn) return "/";
+      // } else {
+      //   if (isLoggedIn) return { name: "not-authorized" };
+      //   else
+      //     return {
+      //       name: "login",
+      //       query: { to: to.name !== "index" ? to.fullPath : undefined },
+      //     };
+      // }
+      return { name: "dashboards" };
+    }
   } else {
-      if (guestRoute.includes(to.name)) next()
-      else next({ name: 'login' })
+    if (to.name != "login") {
+      return { name: "login" };
+    }
   }
-})
+});
 
-
-export default router
+export default router;

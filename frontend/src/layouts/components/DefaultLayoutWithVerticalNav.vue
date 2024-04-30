@@ -1,83 +1,93 @@
 <script setup>
-import DrawerContent from "./DrawerContent.vue";
-import { VerticalNavLayout } from "@layouts";
+import navItems from "@/navigation/vertical";
+import { useThemeConfig } from "@core/composable/useThemeConfig";
 
 // Components
 import Footer from "@/layouts/components/Footer.vue";
+import NavBarI18n from "@/layouts/components/NavBarI18n.vue";
+import NavBarNotifications from "@/layouts/components/NavBarNotifications.vue";
+import NavbarShortcuts from "@/layouts/components/NavbarShortcuts.vue";
 import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
+import AppLoading from "@/layouts/components/AppLoading.vue";
+
+// import NavSearchBar from '@/layouts/components/NavSearchBar.vue'
 import UserProfile from "@/layouts/components/UserProfile.vue";
-import { useAuthStore } from "@/store/module/auth.module";
+import { useAuthStore } from "@/plugins/auth.module";
+
+// @layouts plugin
+import { VerticalNavLayout } from "@layouts";
+import router from "@/router";
+
+const setting = useAuthStore().setting;
+
+const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig();
+const { width: windowWidth } = useWindowSize();
 </script>
 
 <template>
-  <VerticalNavLayout>
+  <VerticalNavLayout :nav-items="navItems">
     <!-- 👉 navbar -->
-    <template #navbar>
-      <h1
-        class="font-weight-semibold leading-normal text-xl text-uppercase muol-light text-success"
-      >
-        ប្រព័ន្ធគ្រប់គ្រងសាលារៀន
-      </h1>
-      <VSpacer />
-      <NavbarThemeSwitcher />
-      <!-- <VBtn icon variant="text" color="default" class="me-2" size="small">
-        <VIcon icon="mdi-bell-outline" size="24" />
-      </VBtn> -->
-      <UserProfile />
-    </template>
+    <template #navbar="{ toggleVerticalOverlayNavActive }">
+      <div class="d-flex h-100 align-center">
+        <IconBtn
+          v-if="isLessThanOverlayNavBreakpoint(windowWidth)"
+          id="vertical-nav-toggle-btn"
+          class="ms-n3"
+          @click="toggleVerticalOverlayNavActive(true)"
+        >
+          <VIcon size="26" icon="tabler-menu-2" />
+        </IconBtn>
 
-    <!-- 👉 Drawer content -->
-    <template #navigation-drawer-content>
-      <DrawerContent />
+        <!-- <NavSearchBar class="ms-lg-n3" /> -->
+        <p
+          style="margin: 0 auto"
+          :class="[
+            $i18n.locale == 'en' ? 'font-weight-bold' : '',
+            'text-h5 textNavHeader text-primary fontKMEF2',
+          ]"
+        >
+          {{ $i18n.locale == "en" ? setting?.name_en : setting?.name_kh }}
+        </p>
+
+        <VSpacer />
+
+        <NavBarI18n class="me-1" />
+        <NavbarThemeSwitcher class="me-1" />
+        <!-- <NavbarShortcuts class="me-1" /> -->
+        <!-- <NavBarNotifications class="me-2" /> -->
+        <UserProfile />
+      </div>
     </template>
 
     <!-- 👉 Pages -->
-    <div class="layout-page-content">
-      <router-view v-slot="{ Component, route }">
-        <transition name="slide-x-transition" mode="out-in">
-          <div :key="route.name">
-            <component :is="Component"></component>
-          </div>
-        </transition>
-      </router-view>
-    </div>
+    <RouterView v-slot="{ Component }">
+      <Transition :name="appRouteTransition" mode="out-in">
+        <div
+          :class="[$i18n.locale == 'en' ? '' : 'fontKBTB']"
+          :style="[$i18n.locale == 'en' ? '' : 'font-size: 13.5px']"
+        >
+          <Component :is="Component" />
+        </div>
+      </Transition>
+    </RouterView>
 
     <!-- 👉 Footer -->
     <template #footer>
       <Footer />
     </template>
+
+    <!-- 👉 Customizer -->
+    <!-- <TheCustomizer /> -->
+
+    <!-- 👉 Loading -->
+    <!-- <AppLoading /> -->
   </VerticalNavLayout>
 </template>
 
-<style lang="scss">
-.app-bar-search {
-  .v-input__control {
-    width: 236px;
+<style scoped>
+@media screen and (max-width: 600px) {
+  .textNavHeader {
+    display: none;
   }
-
-  .v-field__outline__start {
-    border-radius: 28px 0 0 28px !important;
-    flex-basis: 20px !important;
-  }
-
-  .v-field__outline__end {
-    border-radius: 0 28px 28px 0 !important;
-  }
-}
-.line {
-  background: linear-gradient(270deg, rgb(var(--v-theme-success)) 0%, white 300%);
-  color: rgb(var(--v-theme-on-success));
-  box-shadow: 0px 3px 3px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
-    0px 3px 4px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
-    0px 1px 8px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12));
-}
-
-.v-text-field input {
-  line-height: normal !important;
-}
-
-.v-card-title {
-  line-height: normal !important;
-  font-weight: bold !important;
 }
 </style>
