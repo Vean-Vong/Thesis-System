@@ -1,19 +1,19 @@
 <script setup>
-import AppDataTable from "@/components/AppDataTable.vue";
-import api from "@/plugins/utilites";
-import router from "@/router";
-import { onMounted } from "vue";
-import { useAuthStore } from "@/plugins/auth.module";
-import ConfirmDialog from "@/components/ConfirmDialog.vue";
-const user = useAuthStore().user;
-const { t } = useI18n();
-const items = ref([]);
-const loading = ref(false);
+import AppDataTable from "@/components/AppDataTable.vue"
+import api from "@/plugins/utilites"
+import router from "@/router"
+import { onMounted } from "vue"
+import { useAuthStore } from "@/plugins/auth.module"
+import ConfirmDialog from "@/components/ConfirmDialog.vue"
+const user = useAuthStore().user
+const { t } = useI18n()
+const items = ref([])
+const loading = ref(false)
 
-const search = ref(null);
-const delete_item = ref(null);
-const deleting = ref(false);
-const dialog = ref(false);
+const search = ref(null)
+const delete_item = ref(null)
+const deleting = ref(false)
+const dialog = ref(false)
 
 const meta = ref({
   current_page: 1,
@@ -22,28 +22,28 @@ const meta = ref({
   per_page: 15,
   to: 1,
   total: 0,
-});
+})
 
 const initData = () => {
-  loading.value = true;
+  loading.value = true
   api
     .post("/employees-list", {
       page: meta?.current_page,
       limit: meta?.per_page,
       search: search.value,
     })
-    .then((res) => {
-      items.value = res.data.data.data;
-      meta.value = res.data.data.meta;
+    .then(res => {
+      items.value = res.data.data.data
+      meta.value = res.data.data.meta
     })
     .finally(() => {
-      loading.value = false;
-    });
-};
+      loading.value = false
+    })
+}
 
 onMounted(() => {
-  initData();
-});
+  initData()
+})
 
 const headers = [
   {
@@ -98,64 +98,63 @@ const headers = [
     align: "center",
     sortable: false,
   },
-];
+]
 
-const viewCallback = (item) => {
-  router.push({ name: "employees-show", query: { id: item } });
-};
+const viewCallback = item => {
+  router.push({ name: "employees-show", query: { id: item } })
+}
 
-const deleteCallback = (item) => {
-  dialog.value = true;
-  delete_item.value = item;
-};
+const deleteCallback = item => {
+  dialog.value = true
+  delete_item.value = item
+}
 
-const editCallback = (item) => {
+const editCallback = item => {
   router.push({
     name: "employees-edit",
     query: { uuid: item },
-  });
-};
+  })
+}
 
-const updateCallback = (item) => {
-  meta.current_page = item.page;
-  meta.per_page = item.limit;
-  initData();
-};
+const updateCallback = item => {
+  meta.current_page = item.page
+  meta.per_page = item.limit
+  initData()
+}
 
 const onSearch = () => {
-  initData();
-};
+  initData()
+}
 
 const cancelCallback = () => {
-  dialog.value = false;
-  delete_item.value = null;
-};
+  dialog.value = false
+  delete_item.value = null
+}
 
 const confirmDeleteCallback = () => {
-  deleting.value = true;
+  deleting.value = true
   api
     .post("employees-delete", { id: delete_item.value })
-    .then((res) => {
+    .then(res => {
       if (res.status == 200) {
-        initData();
+        initData()
       }
     })
     .finally(() => {
-      deleting.value = false;
-      delete_item.value = null;
-      dialog.value = false;
-    });
-};
+      deleting.value = false
+      delete_item.value = null
+      dialog.value = false
+    })
+}
 </script>
 
 <template>
   <ConfirmDialog
     v-model="dialog"
+    :deleting="deleting"
     @on-cancel="cancelCallback"
     @on-confirm-delete="confirmDeleteCallback"
-    :deleting="deleting"
-  >
-  </ConfirmDialog>
+  />
   <AppDataTable
     create-url="employees-create"
     :headers="headers"
@@ -169,34 +168,44 @@ const confirmDeleteCallback = () => {
     :can-view="user.can('view employees')"
     :can-delete="user.can('delete employees')"
     :can-create="user.can('create employees')"
+    btn-submit="CreateNew"
+    :table-title="$t('List of Employee')"
+    cols="12"
+    :loading="loading"
     @on-edit="editCallback"
     @on-view="viewCallback"
     @on-update="updateCallback"
     @on-delete="deleteCallback"
-    btnSubmit="CreateNew"
-    :tableTitle="$t('List of Employee')"
-    cols="12"
-    :loading="loading"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->
-      <VRow class="justify-start" dense>
-        <VCol cols="8" md="3">
+      <VRow
+        class="justify-start"
+        dense
+      >
+        <VCol
+          cols="8"
+          md="3"
+        >
           <AppTextField
+            v-model="search"
             :placeholder="$t('Search')"
             @keyup.enter="onSearch"
-            v-model="search"
           />
         </VCol>
-        <VCol cols="4" md="2">
+        <VCol
+          cols="4"
+          md="2"
+        >
           <AppSearchButton
-            @click="onSearch"
             :title="$t('Search')"
-            :showIcon="1"
-          ></AppSearchButton>
+            :show-icon="1"
+            @click="onSearch"
+          />
         </VCol>
-      </VRow> </template
-  ></AppDataTable>
+      </VRow>
+    </template>
+  </AppDataTable>
 </template>
 
 <route lang="yaml">
