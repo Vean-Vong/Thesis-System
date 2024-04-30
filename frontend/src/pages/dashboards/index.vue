@@ -1,97 +1,92 @@
 <script setup>
-import ChartJsHorizontalLineChart from "@/views/charts/ChartJsHorizontalLineChart.vue";
-import AppCardinfo from "@/components/AppCardInfo.vue";
-import router from "@/router";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import api from "@/plugins/utilites";
+const router = useRouter();
+onMounted(() => {
+  api.post("summary").then((response) => {
+    statistics.value.forEach((element) => {
+      element.stats = response.data[element.name];
+    });
+  });
+});
 
-const chartJsCustomColors = {
-  white: "#fff",
-  yellow: "#ffe802",
-  primary: "#836af9",
-  areaChartBlue: "#2c9aff",
-  barChartYellow: "#ffcf5c",
-  polarChartGrey: "#4f5d70",
-  polarChartInfo: "#299aff",
-  lineChartYellow: "#d4e157",
-  polarChartGreen: "#28dac6",
-  lineChartPrimary: "#9e69fd",
-  lineChartWarning: "#ff9800",
-  horizontalBarInfo: "#26c6da",
-  polarChartWarning: "#ff8131",
-  scatterChartGreen: "#28c76f",
-  warningShade: "#ffbd1f",
-  areaChartBlueLight: "#84d0ff",
-  areaChartGreyLight: "#edf1f4",
-  scatterChartWarning: "#ff9f43",
+const statistics = ref([
+  {
+    title: "ថ្នាក់រៀនសរុប",
+    stats: 0,
+    icon: "mdi-account-group-outline",
+    color: "primary",
+    name: "academic_classes",
+    to: "/academic-class",
+  },
+  {
+    title: "គ្រូបង្រៀនសរុប",
+    stats: 0,
+    icon: "mdi-account-tie",
+    color: "info",
+    name: "teachers",
+    to: "/teacher",
+  },
+  {
+    title: "សិស្សសរុប",
+    stats: 0,
+    icon: "mdi-account-clock",
+    color: "success",
+    name: "students",
+    to: "/student",
+  },
+  {
+    title: "អ្នកប្រើប្រាស់សរុប",
+    stats: 0,
+    icon: "mdi-account-star",
+    color: "warning",
+    name: "users",
+    to: "/user",
+  },
+]);
+
+const go = (to) => {
+  router.push(to);
 };
-
-const items = [
-  {
-    id: 1,
-    icon: "mdi-plus",
-    Name: "New Patient",
-    backGroundColor: "bg-warning",
-    To: "",
-    type: "Add",
-    link: '/transactions/create-patient',
-  },
-  {
-    id: 2,
-    icon: "mdi-human-male",
-    Name: "Patient Today",
-    backGroundColor: "bg-info",
-    count: 0,
-    To: "",
-    type: "Total",
-    link: '#',
-  },
-  {
-    id: 3,
-    icon: "mdi-human-male",
-    Name: "Patient this year",
-    backGroundColor: "bg-error",
-    count: 0,
-    To: "",
-    type: "Total",
-    link: '#',
-  },
-  {
-    id: 4,
-    icon: "mdi-human-male",
-    Name: "Patient Staying",
-    backGroundColor: "bg-warning",
-    count: 0,
-    To: "",
-    type: "Total",
-    link: '#',
-  },
-];
-
-const viewList = (link) => {
-  router.push(link);
-};
-
 </script>
 
 <template>
-  <VRow>
-    <AppCardinfo v-for="ret in items" :key="ret.id" :item="ret"  @click="viewList(ret.link)"/>
-  </VRow>
-  <VRow>
-    <VCol cols="12" md="12">
-      <VCard class="pa-4">
-        <VCardTitle class="text-center">Total Paition this year</VCardTitle>
-        <VCardItem>
-          <ChartJsHorizontalLineChart :colors="chartJsCustomColors" />
-        </VCardItem>
-      </VCard>
-    </VCol>
-  </VRow>
+  <VCard>
+    <VCardItem>
+      <VCardTitle class="text-xl text-info">តារាងទិន្នន័យសរុបតាមផ្នែក:</VCardTitle>
+    </VCardItem>
+
+    <VCardText>
+      <VRow>
+        <VCol v-for="item in statistics" :key="item.title" cols="6" sm="3">
+          <div class="d-flex align-center link" @click="go(item.to)">
+            <div class="me-3">
+              <VAvatar :color="item.color" rounded size="48" class="elevation-1">
+                <VIcon size="28" :icon="item.icon" />
+              </VAvatar>
+            </div>
+
+            <div class="d-flex flex-column">
+              <span class="text-lg"> {{ item.title }} </span>
+              <span class="text-h6 font-weight-medium"
+                ><number
+                  ref="number1"
+                  :from="0"
+                  :to="item.stats"
+                  :duration="1"
+                  easing="Power1.easeOut"
+              /></span>
+            </div>
+          </div>
+        </VCol>
+      </VRow>
+    </VCardText>
+  </VCard>
 </template>
 
-<route lang="yaml">
-meta:
-  title: Dashboard
-  layout: default
-  action: read
-  subject: Auth
-</route>
+<style scoped>
+.link:hover {
+  cursor: pointer;
+}
+</style>
