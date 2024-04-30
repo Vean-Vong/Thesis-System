@@ -1,7 +1,16 @@
 {
-    "recommendations": [
-        "vue.volar",
-        "vue.vscode-typescript-vue-plugin",
-        "abusaidm.html-snippets"
-    ]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "mgmcdermott.vscode-language-babel",
+    "editorconfig.editorconfig",
+    "xabikos.javascriptsnippets",
+    "stylelint.vscode-stylelint",
+    "fabiospampinato.vscode-highlight",
+    "github.vscode-pull-request-github",
+    "vue.volar",
+    "antfu.iconify",
+    "cipchk.cssrem",
+    "sonarsource.sonarlint-vscode",
+    "antfu.goto-alias"
+  ]
 }

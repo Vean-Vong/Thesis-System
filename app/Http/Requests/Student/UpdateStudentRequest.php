@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Student;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateStudentRequest extends FormRequest
 {
@@ -18,51 +18,73 @@ class UpdateStudentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'code'              => [Rule::unique('students')->ignore(request('id'), 'id'), 'required', 'max:20'],
-            'first_name'        => ['required', 'max:50'],
-            'last_name'         => ['required', 'max:50'],
-            'first_name_latin'  => ['required', 'max:50'],
-            'last_name_latin'   => ['required', 'max:50'],
-            'gender'            => ['required', Rule::in([1, 2, 3])],
-            'dob'               => ['required', 'date'],
-            'from'              => ['nullable', 'max:255'],
-            'photo_path'        => ['nullable', 'image'],
-            'other'             => ['nullable', 'max:255'],
-            'student_status'    => ['nullable', Rule::in([1, 2, 3, 4])],
-            'status'            => ['nullable', Rule::in([1, 2])],
-            'phone'             => ['nullable', 'max:50'],
 
-            'village_birth'     => ['required', 'max:100'],
-            'commune_birth'     => ['required', 'max:100'],
-            'district_birth'    => ['required', 'max:100'],
-            'province_birth'    => ['required', 'max:100'],
+            'code' => [
+                'required',
+                'max:20',
+                Rule::unique('students', 'code')->where('school_id', auth()->user()->school_id)->ignore(request('id'))
+            ],
 
-            'village'           => ['required', 'max:100'],
-            'commune'           => ['required', 'max:100'],
-            'district'          => ['required', 'max:100'],
-            'province'          => ['required', 'max:100'],
+            'name' => [
+                'required',
+                'max:100'
+            ],
 
-            'd_first_name'      => ['nullable', 'max:50'],
-            'd_last_name'       => ['nullable', 'max:50'],
-            'd_job'             => ['nullable', 'max:50'],
-            'd_phone_number'    => ['nullable', 'max:50'],
+            'name_latin' => [
+                'nullable',
+                'max:100'
+            ],
 
-            'm_first_name'      => ['nullable', 'max:50'],
-            'm_last_name'       => ['nullable', 'max:50'],
-            'm_job'             => ['nullable', 'max:50'],
-            'm_phone_number'    => ['nullable', 'max:50'],
+            'sex' => [
+                'required',
+                Rule::in([1, 2])
+            ],
 
-            'g_first_name'      => ['nullable', 'max:50'],
-            'g_last_name'       => ['nullable', 'max:50'],
-            'g_phone_number'    => ['nullable', 'max:50'],
-            'g_job'             => ['nullable', 'max:100'],
-            'g_gender'          => ['nullable', Rule::in([1, 2])],
-            'g_detail'          => ['nullable', 'max:255'],
+            'dob' => [
+                'nullable',
+                'date',
+            ],
+
+            'photo_path' => [
+                'nullable',
+                'image'
+            ],
+
+            'pob' => [
+                'nullable',
+                'max:255'
+            ],
+
+            'address' => [
+                'nullable',
+                'max:255'
+            ],
+
+            'dad_name' => [
+                'nullable',
+                'max:50'
+            ],
+
+            'dad_phone' => [
+                'nullable',
+                'max:50'
+            ],
+
+            'mom_name' => [
+                'nullable',
+                'max:50'
+            ],
+
+            'mom_phone' => [
+                'nullable',
+                'max:50'
+            ],
+
         ];
     }
 }

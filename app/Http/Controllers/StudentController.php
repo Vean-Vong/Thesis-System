@@ -2,128 +2,129 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use App\Http\Resources\StudentResource;
 use App\Http\Requests\Student\StoreStudentRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
+use Throwable;
+use App\Models\Student;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function list(Request $request)
     {
 
-        $data = Student::when(request('search'), function ($q) {
+        abort_if(Gate::denies('student_list'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
-            return $q
-                ->where('code', 'LIKE', '%' . request('search') . '%')
-                ->orWhere('dob', 'LIKE', '%' . request('search') . '%')
-                ->orWhereRaw("CONCAT(first_name, ' ', last_name)  LIKE ?", '%' . request('search') . '%')
-                ->orWhereRaw("CONCAT(first_name_latin, ' ', last_name_latin) LIKE ?", '%' . request('search') . '%')
-                ->orWhere('from', 'LIKE', '%' . request('search') . '%');
-        })
+        $result['status'] = 200;
 
-            ->paginate(request('per_page', 15));
+        try {
 
-        return StudentResource::collection($data);
+            $teachers = Student::mine()->select('id', 'code', 'name', 'sex', 'dad_name', 'dad_phone', 'mom_name', 'mom_phone')
+                ->filter(['search' => $request->search])->latest()->paginate($request->perPage);
+
+            $result['data'] = $teachers;
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreStudentRequest $request)
     {
 
+        abort_if(Gate::denies('student_create'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
-        $student = Student::create($request->validated());
-        if ($student) {
-            return response()->json([
-                'message' => 'Successfully create student.'
-            ]);
-        }
-        return response()->json([
-            'message' => 'Cannot connect to remote server.'
-        ], 500);
-    }
+        $result['status'] = 200;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Student $student)
-    {
-        return new StudentResource($student);
-    }
+        try {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Student $student)
-    {
+            Student::create($request->validated() + ['school_id' => auth()->user()->school_id]);
 
-
-        return new StudentResource($student);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateStudentRequest $request, Student $student)
-    {
-
-
-        if ($student->update($request->validated())) {
-            return response()->json([
-                'message' => 'Successfully update student.'
-            ]);
-        }
-        return response()->json([
-            'message' => 'Cannot connect to remote server.'
-        ], 500);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Student $student)
-    {
-
-
-        $tables = DB::select("SELECT TABLE_NAME FROM information_schema.columns WHERE column_name = 'student_id' AND table_schema = '" . env('DB_DATABASE') . "'");
-
-        $data = 0;
-
-        foreach ($tables as $table) {
-            $data += DB::table($table->TABLE_NAME)->where('student_id', $student->id)->get()->count();
+            $result['message'] = "រក្សាទុកបានសម្រេច";
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
         }
 
-        if ($data > 0) {
+        return response()->json($result);
+    }
+    public function show(Request $request)
+    {
 
-            return response()->json([
-                'message' => 'This student already used!'
-            ], 422);
-        } else {
+        abort_if(Gate::denies('student_edit'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
-            if ($student->delete()) {
-                return response()->json([
-                    'message' => 'successfully delete student'
-                ]);
+        $result['status'] = 200;
+
+        try {
+
+            $student = Student::select('id', 'code', 'name', 'name_latin', 'sex', 'dob', 'pob', 'address', 'photo_path', 'dad_name', 'dad_phone', 'mom_name', 'mom_phone')->findOrFail($request->id);
+
+            $result['model'] = $student;
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
+    public function update(UpdateStudentRequest $request)
+    {
+
+        abort_if(Gate::denies('student_edit'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $student = Student::findOrFail($request->id);
+
+            if($student->update($request->validated())) {
+                $result['message'] = "កែប្រែបានសម្រេច";
             }
-            return response()->json([
-                'message' => 'Cannot connect to remote server.'
-            ], 500);
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
         }
+
+        return response()->json($result);
     }
+
+    public function delete(Request $request)
+    {
+
+        abort_if(Gate::denies('student_delete'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $model = Student::findOrFail($request->id);
+
+            $tables = [
+                'studies',
+                'exams',
+                'attendances'
+            ];
+
+            $delete = deleteFreshItem($tables, 'student_id', 'សិស្ស', $model);
+
+            $result['message'] = $delete['message'];
+
+            if(!$delete['status']) {
+                $result['status'] = 201;
+            }
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
 }

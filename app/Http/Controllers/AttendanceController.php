@@ -2,148 +2,221 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Attendance\AttendanceRequest;
-use App\Models\Attendance;
+use Throwable;
+use Carbon\Carbon;
 use App\Models\Study;
-use App\Models\StudyClass;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
+use App\Models\AcademicClass;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Throwable;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\Attendance\StoreAttendanceRequest;
 
 class AttendanceController extends Controller
 {
 
-    public function form(StudyClass $study_class, Request $request)
-    {
-        $attendances = Study::join('students', 'students.id', 'studies.student_id')
-            ->leftJoin('attendances', 'attendances.student_id', 'studies.student_id')
-            ->where('studies.study_class_id', $study_class->id)
-            ->where('attendances.date', $request->date)
-            ->where('attendances.meridiem', $request->meridiem)
-            ->select('attendances.id', 'attendances.absent', 'studies.student_id', DB::raw("CONCAT(students.first_name, ' ' ,students.last_name) AS full_name"),  "students.gender", "attendances.reason")
-            ->get();
-
-            $student_has_attendance = $attendances->pluck('student_id');
-
-        $students = Study::join('students', 'studies.student_id', 'students.id')
-            ->select('studies.student_id', DB::raw("CONCAT(students.first_name, ' ' ,students.last_name) AS full_name"), 'students.gender')
-            ->where('studies.study_class_id', $study_class->id)
-            ->whereNotIn('studies.student_id', $student_has_attendance)
-            ->orderBy('students.first_name')
-            ->get();
-
-        $data = array_merge($attendances->toArray(), $students->toArray());
-
-
-        return response()->json($data);
-    }
-
-    public function save(StudyClass $study_class, AttendanceRequest $request)
+    public function form(Request $request)
     {
 
-        DB::beginTransaction();
+        abort_if(Gate::denies('attendance_save'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
 
         try {
 
-            foreach($request->details as $attendance) {
+            $academic_class = AcademicClass::findOrFail($request->academic_class_id);
 
-               if(!empty(isset($attendance['absent']))) {
-                    Attendance::updateOrCreate(
-                        [
-                            'id' => $attendance['id'] ?? null
-                        ],
-                        [
-                            'student_id' => $attendance['student_id'],
-                            'study_class_id' => $study_class->id,
-                            'date' => $request->date,
-                            'absent' => $attendance['absent'] ?? null,
-                            'meridiem' => $request->meridiem,
-                            'reason' => $attendance['reason'] ?? null,
-                            'month'=> date("m",strtotime($request->date))
-                        ]
-                    );
-               }
-               if(empty(isset($attendance['absent'])) && !empty(isset($attendance['id']))) {
-                    Attendance::find($attendance['id'])->delete();
-               }
+            $start_year = Carbon::createFromFormat('Y-m-d', $academic_class->academicYear->start_date)->format('Y');
+            $start_month = Carbon::createFromFormat('Y-m-d', $academic_class->academicYear->start_date)->format('m');
+            $year = $start_month <= $request->month ? $start_year : $start_year + 1 ;
+            $total_day = Carbon::now()->year($year)->month($request->month)->daysInMonth;
+
+            $attendances = Study::leftJoin('attendances', 'studies.student_id', 'attendances.student_id')
+                ->join('students', 'studies.student_id', 'students.id')
+                ->select('studies.student_id', 'attendances.date', 'students.name', 'students.sex', 'attendances.absent', 'attendances.id')
+                ->where('attendances.academic_class_id', $request->academic_class_id)
+                ->where('month', $request->month)
+                ->orderBy('students.name')
+                ->orderBy('attendances.date')
+                ->whereNull('studies.deleted_at')
+                ->whereNull('attendances.deleted_at')
+                ->get();
+
+            $student_has_attendance = $attendances->pluck('student_id');
+
+            $students = Study::join('students', 'studies.student_id', 'students.id')
+                ->select('studies.student_id', 'students.name', 'students.sex')
+                ->where('studies.academic_class_id', $request->academic_class_id)
+                ->whereNotIn('studies.student_id', $student_has_attendance)
+                ->whereNull('studies.deleted_at')
+                ->orderBy('students.name')
+                ->get();
+
+            $data = array_merge($attendances->toArray(), $students->toArray());
+
+            $form = [
+                'academic_class_id' => $request->academic_class_id,
+                'month' => $request->month,
+                'total_day' => $total_day,
+                'attendances' => [],
+            ];
+
+
+                foreach($data as $key => $item) {
+                    $form['attendances'][$item['name']]['sex'] = $item['sex'];
+                    $form['attendances'][$item['name']]['number'] = $key;
+                    $form['attendances'][$item['name']]['student_id'] = $item['student_id'];
+                    for($i = 1; $i <= $total_day; $i ++) {
+                        if(isset($item['absent'])) {
+                            $day = Carbon::createFromFormat('Y-m-d', $item['date'])->format('d');
+                            if($day == $i) {
+                                $form['attendances'][$item['name']]['days'][$i]['absent'] = $item['absent'];
+                                $form['attendances'][$item['name']]['days'][$i]['id'] = isset($item['id']) ? $item['id'] : null ;
+                            } else if($day != $i && !isset($form['attendances'][$item['name']]['days'][$i]['absent']) ) {
+                                $form['attendances'][$item['name']]['days'][$i]['absent'] = null;
+                            }
+                        } else {
+                            $form['attendances'][$item['name']]['days'][$i]['absent'] =
+                                null
+                            ;
+                        }
+                    }
+                }
+                $result['form'] = $form;
+
+        } catch(Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+
+    }
+
+    public function save(StoreAttendanceRequest $request)
+    {
+
+        abort_if(Gate::denies('attendance_save'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+        DB::beginTransaction();
+        try {
+
+            $academic_class = AcademicClass::findOrFail($request->academic_class_id);
+
+            $start_year = Carbon::createFromFormat('Y-m-d', $academic_class->academicYear->start_date)->format('Y');
+            $start_month = Carbon::createFromFormat('Y-m-d', $academic_class->academicYear->start_date)->format('m');
+            $year = $start_month <= $request->month ? $start_year : $start_year + 1 ;
+
+            foreach($request->attendances as $attendance) {
+                foreach($attendance['days'] as $key => $day) {
+                    if($day['absent']) {
+                        Attendance::updateOrCreate(
+                            [
+                                'id' => $day['id'] ?? null
+                            ],
+                            [
+                                'academic_class_id' => $request->academic_class_id,
+                                'student_id' => $attendance['student_id'],
+                                'month' => $request->month,
+                                'absent' => $day['absent'],
+                                'date' => $year . '-' . $request->month . '-' . $key
+                            ]
+                        );
+                    } else if(!$day['absent'] && isset($day['id'])) {
+                        Attendance::findOrFail($day['id'])->delete();
+                    }
+                }
             }
 
             DB::commit();
 
-            return response()->json(['message' => 'Successfully create attendance']);
-
+            $result['message'] = "រក្សាទុកបានសម្រេច";
 
         } catch(Throwable $e) {
+            $result['status'] = 201;
             Log::error($e);
-            DB::rollBack();
-            return response()->json(['message' => 'Cannot connect to remote server'], 500);
+            $result['message'] = $e->getMessage();
         }
+
+        return response()->json($result);
     }
 
-    public function list(StudyClass $study_class, Request $request)
+    public function show(Request $request)
     {
 
-        $data = Study::join('students', 'students.id', 'studies.student_id')
-            ->leftJoin('attendances', 'attendances.student_id', 'studies.student_id')
-            ->where('studies.study_class_id', $study_class->id)
-            ->where('attendances.date', $request->date)
-            ->where('attendances.meridiem', $request->meridiem)
-            ->select('attendances.id', 'attendances.absent', 'studies.student_id', DB::raw("CONCAT(students.first_name, ' ' ,students.last_name) AS full_name"),  "students.gender", "attendances.reason")
-            ->get();
+        abort_if(Gate::denies('attendance_list'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
-        return response()->json($data);
-    }
+        $result['status'] = 200;
 
-    public function report(StudyClass $study_class, Request $request)
-    {
+        try {
 
-        $attendances = Attendance::where('study_class_id', $study_class->id)
-            ->select('attendances.student_id', 'attendances.absent', 'attendances.month')
-            ->get();
+            $academic_class = AcademicClass::findOrFail($request->academic_class_id);
 
-        $students = Study::where('study_class_id', $study_class->id)
-            ->join('students', 'students.id', 'studies.student_id')
-            ->select(DB::raw("CONCAT(students.first_name, ' ', students.last_name) as name"), 'students.gender', 'students.code', 'students.id')->get();
+            $start_year = Carbon::createFromFormat('Y-m-d', $academic_class->academicYear->start_date)->format('Y');
+            $start_month = Carbon::createFromFormat('Y-m-d', $academic_class->academicYear->start_date)->format('m');
+            $year = $start_month <= $request->month ? $start_year : $start_year + 1 ;
+            $total_day = Carbon::now()->year($year)->month($request->month)->daysInMonth;
 
-        $data = [];
+            $attendances = Study::leftJoin('attendances', 'studies.student_id', 'attendances.student_id')
+                ->join('students', 'studies.student_id', 'students.id')
+                ->select('studies.student_id', 'attendances.date', 'students.name', 'students.sex', 'attendances.absent')
+                ->where('attendances.academic_class_id', $request->academic_class_id)
+                ->where('month', $request->month)
+                ->whereNull('studies.deleted_at')
+                ->orderBy('students.name')
+                ->orderBy('attendances.date')
+                ->whereNull('attendances.deleted_at')
+                ->orderBy('students.name')
+                ->get();
 
-        foreach($students as $k => $student) {
-            $data[$k][] = $student->code;
-            $data[$k][] = $student->name;
-            $data[$k][] = $student->gender == 1 ? 'ប្រុស' : 'ស្រី';
-            $data[$k][] = 0;
-            $data[$k][] = 0;
-            $data[$k][] = 0;
-            foreach($attendances as $k2 => $attendance) {
-                if(!empty($request->month)) {
-                    if($student->id == $attendance->student_id) {
-                        if($attendance->month == $request->month) {
-                            if($attendance->absent == 1) {
-                                $data[$k][3] += 1;
-                            } elseif($attendance->absent == 2) {
-                                $data[$k][4] += 1;
+            $student_has_attendance = $attendances->pluck('student_id');
+
+            $students = Study::join('students', 'studies.student_id', 'students.id')
+                ->select('studies.student_id', 'students.name', 'students.sex')
+                ->where('studies.academic_class_id', $request->academic_class_id)
+                ->whereNotIn('studies.student_id', $student_has_attendance)
+                ->whereNull('studies.deleted_at')
+                ->orderBy('students.name')
+                ->get();
+
+            $data = array_merge($attendances->toArray(), $students->toArray());
+
+            $records = [
+                'month' => $request->month,
+                'total_day' => $total_day,
+                'attendances' => [],
+            ];
+
+
+                foreach($data as $key => $item) {
+                    $records['attendances'][$item['name']]['sex'] = $item['sex'];
+                    $records['attendances'][$item['name']]['number'] = $key;
+                    $records['attendances'][$item['name']]['student_id'] = $item['student_id'];
+                    for($i = 1; $i <= $total_day; $i ++) {
+                        if(isset($item['absent'])) {
+                            $day = Carbon::createFromFormat('Y-m-d', $item['date'])->format('d');
+                            if($day == $i) {
+                                $records['attendances'][$item['name']]['days'][$i]['absent'] = $item['absent'];
+                            } else if($day != $i && !isset($records['attendances'][$item['name']]['days'][$i]['absent']) ) {
+                                $records['attendances'][$item['name']]['days'][$i]['absent'] = null;
                             }
-                            $data[$k][5] += 1;
+                        } else {
+                            $records['attendances'][$item['name']]['days'][$i]['absent'] =
+                                null
+                            ;
                         }
-                    }
-                } else {
-                    if($student->id == $attendance->student_id) {
-                        if($attendance->absent == 1) {
-                            $data[$k][3] += 1;
-                        } elseif($attendance->absent == 2) {
-                            $data[$k][4] += 1;
-                        }
-                        $data[$k][5] += 1;
                     }
                 }
-            }
+                $result['records'] = $records;
+
+        } catch(Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
         }
 
-        return response()->json([
-            'data' => $data,
-            'month_text' => filterMonth($request->month) ?? null
-        ]);
+        return response()->json($result);
 
     }
 

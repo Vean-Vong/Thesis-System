@@ -1,21 +1,19 @@
 <?php
 
-use App\Http\Controllers\AttendanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\GradeController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\StudyYearController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ScoreController;
-use App\Http\Controllers\StudyClassController;
+use App\Http\Controllers\AcademicYearController;
+use App\Http\Controllers\AcademicClassController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,33 +26,76 @@ use App\Http\Controllers\StudyClassController;
 |
 */
 
-Route::get('/guest', [AuthController::class, 'guest']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    Route::post('summary', [DashboardController::class, 'summary']);
+
+    //auth
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('verify-auth', [AuthController::class, 'verifyAuth']);
+    Route::post('update-profile', [AuthController::class, 'changeProfile']);
+    Route::post('update-password', [AuthController::class, 'changePassword']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('user', [AuthController::class, 'user']);
-    Route::get('logout', [AuthController::class, 'logout']);
-    Route::get('/dashboard', [DashboardController::class, 'dashboard']);
-    Route::resource('/roles', RoleController::class);
-    Route::resource('/permissions', PermissionController::class)->only('index');
-    Route::resource('/subjects', SubjectController::class);
-    Route::resource('/study_years', StudyYearController::class);
-    Route::resource('/users', UserController::class);
-    Route::resource('/students', StudentController::class);
-    Route::resource('/rooms', RoomController::class);
-    Route::resource('/grades', GradeController::class);
-    Route::resource('/teachers', TeacherController::class);
-    Route::resource('/studyclasses', StudyClassController::class);
-    Route::get('/studyclasses-grade-subject/{id}', [StudyClassController::class, 'getGradeSubject']);
-    Route::post('/studyclasses-filter-student', [StudyClassController::class, 'filterStudent']);
-    Route::post('/studyclasses-find-student', [StudyClassController::class, 'findStudent']);
-    Route::post("study-classes/{study_class}/attendances/form", [AttendanceController::class, 'form']);
-    Route::post("study-classes/{study_class}/attendances/save", [AttendanceController::class, 'save']);
-    Route::post("study-classes/{study_class}/attendances/list", [AttendanceController::class, 'list']);
-    Route::post("study-classes/{study_class}/attendances/report", [AttendanceController::class, 'report']);
-    Route::post("study-classes/{study_class}/scores/form", [ScoreController::class, 'form']);
-    Route::post("study-classes/{study_class}/scores/save", [ScoreController::class, 'save']);
-    Route::post("study-classes/{study_class}/scores/list", [ScoreController::class, 'list']);
-    Route::post("study-classes/{study_class}/scores/ranking", [ScoreController::class, 'ranking']);
+    Route::post('roles-create', [RoleController::class, 'store']);
+    Route::post('roles-list', [RoleController::class, 'list']);
+    Route::post('roles-show', [RoleController::class, 'show']);
+    Route::post('roles-update', [RoleController::class, 'update']);
+    Route::post('roles-delete', [RoleController::class, 'delete']);
+    Route::post('permissions-list', [PermissionController::class, 'list']);
+
+    Route::post('users-create', [UserController::class, 'store']);
+    Route::post('users-call-org-role', [UserController::class, 'callOrgRole']);
+    Route::post('users-list', [UserController::class, 'list']);
+    Route::post('users-show', [UserController::class, 'show']);
+    Route::post('users-update', [UserController::class, 'update']);
+    Route::post('users-delete', [UserController::class, 'delete']);
+    Route::post('users-reset-pw', [UserController::class, 'resetPassword']);
+
+    Route::post('schools-create', [SchoolController::class, 'store']);
+    Route::post('schools-list', [SchoolController::class, 'list']);
+    Route::post('schools-show', [SchoolController::class, 'show']);
+    Route::post('schools-update', [SchoolController::class, 'update']);
+
+    Route::post('academic-years-create', [AcademicYearController::class, 'store']);
+    Route::post('academic-years-list', [AcademicYearController::class, 'list']);
+    Route::post('academic-years-show', [AcademicYearController::class, 'show']);
+    Route::post('academic-years-update', [AcademicYearController::class, 'update']);
+    Route::post('academic-years-delete', [AcademicYearController::class, 'delete']);
+
+    Route::post('academic-classes-create', [AcademicClassController::class, 'store']);
+    Route::post('academic-classes-list', [AcademicClassController::class, 'list']);
+    Route::post('academic-classes-show', [AcademicClassController::class, 'show']);
+    Route::post('academic-classes-update', [AcademicClassController::class, 'update']);
+    Route::post('academic-classes-delete', [AcademicClassController::class, 'delete']);
+    Route::post('academic-classes-option', [AcademicClassController::class, 'option']);
+    Route::post('academic-classes-detail', [AcademicClassController::class, 'detail']);
+    Route::post('academic-classes-search-student', [AcademicClassController::class, 'searchStudent']);
+    Route::post('academic-classes-add-student', [AcademicClassController::class, 'addStudent']);
+    Route::post('academic-classes-list-student', [AcademicClassController::class, 'listStudent']);
+    Route::post('academic-classes-remove-student', [AcademicClassController::class, 'removeStudent']);
+    Route::post('academic-classes-move-student', [AcademicClassController::class, 'moveStudent']);
+    Route::post('academic-classes-month', [AcademicClassController::class, 'getMonth']);
+
+    Route::post('teachers-create', [TeacherController::class, 'store']);
+    Route::post('teachers-list', [TeacherController::class, 'list']);
+    Route::post('teachers-show', [TeacherController::class, 'show']);
+    Route::post('teachers-update', [TeacherController::class, 'update']);
+    Route::post('teachers-delete', [TeacherController::class, 'delete']);
+
+    Route::post('students-create', [StudentController::class, 'store']);
+    Route::post('students-list', [StudentController::class, 'list']);
+    Route::post('students-show', [StudentController::class, 'show']);
+    Route::post('students-update', [StudentController::class, 'update']);
+    Route::post('students-delete', [StudentController::class, 'delete']);
+
+    Route::post('exam-form', [ExamController::class, 'form']);
+    Route::post('exam-save', [ExamController::class, 'save']);
+    Route::post('exam-show', [ExamController::class, 'show']);
+
+    Route::post('attendances-form', [AttendanceController::class, 'form']);
+    Route::post('attendances-save', [AttendanceController::class, 'save']);
+    Route::post('attendances-show', [AttendanceController::class, 'show']);
 });

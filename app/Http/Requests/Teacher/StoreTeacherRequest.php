@@ -18,79 +18,41 @@ class StoreTeacherRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
+
             'code' => [
                 'required',
-                Rule::unique('teachers', 'code'),
-                'max:20'
+                'max:20',
+                Rule::unique('teachers', 'code')->where('school_id', auth()->user()->school_id)
             ],
 
-            'first_name' => [
+            'name' => [
                 'required',
-                'max:50'
+                'max:100'
             ],
 
-            'last_name' => [
-                'required',
-                'max:50'
+            'name_latin' => [
+                'nullable',
+                'max:100'
             ],
 
-            'first_name_latin' => [
-                'required',
-                'max:50'
-            ],
-
-            'last_name_latin' => [
-                'required',
-                'max:50'
-            ],
-
-            'gender' => [
+            'sex' => [
                 'required',
                 Rule::in([1, 2])
             ],
 
+            'position' => [
+                'required',
+                Rule::in([1, 2, 3])
+            ],
+
             'dob' => [
                 'nullable',
-            ],
-
-            'school_name' => [
-                'nullable',
-                'max:50'
-            ],
-
-            'school_code' => [
-                'nullable',
-                'max:50'
-            ],
-
-            'village' => [
-                'nullable',
-                'max:50'
-            ],
-
-            'commune' => [
-                'nullable',
-                'max:50'
-            ],
-
-            'district' => [
-                'nullable',
-                'max:50'
-            ],
-
-            'province' => [
-                'nullable',
-                'max:50'
-            ],
-
-            'phone' => [
-                'required',
-                'max:50'
+                'date',
             ],
 
             'photo_path' => [
@@ -98,9 +60,20 @@ class StoreTeacherRequest extends FormRequest
                 'image'
             ],
 
-            'status' => [
-                'nullable'
-            ]
+            'pob' => [
+                'nullable',
+                'max:255'
+            ],
+
+            'address' => [
+                'nullable',
+                'max:255'
+            ],
+
+            'phone' => [
+                'nullable',
+                'max:50'
+            ],
 
         ];
     }

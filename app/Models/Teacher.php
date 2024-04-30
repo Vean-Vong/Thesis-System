@@ -2,44 +2,84 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\UUIDs;
+use App\Traits\CreatedUpdatedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Teacher extends Model
 {
-    use HasFactory;
+    use HasFactory, UUIDs, CreatedUpdatedBy, SoftDeletes;
 
-    protected $fillable = [
-        'code', 'first_name', 'last_name', 'first_name_latin', 'last_name_latin', 'gender', 'dob',
-        'school_name', 'school_code', 'village', 'commune', 'district', 'province', 'phone', 'photo_path', 'status'
+    protected $appends = [
+        'sex_text',
+        'position_text'
     ];
 
-    protected $table = 'teachers';
+    protected $fillable = [
+        'school_id',
+        'code',
+        'name',
+        'name_latin',
+        'sex',
+        'dob',
+        'pob',
+        'photo_path',
+        'position',
+        'address',
+        'phone',
+    ];
 
-    protected $appends = ['full_name'];
-
-    public function getStatusLabelAttribute()
+    public function scopeMine($query)
     {
-        if ($this->status === 1) {
-            return 'Active';
-        } else {
-            return 'Inactive';
-        };
+        return $query->where('school_id', auth()->user()->school_id);
     }
-    public function getGenderLabelAttribute()
+
+    public function scopeFilter($query, array $filters)
     {
-        if ($this->gender === 1) {
-            return "ប្រុស";
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('code', 'like', '%' . $search . '%')
+                    ->orWhere('name', 'like', '%' . $search . '%')
+                    ->orWhere('name_latin', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        });
+    }
+
+    public function getSexTextAttribute()
+    {
+        return $this->sex == 1 ? 'ប្រុស' : 'ស្រី';
+    }
+
+    public function getPositionTextAttribute()
+    {
+        if($this->position == 1) {
+            return 'គ្រូបង្រៀន';
+        } else if($this->position == 2) {
+            return 'នាយករង';
         } else {
-            return "ស្រី";
+            return 'នាយក';
         }
     }
-    public function getFullNameAttribute()
+
+    public function setPhotoPathAttribute($value)
     {
-        return $this->last_name . ' ' . $this->first_name;
+        if (isset($value)) {
+            // remove old avatar on update
+            if ($this->photo_path) Storage::disk('public')->delete($this->photo_path);
+            $path = $value->store('teacher/' . date('FY'), ['disk' => 'public']);
+            $this->attributes['photo_path'] = $path;
+        }
     }
-    public function getFullNameLatinAttribute()
+
+    public static function boot()
     {
-        return $this->last_name_latin . ' ' . $this->first_name_latin;
+        parent::boot();
+        static::deleting(function ($item) {
+            if ($item->photo_path) Storage::disk('public')->delete($item->photo_path);
+        });
     }
 }

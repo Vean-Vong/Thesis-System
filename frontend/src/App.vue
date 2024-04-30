@@ -1,6 +1,12 @@
+<script setup>
+
+</script>
+
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+  <VApp>
+    <VLayout class="layout-wrapper layout-nav-type-vertical">
+      <RouterView />
+    </VLayout>
+  </VApp>
 </template>
- 
+

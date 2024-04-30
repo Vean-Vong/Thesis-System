@@ -2,155 +2,206 @@
 
 namespace App\Http\Controllers;
 
-
 use Throwable;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Organization;
+use App\Models\School;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    //function index list data
-
-    public function index(Request $request)
+    public function list(Request $request)
     {
 
-        $users = DB::table('users')
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
-            ->when(!empty(request('search')), function ($query) use ($request) {
-                return $query
-                    ->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('email', 'like', '%' . $request->search . '%');
-            })
+        $result['status'] = 200;
 
-            ->paginate($request->per_page ?? 15);
-        return response()->json([
-            "data" => $users,
-        ]);
+        try {
+
+            $users = User::with('roles', 'school')->when(!auth()->user()->is_super, function ($q) {
+                return $q
+                    ->mine();
+            })->filter(['search' => $request->search])->where('is_super', '=', false)->latest()->paginate($request->perPage);
+
+            $result['data'] = $users;
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
     }
-
-    //function create data
-
-    public function create()
-    {
-        $roles = DB::table('roles')->get();
-        return response()->json([
-            'roles' => $roles,
-        ]);
-    }
-
-    //function insert data
 
     public function store(StoreUserRequest $request)
     {
+
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
         try {
-            DB::beginTransaction();
-            $user           = new    User();
-            $user->name     = $request->name;
-            $user->email    = $request->email;
-            $user->password = Hash::make('12345678');
-            $user->save();
-            foreach ($request->roles as $item) {
-                DB::table('role_user')->insert([
-                    'user_id' => $user->id,
-                    'role_id' => $item,
-                ]);
-            };
-            DB::commit();
-            return response()->json([
-                'message' => "successfully created user",
-            ]);
-        } catch (Throwable $e) {
-            Log::error($e);
-            DB::rollBack();
 
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
+            $school_id = Auth::user()->school_id;
 
-    //function edit data
-
-    public function edit($id)
-    {
-
-        $user = DB::table('users')->where('id', $id)
-            ->select('id', 'name', 'email', 'password')
-            ->first();
-        $role_user = DB::table('role_user')
-            ->join('users', 'users.id', '=', 'role_user.user_id')
-            ->where('role_user.user_id', $id)
-            ->pluck('role_user.role_id');
-
-        return response()->json([
-            'data' => [
-                'form' => [
-                    'name'     => $user->name,
-                    'email'    => $user->email,
-                    'password' => $user->password,
-                    'roles'    => $role_user,
-                ],
-            ],
-        ]);
-    }
-
-    //function show data
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    //function updata data
-
-    public function update(UpdateUserRequest $request, string $id)
-    {
-        try {
-            DB::beginTransaction();
-
-            $user = User::findOrFail($id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->update();
-
-            DB::table('role_user')
-                ->where('user_id', $id)->delete();
-
-            foreach ($request->roles as $item) {
-                DB::table('role_user')->insert([
-                    'user_id' => $user->id,
-                    'role_id' => $item,
-                ]);
+            if ($request->school_id) {
+                $school_id = $request->school_id;
             }
-            DB::commit();
-            return response()->json([
-                "message" => "successfully updated user"
+
+            $user = User::create([
+                'school_id' => $school_id,
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'role_id' => $request->role_id,
+                'password' => "Password@123"
             ]);
+
+            RoleUser::create([
+                'user_id' => $user->id,
+                'role_id' => $request->role_id
+            ]);
+
+            $result['data'] = new UserResource($user);
+            $result['message'] = "បង្កើតអ្នកប្រើប្រាស់បានសម្រេច";
         } catch (Throwable $e) {
-            log::error($e);
-            DB::rollBack();
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 500);
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
         }
+
+        return response()->json($result);
+    }
+    public function show(Request $request)
+    {
+
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $user = User::findOrFail($request->id);
+
+            $result['data'] = new UserResource($user);
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
     }
 
-    //function delete data
-
-    public function destroy(string $id)
+    public function update(UpdateUserRequest $request)
     {
-        DB::table('role_user')->where('role_user.user_id', $id)
-            ->delete();
-        DB::table('users')->where('id', $id)
-            ->delete();
-        return response()->json([
-            "message" => "successfully deleted user",
-        ]);
+
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $user = User::findOrFail($request->id);
+
+            $user->update($request->all());
+
+            DB::table('role_user')->whereUserId($user->id)->delete();
+
+            RoleUser::create([
+                'user_id' => $user->id,
+                'role_id' => $request->role_id
+            ]);
+
+            $result['data'] = new UserResource($user);
+            $result['message'] = "កែប្រែអ្នកប្រើប្រាស់បានសម្រេច";
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
+    public function delete(Request $request)
+    {
+
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $user = User::findOrFail($request->id);
+
+            $user->delete();
+
+            DB::table('role_user')->whereUserId($user->id)->delete();
+
+            $result['message'] = "លុបអ្នកប្រើប្រាស់បានសម្រេច";
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
+    public function resetPassword(Request $request)
+    {
+
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $user = User::findOrFail($request->id);
+
+            $user->password = 'Password@123';
+
+            $user->save();
+
+            $result['message'] = "ផ្លាស់ប្តូរលេខសម្ងាត់បានសម្រេច";
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
+    public function callOrgRole(Request $request)
+    {
+
+        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
+
+        $result['status'] = 200;
+
+        try {
+
+            $roles = Role::when(auth()->user()->is_super == false, function ($q) {
+                return $q
+                    ->where('id', '!=', '4ccadd62-e9f4-4bfb-b0c1-4ac00b129be6');
+            })->get();
+            $schools = School::orderBy('sort')->get();
+
+            $result['data'] = [
+                'roles' => $roles,
+                'schools' => $schools
+            ];
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
     }
 }

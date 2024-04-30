@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PermissionResource;
+use App\Models\Permission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+use Throwable;
 
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
 
-        $permission = DB::table('permissions')->latest()->get();
-        return response()->json([
-            'data' => $permission,
-        ]);
+    public function list()
+    {
+        $result = ['status' => 200];
+
+        try {
+
+            $permissions = Permission::whereNull('parent_id')->orderBy('name')->with('childrens')->get();
+
+            $result['data'] = PermissionResource::collection($permissions);
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
     }
 }

@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\CreatedUpdatedBy;
+use App\Traits\UUIDs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Study extends Model
 {
-    use HasFactory;
+    use HasFactory, UUIDs, CreatedUpdatedBy, SoftDeletes;
 
     protected $fillable = [
-        'student_id',
-        'study_class_id',
-        'comment',
-        'status'
+        'academic_class_id',
+        'student_id'
     ];
 
     public function student()
@@ -21,8 +22,9 @@ class Study extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function studyClass()
+    public function academicClass()
     {
-        return $this->belongsTo(StudyClass::class);
+        return $this->belongsTo(AcademicClass::class);
     }
+
 }
