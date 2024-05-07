@@ -57,7 +57,7 @@ onMounted(() => {
 <template>
   <VRow>
     <VCol cols="12" md="8" sm="12">
-      <VCard title="កែប្រែថ្នាក់រៀន">
+      <VCard :title="$t('update class')">
         <VDivider />
 
         <VCardText>
@@ -67,7 +67,7 @@ onMounted(() => {
               <VCol md="12" cols="12">
                 <VTextField
                   v-model="form.name"
-                  label="ឈ្មោះតួនាទី"
+                  :label="$t('headers.name')"
                   :rules="[(v) => !!v || 'ឈ្មោះតួនាទី តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
@@ -77,7 +77,7 @@ onMounted(() => {
                   item-value="id"
                   item-title="name"
                   v-model="form.teacher_id"
-                  label="គ្រូបន្ទុកថ្នាក់"
+                  :label="$t('class teacher')"
                   :rules="[(v) => !!v || 'គ្រូបន្ទុកថ្នាក់ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
@@ -87,14 +87,14 @@ onMounted(() => {
                   item-value="id"
                   item-title="name"
                   v-model="form.academic_year_id"
-                  label="ឆ្នាំសិក្សា"
+                  :label="$t('academic_year')"
                   :rules="[(v) => !!v || 'ឆ្នាំសិក្សា តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <!-- 👉 Form Actions -->
               <VCol cols="12" class="d-flex flex-wrap gap-4 justify-end">
                 <VBtn type="submit" :loading="submitting" color="success"
-                  ><VIcon>mdi-add</VIcon> រក្សាទុក</VBtn
+                  ><VIcon>mdi-add</VIcon> {{ $t('Save changes') }}</VBtn
                 >
               </VCol>
             </VRow>
@@ -104,3 +104,10 @@ onMounted(() => {
     </VCol>
   </VRow>
 </template>
+<route lang="yaml">
+  meta:
+    title: academic-classes-update 
+    layout: default
+    subject: Auth
+    active: 'academic-classes-update'
+  </route>

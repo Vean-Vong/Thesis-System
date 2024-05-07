@@ -1,24 +1,24 @@
 export default [  
   {
-    title: "Teachers",
+    title: "teachers",
     to: "teacher",
     icon: { icon: "mdi-folder-key-network", size: 13 },
     active: 'teacher',
   },
   {
-    title: "Students",
+    title: "students",
     to: "student",
     icon: { icon: "mdi-account-injury-outline", size: 15 },
     active: 'student',
   },
   {
-    title: "Academic Class",
+    title: "academic_Class",
     to: "academic-class",
     icon: { icon: "mdi-account-tie", size: 15 },
     active: 'academic-class',
   },
   {
-    title: "Academic Year",
+    title: "academic_year",
     to: "academic-year",
     icon: { icon: "mdi-account-tie", size: 15 },
     active: 'academic-year',
@@ -34,7 +34,7 @@ export default [
     title: "Users",
     to: "settings-user-settings",
     icon: { icon: "tabler-user-cog", size: 13 },
-    active: 'user',
+    active: 'users',
   },
   {
     title: "Roles",
@@ -46,7 +46,7 @@ export default [
     title: "Schools",
     to: "school",
     icon: { icon: "mdi-folder-key-network", size: 13 },
-    active: 'position',
+    active: 'school',
   },        
 
   // ],

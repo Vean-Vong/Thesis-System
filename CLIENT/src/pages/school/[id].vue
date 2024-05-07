@@ -58,7 +58,7 @@ onMounted(() => {
 <template>
   <VRow>
     <VCol cols="12" md="8">
-      <VCard title="កែប្រែសាលារៀន">
+      <VCard :title="$t('update school')">
         <VDivider />
 
         <VCardText>
@@ -68,33 +68,33 @@ onMounted(() => {
               <VCol md="6" cols="12">
                 <VTextField
                   v-model="form.code"
-                  label="លេខកូដ"
+                  :label="$t('headers.id')"
                   :rules="[(v) => !!v || 'លេខកូដ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol md="6" cols="12">
                 <VTextField
                   v-model="form.short_name"
-                  label="ឈ្មោះខ្លី"
+                  :label="$t('headers.short name')"
                   :rules="[(v) => !!v || 'ឈ្មោះខ្លី តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol md="12" cols="12">
                 <VTextField
                   v-model="form.khmer_name"
-                  label="ឈ្មោះ"
+                  :label="$t('headers.name')"
                   :rules="[(v) => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol md="6" cols="12">
-                <VTextField v-model="form.latin_name" label="ឈ្មោះឡាតាំង" />
+                <VTextField v-model="form.latin_name" :label="$t('latin_name')" />
               </VCol>
               <VCol md="6" cols="12">
-                <VTextField v-model="form.sort" label="លេខលំដាប់" />
+                <VTextField v-model="form.sort" :label="$t('headers.order number')"/>
               </VCol>
               <VCol cols="12" class="d-flex flex-wrap gap-4 justify-end">
                 <VBtn type="submit" :loading="submitting" color="success"
-                  ><VIcon>mdi-add</VIcon>&nbsp; រក្សាទុក</VBtn
+                  ><VIcon>mdi-add</VIcon>&nbsp; {{$t('Save changes')}}</VBtn
                 >
               </VCol>
             </VRow>
@@ -104,3 +104,10 @@ onMounted(() => {
     </VCol>
   </VRow>
 </template>
+<route lang="yaml">
+  meta:
+    title: update_schools-list
+    layout: default
+    subject: Auth
+    active: 'school'
+  </route>

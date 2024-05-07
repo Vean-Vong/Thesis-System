@@ -1,48 +1,51 @@
 <script setup>
-import { onMounted, ref } from "vue"
-import { useRouter } from "vue-router"
-import api from "@/plugins/utilites"
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import api from '@/plugins/utilites'
 const router = useRouter()
 onMounted(() => {
-  api.post("summary").then(response => {
+  api.post('summary').then(response => {
     statistics.value.forEach(element => {
       element.stats = response.data[element.name]
     })
   })
 })
-
 const statistics = ref([
   {
-    title: "ថ្នាក់រៀនសរុប",
+    title: 'Class Total',
     stats: 0,
-    icon: "mdi-account-group-outline",
-    color: "primary",
-    name: "academic_classes",
-    to: "/academic-class",
+    icon: 'mdi-account-group-outline',
+    color: 'primary',
+    name: 'academic_classes',
+    to: '/academic-class',
+    i18nKey: 'total_academic_classes',
   },
   {
-    title: "គ្រូបង្រៀនសរុប",
+    title: 'Teacher Total',
     stats: 0,
-    icon: "mdi-account-tie",
-    color: "info",
-    name: "teachers",
-    to: "/teacher",
+    icon: 'mdi-account-tie',
+    color: 'info',
+    name: 'teachers',
+    to: '/teacher',
+    i18nKey: 'teachers_total',
   },
   {
-    title: "សិស្សសរុប",
+    title: 'Student Total',
     stats: 0,
-    icon: "mdi-account-clock",
-    color: "success",
-    name: "students",
-    to: "/student",
+    icon: 'mdi-account-clock',
+    color: 'success',
+    name: 'students',
+    to: '/student',
+    i18nKey: 'total_students',
   },
   {
-    title: "អ្នកប្រើប្រាស់សរុប",
+    title: 'User Total',
     stats: 0,
-    icon: "mdi-account-star",
-    color: "warning",
-    name: "users",
-    to: "/user",
+    icon: 'mdi-account-star',
+    color: 'warning',
+    name: 'users',
+    to: '/user',
+    i18nKey: 'total_users',
   },
 ])
 
@@ -54,9 +57,7 @@ const go = to => {
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle class="text-xl text-info">
-        តារាងទិន្នន័យសរុបតាមផ្នែក:
-      </VCardTitle>
+      <VCardTitle class="text-xl text-info"> {{ $t('total_data_table') }}: </VCardTitle>
     </VCardItem>
 
     <VCardText>
@@ -86,13 +87,14 @@ const go = to => {
             </div>
 
             <div class="d-flex flex-column">
-              <span class="text-lg"> {{ item.title }} </span>
-              <span class="text-h6 font-weight-medium"><Number
-                ref="number1"
-                :from="0"
-                :to="item.stats"
-                :duration="1"
-                easing="Power1.easeOut"
+              <span class="text-lg"> {{ $t(item.i18nKey) }} </span>
+              <span class="text-h6 font-weight-medium"
+                ><Number
+                  ref="number1"
+                  :from="0"
+                  :to="item.stats"
+                  :duration="1"
+                  easing="Power1.easeOut"
               /></span>
             </div>
           </div>
@@ -107,3 +109,10 @@ const go = to => {
   cursor: pointer;
 }
 </style>
+<route lang="yaml">
+  meta:
+    title: Dashboard
+    layout: default
+    subject: Auth
+    active: 'dashboard'
+  </route>

@@ -144,7 +144,7 @@ onMounted(() => {
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="កែប្រែគ្រូបង្រៀន">
+      <VCard :title="$t('update teacher')">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
           <VAvatar
@@ -174,7 +174,7 @@ onMounted(() => {
                   icon="mdi-cloud-upload-outline"
                   class="d-sm-none"
                 />
-                <span class="d-none d-sm-block">Upload new photo</span>
+                <span class="d-none d-sm-block">{{ $t('upload_photo') }}</span>
               </VBtn>
 
               <input
@@ -192,7 +192,7 @@ onMounted(() => {
                 variant="tonal"
                 @click="resetAvatar"
               >
-                <span class="d-none d-sm-block">Reset</span>
+                <span class="d-none d-sm-block">{{ $t('reset') }}</span>
                 <VIcon
                   icon="mdi-refresh"
                   class="d-sm-none"
@@ -223,7 +223,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.code"
-                  label="អត្ថលេខ"
+                  :label="$t('headers.id')"
                   :rules="[(v) => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
@@ -234,7 +234,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.name"
-                  label="ឈ្មោះភាសាខ្មែរ"
+                  :label="$t('khmer_name')"
                   :rules="[(v) => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
@@ -244,7 +244,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.name_latin"
-                  label="ឈ្មោះឡាតាំង"
+                  :label="$t('latin_name')"
                 />
               </VCol>
 
@@ -254,7 +254,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.dob"
-                  label="ថ្ងៃខែឆ្នាំកំណើត"
+                  :label="$t('dob')"
                   type="date"
                 />
               </VCol>
@@ -264,7 +264,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.pob"
-                  label="ទីកន្លែងកំណើត"
+                  :label="$t('pob_address')"
                 />
               </VCol>
               <VCol
@@ -273,7 +273,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.phone"
-                  label="លេខទូរសព្ទ"
+                  :label="$t('headers.phone_number')"
                 />
               </VCol>
               <VCol
@@ -285,7 +285,7 @@ onMounted(() => {
                   :items="sexs"
                   item-title="name"
                   item-value="id"
-                  label="ភេទ"
+                  :label="$t('Sex')"
                   :rules="[(v) => !!v || 'ភេទ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
@@ -298,14 +298,14 @@ onMounted(() => {
                   :items="positions"
                   item-title="name"
                   item-value="id"
-                  label="មុខដំណែង"
+                  :label="$t('headers.occupation')"
                   :rules="[(v) => !!v || 'មុខដំណែង តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol cols="12">
                 <VTextarea
                   v-model="formDataLocal.address"
-                  label="អាសយដ្ឋានបច្ចុប្បន្ន"
+                  :label="$t('current address')"
                   no-resize
                   rows="2"
                 />
@@ -321,7 +321,7 @@ onMounted(() => {
                   color="success"
                 >
                   <VIcon>mdi-add</VIcon>
-                  រក្សាទុក
+                  {{ $t('Save changes') }}
                 </VBtn>
 
                 <VBtn
@@ -330,7 +330,7 @@ onMounted(() => {
                   type="reset"
                   @click.prevent="resetForm"
                 >
-                  Reset
+                {{ $t('reset') }}
                 </VBtn>
               </VCol>
             </VRow>
@@ -340,3 +340,10 @@ onMounted(() => {
     </VCol>
   </VRow>
 </template>
+<route lang="yaml">
+  meta:
+    title: Edit-teachers-list
+    layout: default
+    subject: Auth
+    active: 'teacher'
+  </route>

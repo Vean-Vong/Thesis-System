@@ -1,10 +1,10 @@
 <script setup>
-import AppDataTable from "@/components/AppDataTable.vue"
-import api from "@/plugins/utilites"
-import router from "@/router"
-import { onMounted } from "vue"
-import { useAuthStore } from "@/plugins/auth.module"
-import ConfirmDialog from "@/components/ConfirmDialog.vue"
+import AppDataTable from '@/components/AppDataTable.vue'
+import api from '@/plugins/utilites'
+import router from '@/router'
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/plugins/auth.module'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
 const user = useAuthStore().user
 const { t } = useI18n()
 const items = ref([])
@@ -27,7 +27,7 @@ const meta = ref({
 const initData = () => {
   loading.value = true
   api
-    .post("/employees-list", {
+    .post('/employees-list', {
       page: meta?.current_page,
       limit: meta?.per_page,
       search: search.value,
@@ -47,61 +47,61 @@ onMounted(() => {
 
 const headers = [
   {
-    title: t("No"),
-    key: "no",
-    align: "left",
+    title: t('No'),
+    key: 'no',
+    align: 'left',
     sortable: false,
-    minWidth: "10px",
-    maxWidth: "20px",
+    minWidth: '10px',
+    maxWidth: '20px',
   },
   {
-    title: t("Code"),
-    key: "code",
-    align: "center",
+    title: t('Code'),
+    key: 'code',
+    align: 'center',
     sortable: false,
-    minWidth: "20px",
-    maxWidth: "40px",
+    minWidth: '20px',
+    maxWidth: '40px',
   },
   {
-    title: t("Khmer Name"),
-    key: "khmer_name",
-    align: "center",
-    sortable: false,
-  },
-  {
-    title: t("latin_name"),
-    key: "latin_name",
-    align: "center",
+    title: t('Khmer Name'),
+    key: 'khmer_name',
+    align: 'center',
     sortable: false,
   },
   {
-    title: t("Sex"),
-    key: "sex_text",
-    align: "center",
+    title: t('latin_name'),
+    key: 'latin_name',
+    align: 'center',
     sortable: false,
   },
   {
-    title: t("Phone"),
-    key: "phone",
-    align: "center",
+    title: t('Sex'),
+    key: 'sex_text',
+    align: 'center',
     sortable: false,
   },
   {
-    title: t("Position"),
-    key: "position",
-    align: "center",
+    title: t('Phone'),
+    key: 'phone',
+    align: 'center',
     sortable: false,
   },
   {
-    title: t("Actions"),
-    key: "actions",
-    align: "center",
+    title: t('Position'),
+    key: 'position',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Actions'),
+    key: 'actions',
+    align: 'center',
     sortable: false,
   },
 ]
 
 const viewCallback = item => {
-  router.push({ name: "employees-show", query: { id: item } })
+  router.push({ name: 'employees-show', query: { id: item } })
 }
 
 const deleteCallback = item => {
@@ -111,7 +111,7 @@ const deleteCallback = item => {
 
 const editCallback = item => {
   router.push({
-    name: "employees-edit",
+    name: 'employees-edit',
     query: { uuid: item },
   })
 }
@@ -134,7 +134,7 @@ const cancelCallback = () => {
 const confirmDeleteCallback = () => {
   deleting.value = true
   api
-    .post("employees-delete", { id: delete_item.value })
+    .post('employees-delete', { id: delete_item.value })
     .then(res => {
       if (res.status == 200) {
         initData()
@@ -213,5 +213,5 @@ meta:
   title: Employee
   layout: default
   subject: Auth
-  active: "employee"
+  active: 'employee'
 </route>

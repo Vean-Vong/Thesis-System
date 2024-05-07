@@ -1,11 +1,11 @@
 <script setup>
-import avatar1 from "@/assets/images/avatars/avatar-1.png"
-import { onMounted, ref, reactive } from "vue"
-import api from "@/plugins/utilites"
-import { useRoute, useRouter } from "vue-router"
-import constant from "@/constants"
-import { useAuthStore } from "@/plugins/auth.module"
-import User from "../../class/User"
+import avatar1 from '@/assets/images/avatars/avatar-1.png'
+import { onMounted, ref, reactive } from 'vue'
+import api from '@/plugins/utilites'
+import { useRoute, useRouter } from 'vue-router'
+import constant from '@/constants'
+import { useAuthStore } from '@/plugins/auth.module'
+import User from '../../class/User'
 
 const store = useAuthStore()
 
@@ -13,7 +13,7 @@ const user = computed(() => {
   const data = {
     user: store?._user,
   }
-  
+
   return new User(data)
 })
 
@@ -25,11 +25,11 @@ const route = useRoute()
 const sexs = ref([
   {
     id: 1,
-    name: "ប្រុស",
+    name: 'ប្រុស',
   },
   {
     id: 2,
-    name: "ស្រី",
+    name: 'ស្រី',
   },
 ])
 
@@ -61,8 +61,7 @@ const changeAvatar = file => {
     fileReader.readAsDataURL(files[0])
     formDataLocal.value.photo_path = files[0]
     fileReader.onload = () => {
-      if (typeof fileReader.result === "string")
-        additional_image.value = fileReader.result
+      if (typeof fileReader.result === 'string') additional_image.value = fileReader.result
     }
   }
 }
@@ -80,41 +79,41 @@ const submitHandler = async () => {
     submitting.value = true
     let formData = new FormData()
 
-    formData.append("id", formDataLocal.value.id)
-    formData.append("code", formDataLocal.value.code)
-    formData.append("name", formDataLocal.value.name)
-    formData.append("sex", formDataLocal.value.sex)
+    formData.append('id', formDataLocal.value.id)
+    formData.append('code', formDataLocal.value.code)
+    formData.append('name', formDataLocal.value.name)
+    formData.append('sex', formDataLocal.value.sex)
     if (formDataLocal.value.photo_path) {
-      formData.append("photo_path", formDataLocal.value.photo_path)
+      formData.append('photo_path', formDataLocal.value.photo_path)
     }
     if (formDataLocal.value.name_latin) {
-      formData.append("name_latin", formDataLocal.value.name_latin)
+      formData.append('name_latin', formDataLocal.value.name_latin)
     }
     if (formDataLocal.value.dob) {
-      formData.append("dob", formDataLocal.value.dob)
+      formData.append('dob', formDataLocal.value.dob)
     }
     if (formDataLocal.value.pob) {
-      formData.append("pob", formDataLocal.value.pob)
+      formData.append('pob', formDataLocal.value.pob)
     }
     if (formDataLocal.value.address) {
-      formData.append("address", formDataLocal.value.address)
+      formData.append('address', formDataLocal.value.address)
     }
     if (formDataLocal.value.dad_name) {
-      formData.append("dad_name", formDataLocal.value.dad_name)
+      formData.append('dad_name', formDataLocal.value.dad_name)
     }
     if (formDataLocal.value.dad_phone) {
-      formData.append("dad_phone", formDataLocal.value.dad_phone)
+      formData.append('dad_phone', formDataLocal.value.dad_phone)
     }
     if (formDataLocal.value.mom_name) {
-      formData.append("mom_name", formDataLocal.value.mom_name)
+      formData.append('mom_name', formDataLocal.value.mom_name)
     }
     if (formDataLocal.value.mom_phone) {
-      formData.append("mom_phone", formDataLocal.value.mom_phone)
+      formData.append('mom_phone', formDataLocal.value.mom_phone)
     }
     api
-      .post("students-update", formData)
+      .post('students-update', formData)
       .then(res => {
-        router.push("/student")
+        router.push('/student')
       })
       .finally(() => {
         submitting.value = false
@@ -137,7 +136,7 @@ onMounted(() => {
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="កែប្រែសិស្ស">
+      <VCard :title="$t('update student')">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
           <VAvatar
@@ -167,7 +166,7 @@ onMounted(() => {
                   icon="mdi-cloud-upload-outline"
                   class="d-sm-none"
                 />
-                <span class="d-none d-sm-block">Upload new photo</span>
+                <span class="d-none d-sm-block">{{ $t('upload_photo') }}</span>
               </VBtn>
 
               <input
@@ -177,7 +176,7 @@ onMounted(() => {
                 accept=".jpeg,.png,.jpg,GIF"
                 hidden
                 @input="changeAvatar"
-              >
+              />
 
               <VBtn
                 type="reset"
@@ -185,7 +184,7 @@ onMounted(() => {
                 variant="tonal"
                 @click="resetAvatar"
               >
-                <span class="d-none d-sm-block">Reset</span>
+                <span class="d-none d-sm-block">{{ $t('reset') }}</span>
                 <VIcon
                   icon="mdi-refresh"
                   class="d-sm-none"
@@ -193,9 +192,7 @@ onMounted(() => {
               </VBtn>
             </div>
 
-            <p class="text-body-1 mb-0">
-              Allowed JPG, GIF or PNG. Max size of 800K
-            </p>
+            <p class="text-body-1 mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
           </div>
         </VCardText>
 
@@ -216,8 +213,8 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.code"
-                  label="អត្ថលេខ"
-                  :rules="[(v) => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
+                  :label="$t('headers.id')"
+                  :rules="[v => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <!-- <VCol md="6" cols="12"></VCol> -->
@@ -227,8 +224,8 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.name"
-                  label="ឈ្មោះភាសាខ្មែរ"
-                  :rules="[(v) => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
+                  :label="$t('khmer_name')"
+                  :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol
@@ -237,7 +234,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.name_latin"
-                  label="ឈ្មោះឡាតាំង"
+                  :label="$t('latin_name')"
                 />
               </VCol>
 
@@ -247,7 +244,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.dob"
-                  label="ថ្ងៃខែឆ្នាំកំណើត"
+                  :label="$t('dob')"
                   type="date"
                 />
               </VCol>
@@ -257,7 +254,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.pob"
-                  label="ទីកន្លែងកំណើត"
+                  :label="$t('pob_address')"
                 />
               </VCol>
               <VCol
@@ -269,14 +266,14 @@ onMounted(() => {
                   :items="sexs"
                   item-title="name"
                   item-value="id"
-                  label="ភេទ"
-                  :rules="[(v) => !!v || 'ភេទ តម្រូវឱ្យបំពេញ']"
+                  :label="$t('Sex')"
+                  :rules="[v => !!v || 'ភេទ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol cols="12">
                 <VTextarea
                   v-model="formDataLocal.address"
-                  label="អាសយដ្ឋានបច្ចុប្បន្ន"
+                  :label="$t('current address')"
                   no-resize
                   rows="2"
                 />
@@ -287,7 +284,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.dad_name"
-                  label="ឈ្មោះឪពុក"
+                  :label="$t('headers.fatherName')"
                 />
               </VCol>
               <VCol
@@ -296,7 +293,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.dad_phone"
-                  label="លេខទូរសព្ទឪពុក"
+                  :label="$t('headers.fatherPhone')"
                 />
               </VCol>
               <VCol
@@ -305,7 +302,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.mom_name"
-                  label="ឈ្មោះម្តាយ"
+                  :label="$t('headers.motherName')"
                 />
               </VCol>
               <VCol
@@ -314,7 +311,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="formDataLocal.mom_phone"
-                  label="លេខទូរសព្ទម្តាយ"
+                  :label="$t('headers.motherPhone')"
                 />
               </VCol>
               <!-- 👉 Form Actions -->
@@ -328,7 +325,7 @@ onMounted(() => {
                   color="success"
                 >
                   <VIcon>mdi-add</VIcon>
-                  រក្សាទុក
+                  {{ $t('Save changes') }}
                 </VBtn>
 
                 <VBtn
@@ -337,7 +334,7 @@ onMounted(() => {
                   type="reset"
                   @click.prevent="resetForm"
                 >
-                  Reset
+                  {{ $t('reset') }}
                 </VBtn>
               </VCol>
             </VRow>
@@ -347,3 +344,10 @@ onMounted(() => {
     </VCol>
   </VRow>
 </template>
+<route lang="yaml">
+meta:
+  title: Update_Student_List
+  layout: default
+  subject: Auth
+  active: 'student'
+</route>
