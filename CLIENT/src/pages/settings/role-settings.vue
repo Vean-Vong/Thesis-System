@@ -49,14 +49,14 @@ const onSearch = () => {
 
 const headers = [
   {
-    title: "No",
+    title: t("No"),
     key: "no",
     align: "left",
     sortable: false,
     minWidth: "100px",
   },
   {
-    title: t("Name"),
+    title: t("headers.name"),
     key: "name",
     align: "center",
     sortable: false,

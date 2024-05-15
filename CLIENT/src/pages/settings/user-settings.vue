@@ -48,7 +48,7 @@ onMounted(() => {
 
 const headers = [
   {
-    title: "No",
+    title: t("No"),
     key: "no",
     align: "left",
     sortable: false,

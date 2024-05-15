@@ -25,8 +25,8 @@ const refForm = ref()
 const delete_item = ref(null)
 const confirmDialog = ref(false)
 const dialog_add_student = ref(false)
-const headers = ['', 'អត្ថលេខ', 'ឈ្មោះ', 'ភេទ', 'ថ្ងៃខែឆ្នាំកំណើត']
-const headers2 = ['អត្ថលេខ', 'ឈ្មោះ', 'ភេទ', 'ថ្ងៃខែឆ្នាំកំណើត', 'សកម្មភាព']
+const headers = [ 'headers.id', 'headers.name', 'headers.gender', 'dob']
+const headers2 = ['headers.id', 'headers.name', 'headers.gender', 'dob', 'headers.action']
 const selected_students = ref([])
 const listing = ref(false)
 const store = useAuthStore()
@@ -199,7 +199,7 @@ onMounted(() => {
             color="secondary"
             variant="outlined"
             @click="$router.go(-1)"
-            ><v-icon>mdi-arrow-back</v-icon>&nbsp;ថយក្រោយ</v-btn
+            ><v-icon>mdi-arrow-back</v-icon>&nbsp;{{$t('back')}}</v-btn
           >
           <VCardText>
             <v-row class="my-5 justify-end">
@@ -207,12 +207,12 @@ onMounted(() => {
                 class="mx-5"
                 color="grey"
                 @click="listingScore()"
-                ><v-icon>mdi-eye</v-icon>&nbsp;បញ្ជីនៃពិន្ទុ</v-btn
+                ><v-icon>mdi-eye</v-icon>&nbsp;{{$t('list_score')}}</v-btn
               >
               <v-btn
                 color="grey"
                 @click="listingAttendance()"
-                ><v-icon>mdi-eye</v-icon>&nbsp;បញ្ជីនៃអវត្តមាន</v-btn
+                ><v-icon>mdi-eye</v-icon>&nbsp;{{$t('list_att')}}</v-btn
               >
             </v-row>
             <v-row class="my-5 justify-end">
@@ -220,17 +220,17 @@ onMounted(() => {
                 class="mx-5"
                 color="success"
                 @click="addScore()"
-                ><v-icon>mdi-add</v-icon>&nbsp;បញ្ចូលពិន្ទុ</v-btn
+                ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_score')}}</v-btn
               >
               <v-btn
                 color="success"
                 @click="onAddAttendance()"
-                ><v-icon>mdi-add</v-icon>&nbsp;បញ្ចូលអវត្តមាន</v-btn
+                ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_att')}}</v-btn
               >
             </v-row>
           </VCardText>
           <v-card-text v-if="listing">
-            <div class="text-center font-weight-bold text-h6">បញ្ជីនៃសិស្ស</div>
+            <div class="text-center font-weight-bold text-h6">{{$t('list_student')}}</div>
             <VDivider
               class="my-5"
               :thickness="1"
@@ -244,7 +244,7 @@ onMounted(() => {
               >
                 <VTextField
                   v-model="search"
-                  placeholder="ស្វែងរក"
+                  :placeholder="$t('Search')"
                   append-inner-icon="mdi-search"
                   @keypress.enter="qStudent"
                   @click:append-inner="qStudent"
@@ -267,7 +267,7 @@ onMounted(() => {
                 <v-btn
                   color="success"
                   @click="onAddStudent()"
-                  ><v-icon>mdi-add</v-icon>&nbsp;បញ្ចូលសិស្ស</v-btn
+                  ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_student')}}</v-btn
                 >
               </v-col>
             </v-row>
@@ -282,7 +282,7 @@ onMounted(() => {
                     v-for="header in headers2"
                     :key="header"
                   >
-                    {{ header }}
+                    {{ $t(header) }}
                   </th>
                 </tr>
               </thead>
@@ -302,7 +302,7 @@ onMounted(() => {
                     :colspan="headers.length"
                     class="text-center"
                   >
-                    <div class="text-subtitle-2">កំពុងដំណើរការ...</div>
+                    <div class="text-subtitle-2">{{$t('in progress')}}</div>
                   </td>
                 </tr>
                 <tr v-if="!loading && students.length === 0">
@@ -310,7 +310,7 @@ onMounted(() => {
                     :colspan="headers.length + 1"
                     class="text-subtitle-2 text-center"
                   >
-                    មិនមានផ្ទុកទិន្នន័យ...
+                    {{$t('No data stored')}}
                   </td>
                 </tr>
                 <tr
@@ -334,7 +334,7 @@ onMounted(() => {
                           activator="parent"
                           location="bottom"
                         >
-                          ដកសិស្សចេញ
+                          {{$t('remove_student')}}
                         </v-tooltip>
                       </v-btn>
                       <v-btn
@@ -348,7 +348,7 @@ onMounted(() => {
                           activator="parent"
                           location="bottom"
                         >
-                          ផ្ទេរសិស្សចេញ
+                          {{$t('transfer_students')}}
                         </v-tooltip>
                       </v-btn>
                     </div>
@@ -374,7 +374,7 @@ onMounted(() => {
     >
       <v-card>
         <v-card-title style="display: flex; justify-content: space-between; align-items: center"
-          ><span>ជ្រើសរើសសិស្សចូលថ្នាក់</span
+          ><span>{{$t('select_student')}}</span
           ><v-btn
             color="primary"
             variant="text"
@@ -401,7 +401,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="search"
-                    placeholder="ស្វែងរក"
+                    :placeholder="$t('Search')"
                     append-inner-icon="mdi-search"
                     @keypress.enter="q"
                     @click:append-inner="q"
@@ -420,7 +420,7 @@ onMounted(() => {
                 size="large"
                 @click="onConfirmAddStudent()"
                 :loading="adding_student"
-                ><v-icon>mdi-add</v-icon>&nbsp;ដាក់សិស្សចូលថ្នាក់</v-btn
+                ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_student_to_class')}}</v-btn
               ></v-col
             >
             <v-col
@@ -438,7 +438,7 @@ onMounted(() => {
                       v-for="header in headers"
                       :key="header"
                     >
-                      {{ header }}
+                      {{ $t(header) }}
                     </th>
                     <th class="text-right"></th>
                   </tr>
@@ -459,7 +459,7 @@ onMounted(() => {
                       :colspan="headers.length"
                       class="text-center"
                     >
-                      <div class="text-subtitle-2">កំពុងដំណើរការ...</div>
+                      <div class="text-subtitle-2">{{$t('in progress')}}</div>
                     </td>
                   </tr>
                   <tr v-if="!loading && data.length === 0">
@@ -467,7 +467,7 @@ onMounted(() => {
                       :colspan="headers.length + 1"
                       class="text-subtitle-2 text-center"
                     >
-                      មិនមានផ្ទុកទិន្នន័យ...
+                    {{$t('No data stored')}}
                     </td>
                   </tr>
                   <tr
@@ -530,23 +530,30 @@ onMounted(() => {
         <v-card-text>
           {{
             action === 2
-              ? 'តើអ្នកប្រាកដក្នុងការផ្ទេរសិស្សចេញពីថ្នាក់នេះ?'
-              : 'តើអ្នកប្រាកដក្នុងការដកសិស្សចេញពីថ្នាក់នេះ?'
+              ? $t('confirm_transfer')
+              : $t('confirm_exclude')
           }}
         </v-card-text>
         <v-card-actions class="ml-auto">
           <v-btn
             color="error"
             @click="confirmDialog = false"
-            >បោះបង់</v-btn
+            >{{$t('no')}}</v-btn
           >
           <v-btn
             color="success"
             @click="confirmAction"
-            >យល់ព្រម</v-btn
+            >{{$t('yes')}}</v-btn
           >
         </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
 </template>
+<route lang="yaml">
+  meta:
+    title: Academic-Class student
+    layout: default
+    subject: Auth
+    active: 'academic-classes-list-student'
+  </route>
