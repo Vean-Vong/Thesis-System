@@ -49,8 +49,11 @@ watch(currentPage, (newValue, oldValue) => {
   }
 })
 
-const show = id => {
+const edit = id => {
   router.push(`/teacher/${id}`)
+}
+const show = id => {
+  router.push(`/teacher/detail?id=${id}`)
 }
 
 const onDelete = id => {
@@ -152,7 +155,7 @@ onMounted(() => {
                 :colspan="headers.length"
                 class="text-center"
               >
-                <div class="text-subtitle-2">{{$t('in progress')}}</div>
+                <div class="text-subtitle-2">{{ $t('in progress') }}</div>
               </td>
             </tr>
             <tr v-if="!loading && data.length === 0">
@@ -160,7 +163,7 @@ onMounted(() => {
                 :colspan="headers.length"
                 class="text-caption text-center"
               >
-                {{$t('No data stored')}}
+                {{ $t('No data stored') }}
               </td>
             </tr>
             <tr
@@ -179,12 +182,26 @@ onMounted(() => {
                   elevation="0"
                   flat
                 >
+                  <v-icon color="grey">mdi-eye</v-icon>
+                  <v-tooltip
+                    activator="parent"
+                    location="bottom"
+                  >
+                    {{ $t('checked') }}
+                  </v-tooltip>
+                </v-btn>
+                <v-btn
+                  @click="edit(row.id)"
+                  color="white"
+                  elevation="0"
+                  flat
+                >
                   <v-icon color="success">mdi-square-edit-outline</v-icon>
                   <v-tooltip
                     activator="parent"
                     location="bottom"
                   >
-                    {{$t('edit')}}
+                    {{ $t('edit') }}
                   </v-tooltip>
                 </v-btn>
                 <v-btn
@@ -198,7 +215,7 @@ onMounted(() => {
                     activator="parent"
                     location="bottom"
                   >
-                    {{$t('delete')}}
+                    {{ $t('delete') }}
                   </v-tooltip>
                 </v-btn>
               </td>
@@ -242,17 +259,17 @@ onMounted(() => {
       persistent
     >
       <v-card>
-        <v-card-text> {{$t('delete_teacher')}} </v-card-text>
+        <v-card-text> {{ $t('delete_teacher') }} </v-card-text>
         <v-card-actions class="ml-auto">
           <v-btn
             color="error"
             @click="confirmDialog = false"
-            >{{$t('no')}}</v-btn
+            >{{ $t('no') }}</v-btn
           >
           <v-btn
             color="success"
             @click="confirmAction"
-            >{{$t('yes')}}</v-btn
+            >{{ $t('yes') }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -260,9 +277,9 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
-  meta:
-    title: Teacher 
-    layout: default
-    subject: Auth
-    active: 'teacher'
-  </route>
+meta:
+  title: Teacher
+  layout: default
+  subject: Auth
+  active: 'teacher'
+</route>

@@ -146,7 +146,6 @@ onMounted(() => {
             class="me-6"
             :image="additional_image"
           />
-
           <VAvatar
             v-if="!formDataLocal.photo_path && localImage"
             rounded="lg"
