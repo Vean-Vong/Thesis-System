@@ -20,7 +20,7 @@ class StudentController extends Controller
 
         try {
 
-            $query = Student::mine()->filter(['search' => $request->search])->latest()->paginate($request->perPage);
+            $query = Student::filter(['search' => $request->search])->latest()->paginate($request->perPage);
 
             $result['data'] = $query;
         } catch (Throwable $e) {
