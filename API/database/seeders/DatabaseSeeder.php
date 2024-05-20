@@ -30,5 +30,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             StudentSeeder::class
         ]);
+
+        DB::unprepared(file_get_contents('database/sql/data.sql'));
+        $this->command->info('table seeded!');
     }
 }
