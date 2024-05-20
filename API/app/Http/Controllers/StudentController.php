@@ -20,10 +20,9 @@ class StudentController extends Controller
 
         try {
 
-            $teachers = Student::mine()->select('id', 'code', 'name', 'sex', 'dad_name', 'dad_phone', 'mom_name', 'mom_phone')
-                ->filter(['search' => $request->search])->latest()->paginate($request->perPage);
+            $query = Student::filter(['search' => $request->search])->latest()->paginate($request->perPage);
 
-            $result['data'] = $teachers;
+            $result['data'] = $query;
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();
@@ -60,7 +59,7 @@ class StudentController extends Controller
 
         try {
 
-            $student = Student::select('id', 'code', 'name', 'name_latin', 'sex', 'dob', 'pob', 'address', 'photo_path', 'dad_name', 'dad_phone', 'mom_name', 'mom_phone')->findOrFail($request->id);
+            $student = Student::findOrFail($request->id);
 
             $result['model'] = $student;
         } catch (Throwable $e) {

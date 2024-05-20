@@ -27,7 +27,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PermissionSeeder::class,
-            RoleSeeder::class
+            RoleSeeder::class,
+            StudentSeeder::class
         ]);
+
+        DB::unprepared(file_get_contents('database/sql/data.sql'));
+        $this->command->info('table seeded!');
     }
 }
