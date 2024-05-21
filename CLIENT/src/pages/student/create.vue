@@ -30,6 +30,16 @@ const sexs = ref([
     name: 'ស្រី',
   },
 ])
+const status = ref([
+  {
+    id: 1,
+    name: '1',
+  },
+  {
+    id: 2,
+    name: '2',
+  },
+])
 
 const form = {
   code: null,
@@ -310,7 +320,7 @@ const submitHandler = async () => {
                 >
                   <VSelect
                     v-model="formDataLocal.student_status"
-                    :items="student_status"
+                    :items="status"
                     item-title="name"
                     item-value="id"
                     label="Student Status"
@@ -347,7 +357,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.village"
+                    v-model="formDataLocal.village_birth"
                     label="Village"
                     :rules="[v => !!v || 'ភូមិ តម្រូវឱ្យបំពេញ']"
                   />
@@ -357,7 +367,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.commnue"
+                    v-model="formDataLocal.commnue_birth"
                     label="Commune"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
@@ -367,7 +377,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.district"
+                    v-model="formDataLocal.district_birth"
                     label="District"
                     :rules="[v => !!v || 'ស្រុក តម្រូវឱ្យបំពេញ']"
                   />
@@ -377,7 +387,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.province"
+                    v-model="formDataLocal.province_birth"
                     label="Province"
                     :rules="[v => !!v || 'ខេត្ត តម្រូវឱ្យបំពេញ']"
                   />
@@ -474,7 +484,7 @@ const submitHandler = async () => {
                       >
                         <VTextField
                           v-model="formDataLocal.job_father"
-                          label="Last Name"
+                          label="Job"
                           :rules="[v => !!v || 'ការងារ តម្រូវឱ្យបំពេញ']"
                         />
                       </VCol>
@@ -528,7 +538,7 @@ const submitHandler = async () => {
                       >
                         <VTextField
                           v-model="formDataLocal.job_mother"
-                          label="Last Name"
+                          label="Job"
                           :rules="[v => !!v || 'ការងារ តម្រូវឱ្យបំពេញ']"
                         />
                       </VCol>
