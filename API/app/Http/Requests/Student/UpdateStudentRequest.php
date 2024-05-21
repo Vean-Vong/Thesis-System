@@ -64,4 +64,5 @@ class UpdateStudentRequest extends FormRequest
             'g_gender'          => ['nullable', Rule::in([1, 2])],
             'g_detail'          => ['nullable', 'max:255'],
         ];
+    }
 }
