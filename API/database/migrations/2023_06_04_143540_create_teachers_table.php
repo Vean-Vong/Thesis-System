@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignId('school_id')->index();
             $table->string('code', 20)->nullable()->index();
             $table->string('name', 100);
             $table->string('name_latin', 100)->nullable();

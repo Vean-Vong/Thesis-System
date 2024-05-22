@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('academic_classes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('school_id')->index();
+
+            // 1 for កាត់ដេ 2 for englist 3 for computer classes
+            $table->tinyInteger('type')->index();
             $table->string('name', 50);
-            $table->foreignUuid('teacher_id')->index();
-            $table->foreignId('academic_year_id')->index();
+            $table->foreignUuid('teacher_id');
+            $table->foreignId('room_id')->nullable();
+            $table->foreignId('time_id')->nullable();
+            $table->foreignId('level_id')->nullable();
+            $table->foreignId('academic_year_id');
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();
             $table->softDeletes();

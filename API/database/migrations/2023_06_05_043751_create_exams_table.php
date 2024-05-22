@@ -12,15 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exams', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->id();
             $table->foreignUuid('academic_class_id')->index();
-            $table->foreignUuid('student_id')->index();
-            $table->tinyInteger('semester')->comment('for semester 1 or 2');
-            $table->tinyInteger('type')->comment('0 => is semester exam, 1-12 is monthly exam');
-            $table->float('m')->comment('Mathemathic')->default(0)->nullable();
-            $table->float('k')->comment('Khmer')->default(0)->nullable();
-            $table->float('sc')->comment('Science')->default(0)->nullable();
-            $table->float('s')->comment('Sociality')->default(0)->nullable();
+            $table->foreignUuid('student_id')->index();;
+            $table->tinyInteger('att')->default(0);
+            $table->tinyInteger('quiz')->default(0);
+            $table->tinyInteger('hw')->default(0);
+            $table->tinyInteger('re')->default(0);
+            $table->tinyInteger('voc')->default(0);
+            $table->tinyInteger('gr')->default(0);
+            $table->tinyInteger('liu')->default(0);
+            $table->tinyInteger('wr')->default(0);
+            $table->tinyInteger('li')->default(0);
+            $table->tinyInteger('sp')->default(0);
+            $table->float('total', 5, 2)->default(0);
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();
             $table->softDeletes();

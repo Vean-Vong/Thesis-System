@@ -55,11 +55,6 @@ class Student extends Model
         'g_detail',
     ];
 
-    public function scopeMine($query)
-    {
-        return $query->where('school_id', auth()->user()->school_id);
-    }
-
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {

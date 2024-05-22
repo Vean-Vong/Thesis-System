@@ -19,7 +19,6 @@ class Teacher extends Model
     ];
 
     protected $fillable = [
-        'school_id',
         'code',
         'name',
         'name_latin',
@@ -31,11 +30,6 @@ class Teacher extends Model
         'address',
         'phone',
     ];
-
-    public function scopeMine($query)
-    {
-        return $query->where('school_id', auth()->user()->school_id);
-    }
 
     public function scopeFilter($query, array $filters)
     {

@@ -13,7 +13,6 @@ class AcademicClass extends Model
     use HasFactory, CreatedUpdatedBy, UUIDs, SoftDeletes;
 
     protected $fillable = [
-        'school_id',
         'name',
         'teacher_id',
         'academic_year_id',
@@ -29,11 +28,6 @@ class AcademicClass extends Model
         })->when($filters['academic_year_id'] ?? null, function ($query, $academic_year_id) {
             $query->whereAcademicYearId($academic_year_id);
         });
-    }
-
-    public function scopeMine($query)
-    {
-        return $query->where('school_id', auth()->user()->school_id);
     }
 
     public function teacher()
