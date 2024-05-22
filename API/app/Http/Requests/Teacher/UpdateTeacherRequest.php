@@ -27,7 +27,7 @@ class UpdateTeacherRequest extends FormRequest
             'code' => [
                 'required',
                 'max:20',
-                Rule::unique('teachers', 'code')->where('school_id', auth()->user()->school_id)->ignore(request('id'))
+                Rule::unique('teachers', 'code')->ignore(request('id'))
             ],
 
             'name' => [

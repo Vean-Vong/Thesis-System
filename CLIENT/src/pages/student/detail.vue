@@ -56,14 +56,14 @@ onMounted(() => {
           <v-row>
             <v-col>
               <v-card-text>Code : {{ student.code }}</v-card-text>
-              <v-card-text>Name : {{ student.name }}</v-card-text>
+              <v-card-text>Name : {{ student.first_name + ' ' + student.last_name }}</v-card-text>
               <v-card-text>Day Of Birth : {{ student.dob }}</v-card-text>
               <v-card-text>Gender : {{ student.sex_text }}</v-card-text>
-              <v-card-text>Student Status :</v-card-text>
-              <v-card-text>Status :</v-card-text>
-              <v-card-text>From :</v-card-text>
-              <v-card-text>Phone Number :</v-card-text>
-              <v-card-text>Other :</v-card-text>
+              <v-card-text>Student Status : {{ student.student_status }}</v-card-text>
+              <v-card-text>Status : {{ student.status }}</v-card-text>
+              <v-card-text>From : {{student.from }}</v-card-text>
+              <v-card-text>Phone Number : {{student.phone}}</v-card-text>
+              <v-card-text>Other : {{student.other}}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
@@ -73,10 +73,10 @@ onMounted(() => {
           <v-card-title class="bg-primary rounded">Place Of Birth</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Village : </v-card-text>
-              <v-card-text>Commune :</v-card-text>
-              <v-card-text>District :{{ student.pob }}</v-card-text>
-              <v-card-text>Province : {{ student.pob }}</v-card-text>
+              <v-card-text>Village : {{ student.village_birth }} </v-card-text>
+              <v-card-text>Commune : {{ student.commune_birth }} </v-card-text>
+              <v-card-text>District : {{ student.district_birth }}</v-card-text>
+              <v-card-text>Province : {{ student.province_birth }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
@@ -84,10 +84,10 @@ onMounted(() => {
           <v-card-title class="bg-primary rounded">Address</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Village :</v-card-text>
-              <v-card-text>Commune :</v-card-text>
-              <v-card-text>District : {{ student.address }}</v-card-text>
-              <v-card-text>Province : {{ student.address }}</v-card-text>
+              <v-card-text>Village : {{ student.village }}</v-card-text>
+              <v-card-text>Commune : {{ student.commune }}</v-card-text>
+              <v-card-text>District : {{ student.district }}</v-card-text>
+              <v-card-text>Province : {{ student.province}}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
@@ -97,9 +97,9 @@ onMounted(() => {
           <v-card-title class="bg-primary rounded">Father's Info</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Name :{{ student.dad_name }}</v-card-text>
-              <v-card-text>Job :</v-card-text>
-              <v-card-text>Phone Number :{{ student.dad_phone }}</v-card-text>
+              <v-card-text>Name : {{ student.d_first_name + ' ' + student.last_name }}</v-card-text>
+              <v-card-text>Job : {{ student.d_job }}</v-card-text>
+              <v-card-text>Phone Number : {{ student.d_phone_number }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
@@ -107,9 +107,9 @@ onMounted(() => {
           <v-card-title class="bg-primary rounded">Mother's Info</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Name :{{ student.mom_name }}</v-card-text>
-              <v-card-text>Job :</v-card-text>
-              <v-card-text>Phone Number :{{ student.mom_phone }}</v-card-text>
+              <v-card-text>Name : {{ student.m_first_name + ' ' + student.m_last_name }}</v-card-text>
+              <v-card-text>Job : {{ student.m_job }}</v-card-text>
+              <v-card-text>Phone Number : {{ student.m_phone_number }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
@@ -119,9 +119,10 @@ onMounted(() => {
           <v-card-title class="bg-primary rounded">Guardian</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Name :</v-card-text>
-              <v-card-text>Sex :</v-card-text>
-              <v-card-text>Phone Number :</v-card-text>
+              <v-card-text>Name : {{ student.g_first_name + ' ' + student.g_last_name }}</v-card-text>
+              <v-card-text>Gender : {{ student.g_gender }}</v-card-text>
+              <v-card-text>Detail : {{ student.g_detail }}</v-card-text>
+              <v-card-text>Phone Number : {{ student.g_phone_number }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>

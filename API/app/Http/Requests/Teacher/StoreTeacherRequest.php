@@ -27,7 +27,7 @@ class StoreTeacherRequest extends FormRequest
             'code' => [
                 'required',
                 'max:20',
-                Rule::unique('teachers', 'code')->where('school_id', auth()->user()->school_id)
+                Rule::unique('teachers', 'code')
             ],
 
             'name' => [
