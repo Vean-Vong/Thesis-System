@@ -1,6 +1,6 @@
 <script setup>
 import avatar1 from '@/assets/images/avatars/avatar-1.png'
-import { onMounted, ref, reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import api from '@/plugins/utilites'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/plugins/auth.module'
@@ -21,39 +21,50 @@ const additional_image = ref(avatar1)
 const refForm = ref(null)
 const router = useRouter()
 const sexs = ref([
-  {
-    id: 1,
-    name: 'ប្រុស',
-  },
-  {
-    id: 2,
-    name: 'ស្រី',
-  },
+  { id: 1, name: 'ប្រុស' },
+  { id: 2, name: 'ស្រី' },
 ])
 const status = ref([
-  {
-    id: 1,
-    name: '1',
-  },
-  {
-    id: 2,
-    name: '2',
-  },
+  { id: 1, name: '1' },
+  { id: 2, name: '2' },
 ])
 
 const form = {
   code: null,
-  name: null,
-  name_latin: null,
+  last_name: null,
+  first_name: null,
+  last_name_latin: null,
+  first_name_latin: null,
   sex: null,
+  gender: null,
   dob: null,
-  pob: null,
-  address: null,
+  phone: null,
+  from: null,
+  student_status: null,
+  other: null,
+  village_birth: null,
+  commune_birth: null,
+  district_birth: null,
+  province_birth: null,
+  village: null,
+  commune: null,
+  district: null,
+  province: null,
+  d_last_name: null,
+  d_first_name: null,
+  d_job: null,
+  d_phone_number: null,
+  m_last_name: null,
+  m_first_name: null,
+  m_job: null,
+  m_phone_number: null,
+  g_last_name: null,
+  g_first_name: null,
+  g_phone_number: null,
+  g_job: null,
+  g_gender: null,
+  g_detail: null,
   photo_path: null,
-  dad_name: null,
-  dad_phone: null,
-  mom_name: null,
-  mom_phone: null,
 }
 
 const refInputEl = ref()
@@ -86,36 +97,12 @@ const submitHandler = async () => {
     submitting.value = true
     let formData = new FormData()
 
-    formData.append('code', formDataLocal.value.code)
-    formData.append('name', formDataLocal.value.name)
-    formData.append('sex', formDataLocal.value.sex)
-    if (formDataLocal.value.photo_path) {
-      formData.append('photo_path', formDataLocal.value.photo_path)
+    for (const key in formDataLocal.value) {
+      if (formDataLocal.value[key] !== null) {
+        formData.append(key, formDataLocal.value[key])
+      }
     }
-    if (formDataLocal.value.name_latin) {
-      formData.append('name_latin', formDataLocal.value.name_latin)
-    }
-    if (formDataLocal.value.dob) {
-      formData.append('dob', formDataLocal.value.dob)
-    }
-    if (formDataLocal.value.pob) {
-      formData.append('pob', formDataLocal.value.pob)
-    }
-    if (formDataLocal.value.address) {
-      formData.append('address', formDataLocal.value.address)
-    }
-    if (formDataLocal.value.dad_name) {
-      formData.append('dad_name', formDataLocal.value.dad_name)
-    }
-    if (formDataLocal.value.dad_phone) {
-      formData.append('dad_phone', formDataLocal.value.dad_phone)
-    }
-    if (formDataLocal.value.mom_name) {
-      formData.append('mom_name', formDataLocal.value.mom_name)
-    }
-    if (formDataLocal.value.mom_phone) {
-      formData.append('mom_phone', formDataLocal.value.mom_phone)
-    }
+
     api
       .post('students-create', formData)
       .then(res => {
@@ -210,7 +197,6 @@ const submitHandler = async () => {
                     :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
-                <!-- <VCol md="6" cols="12"></VCol> -->
                 <VCol
                   md="3"
                   cols="12"
@@ -221,46 +207,26 @@ const submitHandler = async () => {
                     :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
-                <!-- <VCol
-                md="3"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.name"
-                  :label="$t('khmer_name')"
-                  :rules="[(v) => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
-                />
-              </VCol> -->
                 <VCol
                   md="3"
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.name_latin_last"
+                    v-model="formDataLocal.last_name_latin"
                     label="Last Name Latin"
                     :rules="[v => !!v || 'ឈ្មោះឡាតាំង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
-                <!-- <VCol
-                md="3"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.name_latin"
-                  :label="$t('latin_name')"
-                />
-              </VCol> -->
                 <VCol
                   md="3"
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.name_latin_first"
+                    v-model="formDataLocal.first_name_latin"
                     label="First Name Latin"
                     :rules="[v => !!v || 'ឈ្មោះឡាតាំង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
-
                 <VCol
                   md="3"
                   cols="12"
@@ -276,7 +242,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VSelect
-                    v-model="formDataLocal.sex"
+                    v-model="formDataLocal.gender"
                     :items="sexs"
                     item-title="name"
                     item-value="id"
@@ -292,6 +258,7 @@ const submitHandler = async () => {
                     v-model="formDataLocal.dob"
                     :label="$t('dob')"
                     type="date"
+                    :rules="[v => !!v || 'ថ្ងៃខែឆ្នាំកំណើត តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
@@ -299,7 +266,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.phoneNumber"
+                    v-model="formDataLocal.phone"
                     label="Phone Number"
                     :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
                   />
@@ -311,7 +278,6 @@ const submitHandler = async () => {
                   <VTextField
                     v-model="formDataLocal.from"
                     label="From"
-                    :rules="[v => !!v || 'ទីកន្លែង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
@@ -324,7 +290,6 @@ const submitHandler = async () => {
                     item-title="name"
                     item-value="id"
                     label="Student Status"
-                    :rules="[v => !!v || 'ស្ថានភាពសិស្ស តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
@@ -334,7 +299,6 @@ const submitHandler = async () => {
                   <VTextField
                     v-model="formDataLocal.other"
                     label="Other"
-                    :rules="[v => !!v || 'ផ្សេងៗ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
@@ -367,7 +331,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.commnue_birth"
+                    v-model="formDataLocal.commune_birth"
                     label="Commune"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
@@ -413,7 +377,7 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.commnue"
+                    v-model="formDataLocal.commune"
                     label="Commune"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
@@ -439,279 +403,208 @@ const submitHandler = async () => {
                   />
                 </VCol>
               </VRow>
+
+              <VRow>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VCard>
+                    <div class="mx-3 my-4">
+                      <h3 class="mb-5">Father's Information</h3>
+                      <VRow>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.d_last_name"
+                            label="Last Name"
+                          />
+                        </VCol>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.d_first_name"
+                            label="First Name"
+                          />
+                        </VCol>
+                      </VRow>
+                      <VRow>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.d_job"
+                            label="Job"
+                          />
+                        </VCol>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.d_phone_number"
+                            label="Phone Number"
+                          />
+                        </VCol>
+                      </VRow>
+                    </div>
+                  </VCard>
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VCard>
+                    <div class="mx-3 my-4">
+                      <h3 class="mb-5">Mother's Information</h3>
+                      <VRow>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.m_last_name"
+                            label="Last Name"
+                          />
+                        </VCol>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.m_first_name"
+                            label="First Name"
+                          />
+                        </VCol>
+                      </VRow>
+                      <VRow>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.m_job"
+                            label="Job"
+                          />
+                        </VCol>
+                        <VCol
+                          md="6"
+                          cols="12"
+                        >
+                          <VTextField
+                            v-model="formDataLocal.m_phone_number"
+                            label="Phone Number"
+                          />
+                        </VCol>
+                      </VRow>
+                    </div>
+                  </VCard>
+                </VCol>
+              </VRow>
+
+              <VCard>
+                <div class="mx-3 my-4">
+                  <h3 class="mb-5">Guardian</h3>
+                  <VRow>
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_last_name"
+                        label="Last Name"
+                      />
+                    </VCol>
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_first_name"
+                        label="First Name"
+                      />
+                    </VCol>
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_phone_number"
+                        label="Phone Number"
+                      />
+                    </VCol>
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_job"
+                        label="Job"
+                      />
+                    </VCol>
+                    <VCol
+                      md="4"
+                      cols="12"
+                    >
+                      <VSelect
+                        v-model="formDataLocal.g_gender"
+                        :items="sexs"
+                        item-title="name"
+                        item-value="id"
+                        :label="$t('Sex')"
+                      />
+                    </VCol>
+                    <VCol
+                      md="8"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_detail"
+                        label="Detail"
+                      />
+                    </VCol>
+                  </VRow>
+                </div>
+              </VCard>
+
+              <VRow>
+                <!-- 👉 Form Actions -->
+                <VCol
+                  cols="12"
+                  class="d-flex flex-wrap gap-4"
+                >
+                  <VBtn
+                    type="submit"
+                    :loading="submitting"
+                    color="success"
+                  >
+                    <VIcon>mdi-add</VIcon>
+                    {{ $t('Save changes') }}
+                  </VBtn>
+
+                  <VBtn
+                    color="secondary"
+                    variant="tonal"
+                    type="reset"
+                    @click.prevent="resetForm"
+                  >
+                    {{ $t('reset') }}
+                  </VBtn>
+                </VCol>
+              </VRow>
             </VForm>
           </VCard>
-          <Vform
-            ref="refForm"
-            class="my-4 mx-3"
-            lazy-validation
-            @submit.prevent="submitHandler"
-          >
-            <VRow>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VCard>
-                  <div class="mx-3 my-4">
-                    <h3>Father's Information</h3>
-                    <VRow>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.lastName_father"
-                          label="Last Name"
-                          :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.firstName_father"
-                          label="First Name"
-                          :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                    </VRow>
-                    <VRow>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.job_father"
-                          label="Job"
-                          :rules="[v => !!v || 'ការងារ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.dad_phone"
-                          label="Phone Number"
-                          :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                    </VRow>
-                  </div>
-                </VCard>
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VCard>
-                  <div class="mx-3 my-4">
-                    <h3>Mother's Information</h3>
-                    <VRow>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.lastName_mother"
-                          label="Last Name"
-                          :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.firstName_mother"
-                          label="First Name"
-                          :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                    </VRow>
-                    <VRow>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.job_mother"
-                          label="Job"
-                          :rules="[v => !!v || 'ការងារ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                      <VCol
-                        md="6"
-                        cols="12"
-                      >
-                        <VTextField
-                          v-model="formDataLocal.mom_phone"
-                          label="Phone Number"
-                          :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
-                        />
-                      </VCol>
-                    </VRow>
-                  </div>
-                </VCard>
-              </VCol>
-            </VRow>
-          </Vform>
-          <VForm
-            ref="refForm"
-            class="mt-1 mb-6"
-            lazy-validation
-            @submit.prevent="submitHandler"
-          >
-            <VCard>
-              <div class="mx-3 my-4">
-                <h3>Guardian</h3>
-                <VRow>
-                  <VCol
-                    md="6"
-                    cols="12"
-                  >
-                    <VTextField
-                      v-model="formDataLocal.lastName_guardian"
-                      label="Last Name"
-                      :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
-                    />
-                  </VCol>
-                  <VCol
-                    md="6"
-                    cols="12"
-                  >
-                    <VTextField
-                      v-model="formDataLocal.firstName_guardian"
-                      label="First Name"
-                      :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
-                    />
-                  </VCol>
-                  <VCol
-                    md="6"
-                    cols="12"
-                  >
-                    <VTextField
-                      v-model="formDataLocal.phone_guardian"
-                      label="Phone Number"
-                      :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
-                    />
-                  </VCol>
-                  <VCol
-                    md="6"
-                    cols="12"
-                  >
-                    <VTextField
-                      v-model="formDataLocal.job_guardian"
-                      label="Job"
-                      :rules="[v => !!v || 'ការងារ តម្រូវឱ្យបំពេញ']"
-                    />
-                  </VCol>
-                  <VCol
-                    md="4"
-                    cols="12"
-                  >
-                    <VSelect
-                      v-model="formDataLocal.sex"
-                      :items="sexs"
-                      item-title="name"
-                      item-value="id"
-                      :label="$t('Sex')"
-                      :rules="[v => !!v || 'ភេទ តម្រូវឱ្យបំពេញ']"
-                    />
-                  </VCol>
-                  <VCol
-                    md="8"
-                    cols="12"
-                  >
-                    <VTextField
-                      v-model="formDataLocal.detail_guardian"
-                      label="Detail"
-                      :rules="[v => !!v || 'លម្អិត តម្រូវឱ្យបំពេញ']"
-                    />
-                  </VCol>
-                </VRow>
-              </div>
-            </VCard>
-          </VForm>
-
-          <VForm>
-            <VRow>
-              <!-- <VCol cols="12">
-                <VTextarea
-                  v-model="formDataLocal.address"
-                  :label="$t('current address')"
-                  no-resize
-                  rows="2"
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.dad_name"
-                  :label="$t('headers.fatherName')"
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.dad_phone"
-                  :label="$t('headers.fatherPhone')"
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.mom_name"
-                  :label="$t('headers.motherName')"
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.mom_phone"
-                  :label="$t('headers.motherPhone')"
-                />
-              </VCol> -->
-              <!-- 👉 Form Actions -->
-              <VCol
-                cols="12"
-                class="d-flex flex-wrap gap-4"
-              >
-                <VBtn
-                  type="submit"
-                  :loading="submitting"
-                  color="success"
-                >
-                  <VIcon>mdi-add</VIcon>
-                  {{ $t('Save changes') }}
-                </VBtn>
-
-                <VBtn
-                  color="secondary"
-                  variant="tonal"
-                  type="reset"
-                  @click.prevent="resetForm"
-                >
-                  {{ $t('reset') }}
-                </VBtn>
-              </VCol>
-            </VRow>
-          </VForm>
         </VCardText>
       </VCard>
     </VCol>
   </VRow>
 </template>
+
 <route lang="yaml">
 meta:
   title: Student List

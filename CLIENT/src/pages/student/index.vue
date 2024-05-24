@@ -179,11 +179,11 @@ onMounted(() => {
               :key="row.id"
             >
               <td v-text="row.code" />
-              <td v-text=" row.first_name + ' ' + row.last_name "/>
+              <td v-text="row.first_name + ' ' + row.last_name" />
               <td v-text="row.sex_text" />
               <td v-text="row.phone" />
-              <td v-text="row.d_first_name+' '+row.d_last_name" />
-              <td v-text="row.m_first_name+' '+row.m_last_name" /> 
+              <td v-text="row.d_first_name + ' ' + row.d_last_name" />
+              <td v-text="row.m_first_name + ' ' + row.m_last_name" />
               <td>
                 <v-btn
                   @click="show(row.id)"

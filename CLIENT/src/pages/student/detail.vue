@@ -58,7 +58,7 @@ onMounted(() => {
               <v-card-text>Code : {{ student.code }}</v-card-text>
               <v-card-text>Name : {{ student.first_name + ' ' + student.last_name }}</v-card-text>
               <v-card-text>Day Of Birth : {{ student.dob }}</v-card-text>
-              <v-card-text>Gender : {{ student.sex_text }}</v-card-text>
+              <v-card-text>Gender : {{ student.gender }}</v-card-text>
               <v-card-text>Student Status : {{ student.student_status }}</v-card-text>
               <v-card-text>Status : {{ student.status }}</v-card-text>
               <v-card-text>From : {{student.from }}</v-card-text>
