@@ -26,7 +26,7 @@ onMounted(() => {
   <!-- <h1>{{ route.query.id }}</h1> -->
   <div>
     <v-card>
-      <v-card-title> Student List </v-card-title>
+      <v-card-title> {{ $t('student_list') }} </v-card-title>
     </v-card>
     <v-card class="mt-7">
       <v-btn
@@ -51,78 +51,98 @@ onMounted(() => {
         </v-col>
         <v-col>
           <v-col>
-            <v-card-title class="bg-primary rounded"> Profile </v-card-title>
+            <v-card-title class="bg-primary rounded"> {{ $t('profile') }} </v-card-title>
           </v-col>
           <v-row>
             <v-col>
-              <v-card-text>Code : {{ student.code }}</v-card-text>
-              <v-card-text>Name : {{ student.first_name + ' ' + student.last_name }}</v-card-text>
-              <v-card-text>Day Of Birth : {{ student.dob }}</v-card-text>
-              <v-card-text>Gender : {{ student.gender }}</v-card-text>
-              <v-card-text>Student Status : {{ student.student_status }}</v-card-text>
-              <v-card-text>Status : {{ student.status }}</v-card-text>
-              <v-card-text>From : {{student.from }}</v-card-text>
-              <v-card-text>Phone Number : {{student.phone}}</v-card-text>
-              <v-card-text>Other : {{student.other}}</v-card-text>
+              <v-card-text>{{ $t('code') }} : {{ student.code }}</v-card-text>
+              <v-card-text>{{ $t('headers.name') }} : {{ student.last_name + ' ' + student.first_name }}</v-card-text>
+              <v-card-text>{{ $t('dob') }} : {{ student.dob }}</v-card-text>
+              <v-card-text>{{ $t('headers.gender') }} : {{ student.gender }}</v-card-text>
+              <v-card-text>{{ $t('status') }} : {{ student.student_status }}</v-card-text>
+              <v-card-text>{{ $t('from') }} : {{ student.from }}</v-card-text>
+              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.phone }}</v-card-text>
+              <v-card-text>{{ $t('other') }} : {{ student.other }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
       <v-row class="mx-2">
         <v-col>
-          <v-card-title class="bg-primary rounded">Place Of Birth</v-card-title>
+          <v-card-title class="bg-primary rounded">{{ $t('pob') }}</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Village : {{ student.village_birth }} </v-card-text>
-              <v-card-text>Commune : {{ student.commune_birth }} </v-card-text>
-              <v-card-text>District : {{ student.district_birth }}</v-card-text>
-              <v-card-text>Province : {{ student.province_birth }}</v-card-text>
+              <v-card-text>{{ $t('village') }} : {{ student.village_birth }} </v-card-text>
+              <v-card-text>{{ $t('district') }} : {{ student.district_birth }}</v-card-text>
+            </v-col>
+            <v-col>
+              <v-card-text>{{ $t('commune') }} : {{ student.commune_birth }} </v-card-text>
+              <v-card-text>{{ $t('province') }} : {{ student.province_birth }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
         <v-col>
-          <v-card-title class="bg-primary rounded">Address</v-card-title>
+          <v-card-title class="bg-primary rounded">{{ $t('add') }}</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Village : {{ student.village }}</v-card-text>
-              <v-card-text>Commune : {{ student.commune }}</v-card-text>
-              <v-card-text>District : {{ student.district }}</v-card-text>
-              <v-card-text>Province : {{ student.province}}</v-card-text>
+              <v-card-text>{{ $t('village') }} : {{ student.village_birth }} </v-card-text>
+              <v-card-text>{{ $t('district') }} : {{ student.district_birth }}</v-card-text>
+            </v-col>
+            <v-col>
+              <v-card-text>{{ $t('commune') }} : {{ student.commune_birth }} </v-card-text>
+              <v-card-text>{{ $t('province') }} : {{ student.province_birth }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
       <v-row class="mx-2">
         <v-col col="12">
-          <v-card-title class="bg-primary rounded">Father's Info</v-card-title>
+          <v-card-title class="bg-primary rounded">{{ $t('father_infor') }}</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Name : {{ student.d_first_name + ' ' + student.last_name }}</v-card-text>
-              <v-card-text>Job : {{ student.d_job }}</v-card-text>
-              <v-card-text>Phone Number : {{ student.d_phone_number }}</v-card-text>
+              <v-card-text>{{ $t('headers.name') }} : {{ student.d_last_name + ' ' + student.first_name }}</v-card-text>
+              <v-card-text>{{ $t('job') }} : {{ student.d_job }}</v-card-text>
+              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.d_phone_number }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
         <v-col>
-          <v-card-title class="bg-primary rounded">Mother's Info</v-card-title>
+          <v-card-title class="bg-primary rounded">{{ $t('mother_infor') }}</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>Name : {{ student.m_first_name + ' ' + student.m_last_name }}</v-card-text>
-              <v-card-text>Job : {{ student.m_job }}</v-card-text>
-              <v-card-text>Phone Number : {{ student.m_phone_number }}</v-card-text>
+              <v-card-text
+                >{{ $t('headers.name') }} : {{ student.m_last_name + ' ' + student.m_first_name }}</v-card-text
+              >
+              <v-card-text>{{ $t('job') }} : {{ student.m_job }}</v-card-text>
+              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.m_phone_number }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
       <v-row class="mx-2">
-        <v-col>
-          <v-card-title class="bg-primary rounded">Guardian</v-card-title>
+        <v-col cols="12">
+          <v-card-title class="bg-primary rounded">{{ $t('guardian') }}</v-card-title>
           <v-row>
-            <v-col>
-              <v-card-text>Name : {{ student.g_first_name + ' ' + student.g_last_name }}</v-card-text>
-              <v-card-text>Gender : {{ student.g_gender }}</v-card-text>
-              <v-card-text>Detail : {{ student.g_detail }}</v-card-text>
-              <v-card-text>Phone Number : {{ student.g_phone_number }}</v-card-text>
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-card-text
+                >{{ $t('headers.name') }} : {{ student.g_last_name + ' ' + student.g_first_name }}</v-card-text
+              >
+              <v-card-text>{{ $t('detail') }} : {{ student.g_detail }}</v-card-text>
+            </v-col>
+            <v-col
+              cols="12"
+              md="2"
+            >
+              <v-card-text>{{ $t('headers.gender') }} : {{ student.g_gender }}</v-card-text>
+            </v-col>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.g_phone_number }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>

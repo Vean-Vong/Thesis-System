@@ -25,8 +25,8 @@ const sexs = ref([
   { id: 2, name: 'ស្រី' },
 ])
 const status = ref([
-  { id: 1, name: '1' },
-  { id: 2, name: '2' },
+  { id: 1, name: 'នៅលីវ' },
+  { id: 2, name: 'មានគ្រួសារ' },
 ])
 
 const form = {
@@ -185,25 +185,35 @@ const submitHandler = async () => {
                   md="12"
                   cols="12"
                 >
-                  <h3>Personal Information</h3>
+                  <h3>{{$t('personal_infor')}}</h3>
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="formDataLocal.code"
+                    :label="$t('code')"
+                    :rules="[v => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
+                  />
+                </VCol>
+                <VCol
+                  md="2"
                   cols="12"
                 >
                   <VTextField
                     v-model="formDataLocal.last_name"
-                    label="Last Name"
+                    :label="$t('surname')"
                     :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VTextField
                     v-model="formDataLocal.first_name"
-                    label="First Name"
+                    :label="$t('name')"
                     :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -213,7 +223,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.last_name_latin"
-                    label="Last Name Latin"
+                    :label="$t('surname_latin')"
                     :rules="[v => !!v || 'ឈ្មោះឡាតាំង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -223,22 +233,12 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.first_name_latin"
-                    label="First Name Latin"
+                    :label="$t('name_latin')"
                     :rules="[v => !!v || 'ឈ្មោះឡាតាំង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
-                  md="3"
-                  cols="12"
-                >
-                  <VTextField
-                    v-model="formDataLocal.code"
-                    :label="$t('headers.id')"
-                    :rules="[v => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
-                  />
-                </VCol>
-                <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VSelect
@@ -251,7 +251,7 @@ const submitHandler = async () => {
                   />
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VTextField
@@ -266,9 +266,8 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.phone"
-                    label="Phone Number"
-                    :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
+                    v-model="formDataLocal.from"
+                    :label="$t('from')"
                   />
                 </VCol>
                 <VCol
@@ -276,29 +275,30 @@ const submitHandler = async () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.from"
-                    label="From"
+                    v-model="formDataLocal.phone"
+                    :label="$t('headers.phone_number')"
+                    :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VSelect
                     v-model="formDataLocal.student_status"
                     :items="status"
-                    item-title="name"
+                    item-title='name'
                     item-value="id"
-                    label="Student Status"
+                    :label="$t('status')"
                   />
                 </VCol>
                 <VCol
-                  md="4"
+                  md="2"
                   cols="12"
                 >
                   <VTextField
                     v-model="formDataLocal.other"
-                    label="Other"
+                    :label="$t('other')"
                   />
                 </VCol>
                 <VCol
@@ -307,14 +307,14 @@ const submitHandler = async () => {
                   class="mt-2"
                 >
                   <input type="radio" />&nbsp;
-                  <label for="">Active</label>
+                  <label for="">{{$t('active')}}</label>
                 </VCol>
 
                 <VCol
                   md="12"
                   cols="12"
                 >
-                  <h3>Place Of Birth</h3>
+                  <h3>{{ $t('pob') }}</h3>
                 </VCol>
                 <VCol
                   md="3"
@@ -322,7 +322,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.village_birth"
-                    label="Village"
+                    :label="$t('village')"
                     :rules="[v => !!v || 'ភូមិ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -332,7 +332,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.commune_birth"
-                    label="Commune"
+                    :label="$t('commune')"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -342,7 +342,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.district_birth"
-                    label="District"
+                    :label="$t('district')"
                     :rules="[v => !!v || 'ស្រុក តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -352,7 +352,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.province_birth"
-                    label="Province"
+                    :label="$t('province')"
                     :rules="[v => !!v || 'ខេត្ត តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -360,7 +360,7 @@ const submitHandler = async () => {
                   md="12"
                   cols="12"
                 >
-                  <h3>Address</h3>
+                <h3>{{ $t('add') }}</h3>
                 </VCol>
                 <VCol
                   md="3"
@@ -368,7 +368,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.village"
-                    label="Village"
+                    :label="$t('village')"
                     :rules="[v => !!v || 'ភូមិ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -378,7 +378,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.commune"
-                    label="Commune"
+                    :label="$t('commune')"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -388,7 +388,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.district"
-                    label="District"
+                    :label="$t('district')"
                     :rules="[v => !!v || 'ស្រុក តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -398,7 +398,7 @@ const submitHandler = async () => {
                 >
                   <VTextField
                     v-model="formDataLocal.province"
-                    label="Province"
+                    :label="$t('province')"
                     :rules="[v => !!v || 'ខេត្ត តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -411,7 +411,7 @@ const submitHandler = async () => {
                 >
                   <VCard>
                     <div class="mx-3 my-4">
-                      <h3 class="mb-5">Father's Information</h3>
+                      <h3 class="mb-5">{{ $t('father_infor') }}</h3>
                       <VRow>
                         <VCol
                           md="6"
@@ -419,7 +419,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_last_name"
-                            label="Last Name"
+                            :label="$t('surname')"
                           />
                         </VCol>
                         <VCol
@@ -428,7 +428,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_first_name"
-                            label="First Name"
+                            :label="$t('name')"
                           />
                         </VCol>
                       </VRow>
@@ -439,7 +439,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_job"
-                            label="Job"
+                            :label="$t('job')"
                           />
                         </VCol>
                         <VCol
@@ -448,7 +448,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_phone_number"
-                            label="Phone Number"
+                            :label="$t('headers.phone_number')"
                           />
                         </VCol>
                       </VRow>
@@ -461,7 +461,7 @@ const submitHandler = async () => {
                 >
                   <VCard>
                     <div class="mx-3 my-4">
-                      <h3 class="mb-5">Mother's Information</h3>
+                      <h3 class="mb-5">{{ $t('mother_infor') }}</h3>
                       <VRow>
                         <VCol
                           md="6"
@@ -469,7 +469,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_last_name"
-                            label="Last Name"
+                            :label="$t('surname')"
                           />
                         </VCol>
                         <VCol
@@ -478,7 +478,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_first_name"
-                            label="First Name"
+                            :label="$t('name')"
                           />
                         </VCol>
                       </VRow>
@@ -489,7 +489,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_job"
-                            label="Job"
+                            :label="$t('job')"
                           />
                         </VCol>
                         <VCol
@@ -498,7 +498,7 @@ const submitHandler = async () => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_phone_number"
-                            label="Phone Number"
+                            :label="$t('headers.phone_number')"
                           />
                         </VCol>
                       </VRow>
@@ -507,48 +507,30 @@ const submitHandler = async () => {
                 </VCol>
               </VRow>
 
-              <VCard>
+              <VCard class="my-6">
                 <div class="mx-3 my-4">
-                  <h3 class="mb-5">Guardian</h3>
+                  <h3 class="mb-5">{{$t('guardian')}}</h3>
                   <VRow>
                     <VCol
-                      md="6"
+                      md="3"
                       cols="12"
                     >
                       <VTextField
                         v-model="formDataLocal.g_last_name"
-                        label="Last Name"
+                        :label="$t('surname')"
                       />
                     </VCol>
                     <VCol
-                      md="6"
+                      md="3"
                       cols="12"
                     >
                       <VTextField
                         v-model="formDataLocal.g_first_name"
-                        label="First Name"
+                        :label="$t('name')"
                       />
                     </VCol>
                     <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VTextField
-                        v-model="formDataLocal.g_phone_number"
-                        label="Phone Number"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VTextField
-                        v-model="formDataLocal.g_job"
-                        label="Job"
-                      />
-                    </VCol>
-                    <VCol
-                      md="4"
+                      md="2"
                       cols="12"
                     >
                       <VSelect
@@ -560,12 +542,30 @@ const submitHandler = async () => {
                       />
                     </VCol>
                     <VCol
-                      md="8"
+                      md="3"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_job"
+                        :label="$t('job')"
+                      />
+                    </VCol>
+                    <VCol
+                      md="3"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_phone_number"
+                        :label="$t('headers.phone_number')"
+                      />
+                    </VCol>
+                    <VCol
+                      md="5"
                       cols="12"
                     >
                       <VTextField
                         v-model="formDataLocal.g_detail"
-                        label="Detail"
+                        :label="$t('detail')"
                       />
                     </VCol>
                   </VRow>
@@ -583,7 +583,7 @@ const submitHandler = async () => {
                     :loading="submitting"
                     color="success"
                   >
-                    <VIcon>mdi-add</VIcon>
+                    <VIcon class="me-2">mdi-content-save-all</VIcon>
                     {{ $t('Save changes') }}
                   </VBtn>
 

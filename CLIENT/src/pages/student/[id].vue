@@ -1,129 +1,3 @@
-<!-- <script setup>
-import avatar1 from '@/assets/images/avatars/avatar-1.png'
-import { onMounted, ref, reactive } from 'vue'
-import api from '@/plugins/utilites'
-import { useRoute, useRouter } from 'vue-router'
-import constant from '@/constants'
-import { useAuthStore } from '@/plugins/auth.module'
-import User from '../../class/User'
-
-const store = useAuthStore()
-
-const user = computed(() => {
-  const data = {
-    user: store?._user,
-  }
-
-  return new User(data)
-})
-
-const submitting = ref(false)
-const additional_image = ref(avatar1)
-const refForm = ref(null)
-const router = useRouter()
-const route = useRoute()
-const sexs = ref([
-  {
-    id: 1,
-    name: 'ប្រុស',
-  },
-  {
-    id: 2,
-    name: 'ស្រី',
-  },
-])
-
-const form = {
-  id: route.params.id,
-  code: null,
-  name: null,
-  name_latin: null,
-  sex: null,
-  dob: null,
-  pob: null,
-  address: null,
-  dad_name: null,
-  dad_phone: null,
-  mom_name: null,
-  mom_phone: null,
-  photo_path: null,
-  gerder_phone:null,
-}
-const refInputEl = ref()
-const formDataLocal = ref(structuredClone(form))
-
-const resetForm = () => {
-  formDataLocal.value = structuredClone(form)
-}
-const changeAvatar = file => {
-  const fileReader = new FileReader()
-  const { files } = file.target
-  if (files && files.length) {
-    fileReader.readAsDataURL(files[0])
-    formDataLocal.value.photo_path = files[0]
-    fileReader.onload = () => {
-      if (typeof fileReader.result === 'string') additional_image.value = fileReader.result
-    }
-  }
-}
-
-// reset avatar image
-const resetAvatar = () => {
-  additional_image.value = avatar1
-  localImage.value = null
-  formDataLocal.value.photo_path = null
-}
-
-const submitHandler = async () => {
-  const { valid } = await refForm.value?.validate()
-  if (valid) {
-    submitting.value = true
-    let formData = new FormData()
-
-    formData.append('id', formDataLocal.value.id)
-    formData.append('code', formDataLocal.value.code)
-    formData.append('name', formDataLocal.value.name)
-    formData.append('sex', formDataLocal.value.sex)
-    formData.append('gender_phne', formDataLocal.value.g_phone_number)
-    if (formDataLocal.value.photo_path) {
-      formData.append('photo_path', formDataLocal.value.photo_path)
-    }
-    if (formDataLocal.value.name_latin) {
-      formData.append('name_latin', formDataLocal.value.name_latin)
-    }
-    if (formDataLocal.value.dob) {
-      formData.append('dob', formDataLocal.value.dob)
-    }
-    if (formDataLocal.value.pob) {
-      formData.append('pob', formDataLocal.value.pob)
-    }
-    if (formDataLocal.value.address) {
-      formData.append('address', formDataLocal.value.address)
-    }
-    if (formDataLocal.value.dad_name) {
-      formData.append('dad_name', formDataLocal.value.dad_name)
-    }
-    if (formDataLocal.value.dad_phone) {
-      formData.append('dad_phone', formDataLocal.value.dad_phone)
-    }
-    if (formDataLocal.value.mom_name) {
-      formData.append('mom_name', formDataLocal.value.mom_name)
-    }
-    if (formDataLocal.value.mom_phone) {
-      formData.append('mom_phone', formDataLocal.value.mom_phone)
-    }
-    api
-      .post('students-update', formData)
-      .then(() => {
-        router.push('/student')
-      })
-      .finally(() => {
-        submitting.value = false
-      })
-  }
-}
--->
-
 <script setup>
 import avatar1 from '@/assets/images/avatars/avatar-1.png'
 import { onMounted, ref, computed } from 'vue'
@@ -151,7 +25,10 @@ const sexs = ref([
   { id: 1, name: 'ប្រុស' },
   { id: 2, name: 'ស្រី' },
 ])
-
+const status = ref([
+  { id: 1, name: 'នៅលីវ' },
+  { id: 2, name: 'មានគ្រួសារ' },
+])
 const form = {
   id: route.params.id,
   code: null,
@@ -326,25 +203,35 @@ onMounted(() => {
                   md="12"
                   cols="12"
                 >
-                  <h3>Personal Information</h3>
+                  <h3>{{ $t('personal_infor') }}</h3>
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="formDataLocal.code"
+                    :label="$t('code')"
+                    :rules="[v => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
+                  />
+                </VCol>
+                <VCol
+                  md="2"
                   cols="12"
                 >
                   <VTextField
                     v-model="formDataLocal.last_name"
-                    label="Last Name"
+                    :label="$t('surname')"
                     :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VTextField
                     v-model="formDataLocal.first_name"
-                    label="First Name"
+                    :label="$t('name')"
                     :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -354,7 +241,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.last_name_latin"
-                    label="Last Name Latin"
+                    :label="$t('surname_latin')"
                     :rules="[v => !!v || 'ឈ្មោះឡាតាំង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -364,22 +251,12 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.first_name_latin"
-                    label="First Name Latin"
+                    :label="$t('name_latin')"
                     :rules="[v => !!v || 'ឈ្មោះឡាតាំង តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
-                  md="3"
-                  cols="12"
-                >
-                  <VTextField
-                    v-model="formDataLocal.code"
-                    :label="$t('headers.id')"
-                    :rules="[v => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
-                  />
-                </VCol>
-                <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VSelect
@@ -392,7 +269,7 @@ onMounted(() => {
                   />
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VTextField
@@ -407,9 +284,8 @@ onMounted(() => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.phone"
-                    label="Phone Number"
-                    :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
+                    v-model="formDataLocal.from"
+                    :label="$t('from')"
                   />
                 </VCol>
                 <VCol
@@ -417,29 +293,30 @@ onMounted(() => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="formDataLocal.from"
-                    label="From"
+                    v-model="formDataLocal.phone"
+                    :label="$t('headers.phone_number')"
+                    :rules="[v => !!v || 'លេខទូរសព្ទ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
                 <VCol
-                  md="3"
+                  md="2"
                   cols="12"
                 >
                   <VSelect
                     v-model="formDataLocal.student_status"
                     :items="status"
-                    item-title="name"
+                    item-title="$t('name')"
                     item-value="id"
-                    label="Student Status"
+                    :label="$t('status')"
                   />
                 </VCol>
                 <VCol
-                  md="4"
+                  md="2"
                   cols="12"
                 >
                   <VTextField
                     v-model="formDataLocal.other"
-                    label="Other"
+                    :label="$t('other')"
                   />
                 </VCol>
                 <VCol
@@ -448,14 +325,14 @@ onMounted(() => {
                   class="mt-2"
                 >
                   <input type="radio" />&nbsp;
-                  <label for="">Active</label>
+                  <label for="">{{ $t('active') }}</label>
                 </VCol>
 
                 <VCol
                   md="12"
                   cols="12"
                 >
-                  <h3>Place Of Birth</h3>
+                  <h3>{{ $t('pob') }}</h3>
                 </VCol>
                 <VCol
                   md="3"
@@ -463,7 +340,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.village_birth"
-                    label="Village"
+                    :label="$t('village')"
                     :rules="[v => !!v || 'ភូមិ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -473,7 +350,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.commune_birth"
-                    label="Commune"
+                    :label="$t('commune')"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -483,7 +360,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.district_birth"
-                    label="District"
+                    :label="$t('district')"
                     :rules="[v => !!v || 'ស្រុក តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -493,7 +370,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.province_birth"
-                    label="Province"
+                    :label="$t('province')"
                     :rules="[v => !!v || 'ខេត្ត តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -501,7 +378,7 @@ onMounted(() => {
                   md="12"
                   cols="12"
                 >
-                  <h3>Address</h3>
+                  <h3>{{ $t('add') }}</h3>
                 </VCol>
                 <VCol
                   md="3"
@@ -509,7 +386,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.village"
-                    label="Village"
+                    :label="$t('village')"
                     :rules="[v => !!v || 'ភូមិ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -519,7 +396,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.commune"
-                    label="Commune"
+                    :label="$t('commune')"
                     :rules="[v => !!v || 'ឃុំ តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -529,7 +406,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.district"
-                    label="District"
+                    :label="$t('district')"
                     :rules="[v => !!v || 'ស្រុក តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -539,7 +416,7 @@ onMounted(() => {
                 >
                   <VTextField
                     v-model="formDataLocal.province"
-                    label="Province"
+                    :label="$t('province')"
                     :rules="[v => !!v || 'ខេត្ត តម្រូវឱ្យបំពេញ']"
                   />
                 </VCol>
@@ -552,7 +429,7 @@ onMounted(() => {
                 >
                   <VCard>
                     <div class="mx-3 my-4">
-                      <h3 class="mb-5">Father's Information</h3>
+                      <h3 class="mb-5">{{ $t('father_infor') }}</h3>
                       <VRow>
                         <VCol
                           md="6"
@@ -560,7 +437,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_last_name"
-                            label="Last Name"
+                            :label="$t('surname')"
                           />
                         </VCol>
                         <VCol
@@ -569,7 +446,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_first_name"
-                            label="First Name"
+                            :label="$t('name')"
                           />
                         </VCol>
                       </VRow>
@@ -580,7 +457,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_job"
-                            label="Job"
+                            :label="$t('job')"
                           />
                         </VCol>
                         <VCol
@@ -589,7 +466,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.d_phone_number"
-                            label="Phone Number"
+                            :label="$t('headers.phone_number')"
                           />
                         </VCol>
                       </VRow>
@@ -602,7 +479,7 @@ onMounted(() => {
                 >
                   <VCard>
                     <div class="mx-3 my-4">
-                      <h3 class="mb-5">Mother's Information</h3>
+                      <h3 class="mb-5">{{ $t('mother_infor') }}</h3>
                       <VRow>
                         <VCol
                           md="6"
@@ -610,7 +487,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_last_name"
-                            label="Last Name"
+                            :label="$t('surname')"
                           />
                         </VCol>
                         <VCol
@@ -619,7 +496,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_first_name"
-                            label="First Name"
+                            :label="$t('name')"
                           />
                         </VCol>
                       </VRow>
@@ -630,7 +507,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_job"
-                            label="Job"
+                            :label="$t('job')"
                           />
                         </VCol>
                         <VCol
@@ -639,7 +516,7 @@ onMounted(() => {
                         >
                           <VTextField
                             v-model="formDataLocal.m_phone_number"
-                            label="Phone Number"
+                            :label="$t('headers.phone_number')"
                           />
                         </VCol>
                       </VRow>
@@ -648,48 +525,30 @@ onMounted(() => {
                 </VCol>
               </VRow>
 
-              <VCard>
+              <VCard class="my-6">
                 <div class="mx-3 my-4">
-                  <h3 class="mb-5">Guardian</h3>
+                  <h3 class="mb-5">{{ $t('guardian') }}</h3>
                   <VRow>
                     <VCol
-                      md="6"
+                      md="3"
                       cols="12"
                     >
                       <VTextField
                         v-model="formDataLocal.g_last_name"
-                        label="Last Name"
+                        :label="$t('surname')"
                       />
                     </VCol>
                     <VCol
-                      md="6"
+                      md="3"
                       cols="12"
                     >
                       <VTextField
                         v-model="formDataLocal.g_first_name"
-                        label="First Name"
+                        :label="$t('name')"
                       />
                     </VCol>
                     <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VTextField
-                        v-model="formDataLocal.g_phone_number"
-                        label="Phone Number"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VTextField
-                        v-model="formDataLocal.g_job"
-                        label="Job"
-                      />
-                    </VCol>
-                    <VCol
-                      md="4"
+                      md="2"
                       cols="12"
                     >
                       <VSelect
@@ -701,12 +560,30 @@ onMounted(() => {
                       />
                     </VCol>
                     <VCol
-                      md="8"
+                      md="3"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_job"
+                        :label="$t('job')"
+                      />
+                    </VCol>
+                    <VCol
+                      md="3"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="formDataLocal.g_phone_number"
+                        :label="$t('headers.phone_number')"
+                      />
+                    </VCol>
+                    <VCol
+                      md="5"
                       cols="12"
                     >
                       <VTextField
                         v-model="formDataLocal.g_detail"
-                        label="Detail"
+                        :label="$t('detail')"
                       />
                     </VCol>
                   </VRow>
@@ -724,7 +601,7 @@ onMounted(() => {
                     :loading="submitting"
                     color="success"
                   >
-                    <VIcon>mdi-add</VIcon>
+                    <VIcon class="me-2">mdi-content-save-all</VIcon>
                     {{ $t('Save changes') }}
                   </VBtn>
 
