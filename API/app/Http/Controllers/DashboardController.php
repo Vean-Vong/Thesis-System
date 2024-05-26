@@ -18,10 +18,10 @@ class DashboardController extends Controller
 
         try {
 
-            $result['academic_classes'] = AcademicClass::mine()->count();
-            $result['teachers'] = Teacher::mine()->count();
-            $result['students'] = Student::mine()->count();
-            $result['users'] = User::mine()->count();
+            $result['academic_classes'] = AcademicClass::count();
+            $result['teachers'] = Teacher::count();
+            $result['students'] = Student::count();
+            $result['users'] = User::count();
         } catch(Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();

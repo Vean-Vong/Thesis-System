@@ -29,8 +29,7 @@ class UserController extends Controller
         try {
 
             $users = User::with('roles', 'school')->when(!auth()->user()->is_super, function ($q) {
-                return $q
-                    ->mine();
+                return $q;
             })->filter(['search' => $request->search])->where('is_super', '=', false)->latest()->paginate($request->perPage);
 
             $result['data'] = $users;

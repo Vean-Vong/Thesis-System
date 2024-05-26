@@ -35,6 +35,7 @@ onMounted(() => {
   api.post('academic-classes-option').then(res => {
     options.value.teachers = res.data.teachers
     options.value.academic_years = res.data.academic_years
+    options.value.class_type = [{id: 1 ,name: 'កាត់ដេ'}, {id: 2 ,name: 'អង់គ្លេស'},{id: 3 ,name: 'កុំព្យូទ័រ'}];
   })
 })
 </script>
@@ -59,13 +60,26 @@ onMounted(() => {
           >
             <VRow>
               <VCol
-                md="12"
+                md="7"
                 cols="12"
               >
                 <VTextField
                   v-model="form.name"
                   :label="$t('headers.name')"
                   :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
+                />
+              </VCol>
+              <VCol
+                md="5"
+                cols="12"
+              >
+                <v-autocomplete
+                  :items="options.class_type"
+                  item-value="id"
+                  item-title="name"
+                  v-model="form.type"
+                  :label="$t('ប្រភេទថ្នាក់រៀន')"
+                  :rules="[v => !!v || 'ប្រភេទថ្នាក់រៀន តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol
