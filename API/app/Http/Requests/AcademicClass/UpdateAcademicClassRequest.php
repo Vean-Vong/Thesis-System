@@ -28,7 +28,7 @@ class UpdateAcademicClassRequest extends FormRequest
 
             'name' => [
                 'required',
-                Rule::unique('academic_classes', 'name')->where('school_id', auth()->user()->school_id)->where('academic_year_id', request('academic_year_id'))->ignore(request('id'))
+                Rule::unique('academic_classes', 'name')->where('academic_year_id', request('academic_year_id'))->ignore(request('id'))
             ],
 
             'teacher_id' => [

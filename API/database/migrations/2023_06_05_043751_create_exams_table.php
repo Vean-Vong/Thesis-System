@@ -25,6 +25,11 @@ return new class extends Migration
             $table->tinyInteger('wr')->default(0);
             $table->tinyInteger('li')->default(0);
             $table->tinyInteger('sp')->default(0);
+
+            $table->tinyInteger('mid')->default(0);
+            $table->tinyInteger('attitude')->default(0);
+            $table->tinyInteger('final')->default(0);
+            
             $table->float('total', 5, 2)->default(0);
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();

@@ -21,7 +21,7 @@ class TeacherController extends Controller
 
         try {
 
-            $teachers = Teacher::mine()->select('id', 'code', 'name', 'sex', 'phone', 'dob', 'position')
+            $teachers = Teacher::select('id', 'code', 'name', 'sex', 'phone', 'dob', 'position')
                 ->filter(['search' => $request->search])->latest()->paginate($request->perPage);
 
             $result['data'] = $teachers;

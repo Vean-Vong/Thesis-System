@@ -30,7 +30,7 @@ class AcademicClassController extends Controller
 
             $academic_year_id = $request->academic_year_id ?? AcademicYear::whereIsActive(1)->first()->id ?? 1;
 
-            $academic_classes = AcademicClass::mine()->select('id', 'name', 'teacher_id', 'academic_year_id')
+            $academic_classes = AcademicClass::select('id', 'name', 'teacher_id', 'academic_year_id')
                 ->with('teacher')
                 ->filter([
                     'search' => $request->search,
@@ -150,7 +150,7 @@ class AcademicClassController extends Controller
 
         try {
 
-            $result['teachers'] = Teacher::where('school_id', auth()->user()->school_id)->get();
+            $result['teachers'] = Teacher::get();
             $result['academic_years'] = AcademicYear::select('id', 'name')->orderByDESC('is_active')->get();
 
         } catch (Throwable $e) {
@@ -195,7 +195,7 @@ class AcademicClassController extends Controller
             ->leftJoin('studies', 'studies.student_id', 'students.id')
             ->join('academic_classes', 'academic_classes.id', 'studies.academic_class_id')
             ->where('academic_classes.academic_year_id', $request->academic_year_id)
-            ->where('status', 1)
+            ->where('students.status', 1)
             ->whereNotNull('studies.academic_class_id')
             ->whereNull('studies.deleted_at')
             ->pluck('students.id');
@@ -204,8 +204,7 @@ class AcademicClassController extends Controller
             ->filter([
                 'search' => $request->search,
             ])
-            ->mine()
-            ->select('id', 'code', 'name', 'sex', 'dob')
+            ->select('id', 'code','last_name', 'first_name', 'gender')
             ->latest()
             ->paginate($request->perPage);
 
@@ -256,10 +255,10 @@ class AcademicClassController extends Controller
             $result['data'] = Study::where('academic_class_id', $request->academic_class_id)->whereHas('student', function ($q) use ($request) {
                 $q->filter(['search' => $request->search]);
             })
-                ->orderBy(Student::select('name')
+                ->orderBy(Student::select('last_name')
                 ->whereColumn('students.id', 'studies.student_id'))
                 ->select('id', 'student_id', 'status')->get()->load(['student' => function ($q){
-                    $q->select('id', 'code', 'name', 'sex', 'dob');
+                    $q->select('id', 'code','last_name', 'first_name', 'gender');
                 }]);
 
         } catch (Throwable $e) {

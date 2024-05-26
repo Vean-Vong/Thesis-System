@@ -28,7 +28,7 @@ class StoreAcademicClassRequest extends FormRequest
 
             'name' => [
                 'required',
-                Rule::unique('academic_classes', 'name')->where('school_id', auth()->user()->school_id)->where('academic_year_id', request('academic_year_id'))
+                Rule::unique('academic_classes', 'name')->where('academic_year_id', request('academic_year_id'))
             ],
 
             'teacher_id' => [
@@ -36,6 +36,7 @@ class StoreAcademicClassRequest extends FormRequest
                 'exists:teachers,id',
                 // Rule::unique('academic_classes', 'teacher_id')->where('school_id', auth()->user()->school_id)->where('academic_year_id', request('academic_year_id'))
             ],
+            'type' => 'required',
 
             'academic_year_id' => [
                 'required',

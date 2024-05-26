@@ -25,37 +25,23 @@ class ExamController extends Controller
 
         try {
 
-            if($request->type != 0) {
-                $semester = Exam::where('academic_class_id', $request->academic_class_id)->where('type', $request->type)->first()->semester ?? $request->semester;
-            } else {
-                $semester =  Exam::where('academic_class_id', $request->academic_class_id)->where('type', $request->type)->where('semester', $request->semester)->first()->semester ?? $request->semester;
-            }
-
             $exams = Study::leftJoin('exams', 'studies.student_id', 'exams.student_id')
                 ->join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'students.name', 'students.dob', 'students.sex', 'm', 'k', 'sc', 's', 'studies.academic_class_id', 'exams.id')
+                ->select('studies.student_id', 'students.last_name', 'students.dob', 'students.gender', 'studies.academic_class_id', 'exams.*')
                 ->where('exams.academic_class_id', $request->academic_class_id)
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->whereNull('studies.deleted_at')
-                ->where('exams.type', $request->type)
-                ->orderBy('students.name')
-                ->when($request->type == 0, function ($q) use ($request) {
-                    return $q
-                        ->when($request->semester, function ($q) use ($request) {
-                            return $q
-                                ->where('exams.semester', $request->semester);
-                        });
-                })
+                ->orderBy('students.last_name')
                 ->get();
 
             $student_has_exams = $exams->pluck('student_id');
 
             $students = Study::join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'students.name', 'students.dob', 'students.sex')
+                ->select('studies.student_id', 'students.last_name', 'students.first_name', 'students.gender')
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->whereNotIn('studies.student_id', $student_has_exams)
                 ->whereNull('studies.deleted_at')
-                ->orderBy('students.name')
+                ->orderBy('students.last_name')
                 ->get();
 
             $data = array_merge($students->toArray(), $exams->toArray());
@@ -63,8 +49,7 @@ class ExamController extends Controller
             $result['form'] = [
                 'academic_class_id' => $request->academic_class_id,
                 'type' => $request->type,
-                'semester' => $semester,
-                'exams' => ExamFormResource::collection($data)
+                'exams' => $data
             ];
 
 
@@ -127,7 +112,7 @@ class ExamController extends Controller
 
         $exams = Student::join('studies', 'studies.student_id', 'students.id')
                 ->leftJoin('exams', 'studies.student_id', 'exams.student_id')
-                ->select('studies.student_id', 'students.name', 'students.dob', 'students.sex', 'm', 'k', 'sc', 's', 'studies.academic_class_id', 'exams.id')
+                ->select('studies.student_id', 'students.name', 'students.dob', 'students.gender', 'm', 'k', 'sc', 's', 'studies.academic_class_id', 'exams.id')
                 ->where('exams.academic_class_id', $request->academic_class_id)
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->where('exams.type', $request->type)
@@ -145,7 +130,7 @@ class ExamController extends Controller
             $student_has_exams = $exams->pluck('student_id');
 
             $students = Student::join('studies', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'students.name', 'students.dob', 'students.sex')
+                ->select('studies.student_id', 'students.name', 'students.dob', 'students.gender')
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->whereNull('studies.deleted_at')
                 ->orderBy('students.name')

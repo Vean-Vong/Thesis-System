@@ -163,7 +163,7 @@ const listingStudent = () => {
 }
 
 const addScore = () => {
-  router.push('/academic-class/detail/score/' + params.id)
+  router.push('/academic-class/detail/score/create?id='+ params.id)
 }
 
 const listingScore = () => {
@@ -195,13 +195,13 @@ onMounted(() => {
           <VCard :title="`${$t('class')} ${model.name} ${$t('academic_year')} ${model.academic_year?.name}`">
           <VDivider />
           <v-btn
-            class="mt-5 mx-5"
+            class="mt-1 mx-5"
             color="secondary"
             variant="outlined"
             @click="$router.go(-1)"
             ><v-icon>mdi-arrow-back</v-icon>&nbsp;{{$t('back')}}</v-btn
           >
-          <VCardText>
+          <VCardText class="py-0">
             <v-row class="my-5 justify-end">
               <v-btn
                 class="mx-5"
@@ -215,7 +215,7 @@ onMounted(() => {
                 ><v-icon>mdi-eye</v-icon>&nbsp;{{$t('list_att')}}</v-btn
               >
             </v-row>
-            <v-row class="my-5 justify-end">
+            <v-row class="my-2 justify-end">
               <v-btn
                 class="mx-5"
                 color="success"
@@ -232,7 +232,7 @@ onMounted(() => {
           <v-card-text v-if="listing">
             <div class="text-center font-weight-bold text-h6">{{$t('list_student')}}</div>
             <VDivider
-              class="my-5"
+              class="my-2"
               :thickness="1"
             />
             <v-row>
