@@ -16,7 +16,6 @@ class ExamFormResource extends JsonResource
     {
         return [
             'id' => $this['id'] ?? null,
-            'student_id' => $this['student_id'],
             'name' => $this['name'],
             'dob' => $this['dob'],
             'sex' => $this['sex'],

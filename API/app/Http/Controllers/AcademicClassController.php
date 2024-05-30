@@ -258,7 +258,7 @@ class AcademicClassController extends Controller
                 ->orderBy(Student::select('last_name')
                 ->whereColumn('students.id', 'studies.student_id'))
                 ->select('id', 'student_id', 'status')->get()->load(['student' => function ($q){
-                    $q->select('id', 'code','last_name', 'first_name', 'gender');
+                    $q->select('id', 'code','last_name', 'first_name', 'gender', 'dob');
                 }]);
 
         } catch (Throwable $e) {

@@ -40,7 +40,7 @@ class StudentController extends Controller
 
         try {
 
-            Student::create($request->validated() + ['school_id' => auth()->user()->school_id]);
+            Student::create($request->validated());
 
             $result['message'] = "រក្សាទុកបានសម្រេច";
         } catch (Throwable $e) {
