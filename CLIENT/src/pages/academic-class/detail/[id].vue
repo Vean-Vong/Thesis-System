@@ -318,7 +318,7 @@ onMounted(() => {
                   :key="row.id"
                 >
                   <td v-text="row.student?.code" />
-                  <td v-text="row.student?.name" />
+                  <td v-text="row.student?.last_name +' '+row.student?.first_name" />
                   <td v-text="row.student?.sex_text" />
                   <td v-text="row.student?.dob" />
                   <td>

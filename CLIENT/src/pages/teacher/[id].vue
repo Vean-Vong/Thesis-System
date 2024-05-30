@@ -143,7 +143,7 @@ onMounted(() => {
 
 <template>
   <VRow>
-    <VCol cols="12">
+    <VCol cols="12" md="8">
       <VCard :title="$t('update teacher')">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
@@ -218,7 +218,7 @@ onMounted(() => {
           >
             <VRow>
               <VCol
-                md="6"
+                md="2"
                 cols="12"
               >
                 <VTextField
@@ -229,7 +229,7 @@ onMounted(() => {
               </VCol>
               <!-- <VCol md="6" cols="12"></VCol> -->
               <VCol
-                md="6"
+                md="4"
                 cols="12"
               >
                 <VTextField
@@ -239,7 +239,7 @@ onMounted(() => {
                 />
               </VCol>
               <VCol
-                md="6"
+                md="4"
                 cols="12"
               >
                 <VTextField
@@ -249,35 +249,7 @@ onMounted(() => {
               </VCol>
 
               <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.dob"
-                  :label="$t('dob')"
-                  type="date"
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.pob"
-                  :label="$t('pob_address')"
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="formDataLocal.phone"
-                  :label="$t('headers.phone_number')"
-                />
-              </VCol>
-              <VCol
-                md="6"
+                md="2"
                 cols="12"
               >
                 <VSelect
@@ -290,7 +262,35 @@ onMounted(() => {
                 />
               </VCol>
               <VCol
-                md="6"
+                md="3"
+                cols="12"
+              >
+                <VTextField
+                  v-model="formDataLocal.dob"
+                  :label="$t('dob')"
+                  type="date"
+                />
+              </VCol>
+              <VCol
+                md="9"
+                cols="12"
+              >
+                <VTextField
+                  v-model="formDataLocal.pob"
+                  :label="$t('pob_address')"
+                />
+              </VCol>
+              <VCol
+                md="3"
+                cols="12"
+              >
+                <VTextField
+                  v-model="formDataLocal.phone"
+                  :label="$t('headers.phone_number')"
+                />
+              </VCol>
+              <VCol
+                md="3"
                 cols="12"
               >
                 <VSelect
@@ -313,7 +313,7 @@ onMounted(() => {
               <!-- 👉 Form Actions -->
               <VCol
                 cols="12"
-                class="d-flex flex-wrap gap-4"
+                class="d-flex justify-end  gap-4"
               >
                 <VBtn
                   type="submit"
