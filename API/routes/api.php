@@ -13,8 +13,11 @@ use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\LevelController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TimeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,4 +104,19 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('attendances-form', [AttendanceController::class, 'form']);
     Route::post('attendances-save', [AttendanceController::class, 'save']);
     Route::post('attendances-show', [AttendanceController::class, 'show']);
+
+    Route::post('level-create', [LevelController::class, 'store']);
+    Route::post('level-list', [LevelController::class, 'list']);
+    Route::post('level-show', [LevelController::class, 'show']);
+    Route::post('level-update', [LevelController::class, 'update']);
+
+    Route::post('time-create', [TimeController::class, 'store']);
+    Route::post('time-list', [TimeController::class, 'list']);
+    Route::post('time-show', [TimeController::class, 'show']);
+    Route::post('time-update', [TimeController::class, 'update']);
+
+    Route::post('room-create', [RoomController::class, 'store']);
+    Route::post('room-list', [RoomController::class, 'list']);
+    Route::post('room-show', [RoomController::class, 'show']);
+    Route::post('room-update', [RoomController::class, 'update']);
 });
