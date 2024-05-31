@@ -60,12 +60,15 @@ class Student extends Model
         $query->when($filters['search'] ?? null, function ($query, $search) {
             $query->where(function ($query) use ($search) {
                 $query->where('code', 'like', '%' . $search . '%')
-                    ->orWhere('name', 'like', '%' . $search . '%')
-                    ->orWhere('name_latin', 'like', '%' . $search . '%')
-                    ->orWhere('dad_name', 'like', '%' . $search . '%')
-                    ->orWhere('dad_phone', 'like', '%' . $search . '%')
-                    ->orWhere('mom_name', 'like', '%' . $search . '%')
-                    ->orWhere('mom_phone', 'like', '%' . $search . '%');
+                    ->orWhere('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('first_name_latin', 'like', '%' . $search . '%')
+                    ->orWhere('last_name_latin', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%')
+                    ->orWhere('d_first_name', 'like', '%' . $search . '%')
+                    ->orWhere('d_last_name', 'like', '%' . $search . '%')
+                    ->orWhere('m_last_name', 'like', '%' . $search . '%')
+                    ->orWhere('m_first_name', 'like', '%' . $search . '%');
             });
         });
     }

@@ -2,7 +2,6 @@
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/plugins/utilites'
-
 const route = useRoute()
 
 const student = ref({})
