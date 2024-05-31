@@ -58,7 +58,7 @@ onMounted(() => {
               <v-card-text>{{ $t('code') }} : {{ student.code }}</v-card-text>
               <v-card-text>{{ $t('headers.name') }} : {{ student.last_name + ' ' + student.first_name }}</v-card-text>
               <v-card-text>{{ $t('dob') }} : {{ student.dob }}</v-card-text>
-              <v-card-text>{{ $t('headers.gender') }} : {{ student.gender }}</v-card-text>
+              <v-card-text>{{ $t('headers.gender') }} : {{ student.sex_text }}</v-card-text>
               <v-card-text>{{ $t('status') }} : {{ student.student_status }}</v-card-text>
               <v-card-text>{{ $t('from') }} : {{ student.from }}</v-card-text>
               <v-card-text>{{ $t('headers.phone_number') }} : {{ student.phone }}</v-card-text>
@@ -100,7 +100,7 @@ onMounted(() => {
           <v-card-title class="bg-primary rounded">{{ $t('father_infor') }}</v-card-title>
           <v-row>
             <v-col>
-              <v-card-text>{{ $t('headers.name') }} : {{ student.d_last_name + ' ' + student.first_name }}</v-card-text>
+              <v-card-text>{{ $t('headers.name') }} : {{ student.d_last_name + ' ' + student.d_first_name }}</v-card-text>
               <v-card-text>{{ $t('job') }} : {{ student.d_job }}</v-card-text>
               <v-card-text>{{ $t('headers.phone_number') }} : {{ student.d_phone_number }}</v-card-text>
             </v-col>
