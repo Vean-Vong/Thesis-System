@@ -25,7 +25,7 @@ const refForm = ref()
 const delete_item = ref(null)
 const confirmDialog = ref(false)
 const dialog_add_student = ref(false)
-const headers = [ 'headers.id', 'headers.name', 'headers.gender', 'dob']
+const headers = [ 'Add','headers.id', 'headers.name', 'headers.gender', 'dob']
 const headers2 = ['headers.id', 'headers.name', 'headers.gender', 'dob', 'headers.action']
 const selected_students = ref([])
 const listing = ref(false)
@@ -481,7 +481,7 @@ onMounted(() => {
                       ></v-checkbox>
                     </td>
                     <td v-text="row.code" />
-                    <td v-text="row.name" />
+                    <td v-text="row.last_name+' '+row.first_name" />
                     <td v-text="row.sex_text" />
                     <td v-text="row.dob" />
                   </tr>
