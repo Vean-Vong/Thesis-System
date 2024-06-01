@@ -4,6 +4,7 @@ import { reactive, ref, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import User from '../../../class/User'
 import { useAuthStore } from '@/plugins/auth.module'
+import moment from 'moment'
 const router = useRouter()
 const { params } = useRoute()
 const action = ref(null)
@@ -31,6 +32,9 @@ const selected_students = ref([])
 const listing = ref(false)
 const store = useAuthStore()
 
+const formatDate = (date)=>{
+  return moment(date).format('D MMM YYYY')
+}
 const fetchData = () => {
   api
     .post('academic-classes-detail', {
@@ -320,7 +324,7 @@ onMounted(() => {
                   <td v-text="row.student?.code" />
                   <td v-text="row.student?.last_name + ' ' + row.student?.first_name" />
                   <td v-text="row.student?.sex_text" />
-                  <td v-text="row.student?.dob" />
+                  <td v-text="formatDate(row.student?.dob)" />
                   <td>
                     <div v-if="row.status == 1">
                       <v-btn
@@ -483,7 +487,7 @@ onMounted(() => {
                     <td v-text="row.code" />
                     <td v-text="row.last_name + ' ' + row.first_name" />
                     <td v-text="row.sex_text" />
-                    <td v-text="row.dob" />
+                    <td v-text="formatDate(row.dob)" />
                   </tr>
                   <tr></tr>
                 </tbody>

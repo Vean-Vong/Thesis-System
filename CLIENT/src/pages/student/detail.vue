@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/plugins/utilites'
+import moment from 'moment'
 const route = useRoute()
 
 const student = ref({})
@@ -15,6 +16,9 @@ let getData = () => {
       console.table(student)
     })
   }
+}
+const formatDate = (date) => {
+  return moment(date).format('D-MMM-YYYY')
 }
 
 onMounted(() => {
@@ -58,7 +62,7 @@ onMounted(() => {
               
                 <v-card-text>{{ $t('code') }} : {{ student.code }}</v-card-text>
                 <v-card-text>{{ $t('headers.name') }} : {{ student.last_name + ' ' + student.first_name }}</v-card-text>
-                <v-card-text>{{ $t('dob') }} : {{ student.dob }}</v-card-text>
+                <v-card-text>{{ $t('dob') }} : {{ formatDate(student.dob) }}</v-card-text>
                 <v-card-text>{{ $t('headers.gender') }} : {{ student.sex_text }}</v-card-text>
                 <v-card-text>{{ $t('status') }} : {{ student.student_status }}</v-card-text>
                 <v-card-text>{{ $t('from') }} : {{ student.from }}</v-card-text>

@@ -1,4 +1,7 @@
 {
+  "room_update":"Update Room",
+  "room_create":"Create Room",
+  "room":"Room",
   "student_list":"Student List",
   "profile":"Profile Student",
   "detail":"Detail",
