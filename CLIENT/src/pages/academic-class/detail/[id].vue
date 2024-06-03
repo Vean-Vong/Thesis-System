@@ -4,6 +4,7 @@ import { reactive, ref, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import User from '../../../class/User'
 import { useAuthStore } from '@/plugins/auth.module'
+import moment from 'moment'
 const router = useRouter()
 const { params } = useRoute()
 const action = ref(null)
@@ -25,12 +26,15 @@ const refForm = ref()
 const delete_item = ref(null)
 const confirmDialog = ref(false)
 const dialog_add_student = ref(false)
-const headers = [ 'headers.id', 'headers.name', 'headers.gender', 'dob']
+const headers = ['Add', 'headers.id', 'headers.name', 'headers.gender', 'dob']
 const headers2 = ['headers.id', 'headers.name', 'headers.gender', 'dob', 'headers.action']
 const selected_students = ref([])
 const listing = ref(false)
 const store = useAuthStore()
 
+const formatDate = (date)=>{
+  return moment(date).format('D MMM YYYY')
+}
 const fetchData = () => {
   api
     .post('academic-classes-detail', {
@@ -163,7 +167,7 @@ const listingStudent = () => {
 }
 
 const addScore = () => {
-  router.push('/academic-class/detail/score/create?id='+ params.id)
+  router.push('/academic-class/detail/score/create?id=' + params.id)
 }
 
 const listingScore = () => {
@@ -192,14 +196,14 @@ onMounted(() => {
         sm="12"
       >
         <!-- <VCard :title="`ថ្នាក់ទី ${model.name} ឆ្នាំសិក្សា ${model.academic_year?.name}`"> -->
-          <VCard :title="`${$t('class')} ${model.name} ${$t('academic_year')} ${model.academic_year?.name}`">
+        <VCard :title="`${$t('class')} ${model.name} ${$t('academic_year')} ${model.academic_year?.name}`">
           <VDivider />
           <v-btn
             class="mt-1 mx-5"
             color="secondary"
             variant="outlined"
             @click="$router.go(-1)"
-            ><v-icon>mdi-arrow-back</v-icon>&nbsp;{{$t('back')}}</v-btn
+            ><v-icon>mdi-arrow-back</v-icon>&nbsp;{{ $t('back') }}</v-btn
           >
           <VCardText class="py-0">
             <v-row class="my-5 justify-end">
@@ -207,12 +211,12 @@ onMounted(() => {
                 class="mx-5"
                 color="grey"
                 @click="listingScore()"
-                ><v-icon>mdi-eye</v-icon>&nbsp;{{$t('list_score')}}</v-btn
+                ><v-icon>mdi-eye</v-icon>&nbsp;{{ $t('list_score') }}</v-btn
               >
               <v-btn
                 color="grey"
                 @click="listingAttendance()"
-                ><v-icon>mdi-eye</v-icon>&nbsp;{{$t('list_att')}}</v-btn
+                ><v-icon>mdi-eye</v-icon>&nbsp;{{ $t('list_att') }}</v-btn
               >
             </v-row>
             <v-row class="my-2 justify-end">
@@ -220,17 +224,17 @@ onMounted(() => {
                 class="mx-5"
                 color="success"
                 @click="addScore()"
-                ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_score')}}</v-btn
+                ><v-icon>mdi-add</v-icon>&nbsp;{{ $t('insert_score') }}</v-btn
               >
               <v-btn
                 color="success"
                 @click="onAddAttendance()"
-                ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_att')}}</v-btn
+                ><v-icon>mdi-add</v-icon>&nbsp;{{ $t('insert_att') }}</v-btn
               >
             </v-row>
           </VCardText>
           <v-card-text v-if="listing">
-            <div class="text-center font-weight-bold text-h6">{{$t('list_student')}}</div>
+            <div class="text-center font-weight-bold text-h6">{{ $t('list_student') }}</div>
             <VDivider
               class="my-2"
               :thickness="1"
@@ -267,7 +271,7 @@ onMounted(() => {
                 <v-btn
                   color="success"
                   @click="onAddStudent()"
-                  ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_student')}}</v-btn
+                  ><v-icon>mdi-add</v-icon>&nbsp;{{ $t('insert_student') }}</v-btn
                 >
               </v-col>
             </v-row>
@@ -302,7 +306,7 @@ onMounted(() => {
                     :colspan="headers.length"
                     class="text-center"
                   >
-                    <div class="text-subtitle-2">{{$t('in progress')}}</div>
+                    <div class="text-subtitle-2">{{ $t('in progress') }}</div>
                   </td>
                 </tr>
                 <tr v-if="!loading && students.length === 0">
@@ -310,7 +314,7 @@ onMounted(() => {
                     :colspan="headers.length + 1"
                     class="text-subtitle-2 text-center"
                   >
-                    {{$t('No data stored')}}
+                    {{ $t('No data stored') }}
                   </td>
                 </tr>
                 <tr
@@ -318,9 +322,9 @@ onMounted(() => {
                   :key="row.id"
                 >
                   <td v-text="row.student?.code" />
-                  <td v-text="row.student?.last_name +' '+row.student?.first_name" />
+                  <td v-text="row.student?.last_name + ' ' + row.student?.first_name" />
                   <td v-text="row.student?.sex_text" />
-                  <td v-text="row.student?.dob" />
+                  <td v-text="formatDate(row.student?.dob)" />
                   <td>
                     <div v-if="row.status == 1">
                       <v-btn
@@ -334,7 +338,7 @@ onMounted(() => {
                           activator="parent"
                           location="bottom"
                         >
-                          {{$t('remove_student')}}
+                          {{ $t('remove_student') }}
                         </v-tooltip>
                       </v-btn>
                       <v-btn
@@ -348,7 +352,7 @@ onMounted(() => {
                           activator="parent"
                           location="bottom"
                         >
-                          {{$t('transfer_students')}}
+                          {{ $t('transfer_students') }}
                         </v-tooltip>
                       </v-btn>
                     </div>
@@ -374,7 +378,7 @@ onMounted(() => {
     >
       <v-card>
         <v-card-title style="display: flex; justify-content: space-between; align-items: center"
-          ><span>{{$t('select_student')}}</span
+          ><span>{{ $t('select_student') }}</span
           ><v-btn
             color="primary"
             variant="text"
@@ -420,7 +424,7 @@ onMounted(() => {
                 size="large"
                 @click="onConfirmAddStudent()"
                 :loading="adding_student"
-                ><v-icon>mdi-add</v-icon>&nbsp;{{$t('insert_student_to_class')}}</v-btn
+                ><v-icon>mdi-add</v-icon>&nbsp;{{ $t('insert_student_to_class') }}</v-btn
               ></v-col
             >
             <v-col
@@ -459,7 +463,7 @@ onMounted(() => {
                       :colspan="headers.length"
                       class="text-center"
                     >
-                      <div class="text-subtitle-2">{{$t('in progress')}}</div>
+                      <div class="text-subtitle-2">{{ $t('in progress') }}</div>
                     </td>
                   </tr>
                   <tr v-if="!loading && data.length === 0">
@@ -467,7 +471,7 @@ onMounted(() => {
                       :colspan="headers.length + 1"
                       class="text-subtitle-2 text-center"
                     >
-                    {{$t('No data stored')}}
+                      {{ $t('No data stored') }}
                     </td>
                   </tr>
                   <tr
@@ -481,9 +485,9 @@ onMounted(() => {
                       ></v-checkbox>
                     </td>
                     <td v-text="row.code" />
-                    <td v-text="row.name" />
+                    <td v-text="row.last_name + ' ' + row.first_name" />
                     <td v-text="row.sex_text" />
-                    <td v-text="row.dob" />
+                    <td v-text="formatDate(row.dob)" />
                   </tr>
                   <tr></tr>
                 </tbody>
@@ -528,22 +532,18 @@ onMounted(() => {
     >
       <v-card>
         <v-card-text>
-          {{
-            action === 2
-              ? $t('confirm_transfer')
-              : $t('confirm_exclude')
-          }}
+          {{ action === 2 ? $t('confirm_transfer') : $t('confirm_exclude') }}
         </v-card-text>
         <v-card-actions class="ml-auto">
           <v-btn
             color="error"
             @click="confirmDialog = false"
-            >{{$t('no')}}</v-btn
+            >{{ $t('no') }}</v-btn
           >
           <v-btn
             color="success"
             @click="confirmAction"
-            >{{$t('yes')}}</v-btn
+            >{{ $t('yes') }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -551,9 +551,9 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
-  meta:
-    title: Academic-Class student
-    layout: default
-    subject: Auth
-    active: 'academic-classes-list-student'
-  </route>
+meta:
+  title: Academic-Class student
+  layout: default
+  subject: Auth
+  active: 'academic-classes-list-student'
+</route>

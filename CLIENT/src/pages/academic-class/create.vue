@@ -38,7 +38,11 @@ onMounted(() => {
     options.value.times = res.data.times
     options.value.rooms = res.data.rooms
     options.value.academic_years = res.data.academic_years
-    options.value.class_type = [{id: 1 ,name: 'កាត់ដេ'}, {id: 2 ,name: 'អង់គ្លេស'},{id: 3 ,name: 'កុំព្យូទ័រ'}];
+    options.value.class_type = [
+      { id: 1, name: 'កាត់ដេ' },
+      { id: 2, name: 'អង់គ្លេស' },
+      { id: 3, name: 'កុំព្យូទ័រ' },
+    ]
   })
 })
 </script>
@@ -162,7 +166,7 @@ onMounted(() => {
                   type="submit"
                   :loading="submitting"
                   color="success"
-                  ><VIcon>mdi-add</VIcon> {{$t('Save changes')}}</VBtn
+                  ><VIcon>mdi-add</VIcon> {{ $t('Save changes') }}</VBtn
                 >
               </VCol>
             </VRow>
@@ -179,3 +183,4 @@ onMounted(() => {
     subject: Auth
     active: 'academic-classes-create'
   </route>
+

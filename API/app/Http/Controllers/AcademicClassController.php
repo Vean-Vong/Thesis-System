@@ -210,7 +210,7 @@ class AcademicClassController extends Controller
             ->filter([
                 'search' => $request->search,
             ])
-            ->select('id', 'code','last_name', 'first_name', 'gender')
+            ->select('id', 'code','last_name', 'first_name', 'gender','dob')
             ->latest()
             ->paginate($request->perPage);
 
