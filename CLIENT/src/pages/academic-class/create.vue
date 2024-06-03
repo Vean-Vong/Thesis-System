@@ -34,6 +34,9 @@ const onSubmit = async () => {
 onMounted(() => {
   api.post('academic-classes-option').then(res => {
     options.value.teachers = res.data.teachers
+    options.value.levels = res.data.levels
+    options.value.times = res.data.times
+    options.value.rooms = res.data.rooms
     options.value.academic_years = res.data.academic_years
     options.value.class_type = [{id: 1 ,name: 'កាត់ដេ'}, {id: 2 ,name: 'អង់គ្លេស'},{id: 3 ,name: 'កុំព្យូទ័រ'}];
   })
@@ -60,7 +63,7 @@ onMounted(() => {
           >
             <VRow>
               <VCol
-                md="7"
+                md="5"
                 cols="12"
               >
                 <VTextField
@@ -70,7 +73,7 @@ onMounted(() => {
                 />
               </VCol>
               <VCol
-                md="5"
+                md="4"
                 cols="12"
               >
                 <v-autocomplete
@@ -83,7 +86,20 @@ onMounted(() => {
                 />
               </VCol>
               <VCol
-                md="12"
+                md="3"
+                cols="12"
+              >
+                <v-autocomplete
+                  :items="options.academic_years"
+                  item-value="id"
+                  item-title="name"
+                  v-model="form.academic_year_id"
+                  :label="$t('academic_year')"
+                  :rules="[v => !!v || 'ឆ្នាំសិក្សា តម្រូវឱ្យបំពេញ']"
+                />
+              </VCol>
+              <VCol
+                md="4"
                 cols="12"
               >
                 <v-autocomplete
@@ -96,18 +112,47 @@ onMounted(() => {
                 />
               </VCol>
               <VCol
-                md="12"
+                md="4"
                 cols="12"
               >
                 <v-autocomplete
-                  :items="options.academic_years"
+                  :items="options.rooms"
                   item-value="id"
-                  item-title="name"
-                  v-model="form.academic_year_id"
-                  :label="$t('academic_year')"
-                  :rules="[v => !!v || 'ឆ្នាំសិក្សា តម្រូវឱ្យបំពេញ']"
+                  item-title="room"
+                  v-model="form.room_id"
+                  :label="$t('room')"
+                  :rules="[v => !!v || 'បន្ទប់ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
+              <VCol
+                md="4"
+                cols="12"
+                v-if="form.type==2||form.type==3"
+              >
+                <v-autocomplete
+                  :items="options.time"
+                  item-value="id"
+                  item-title="time"
+                  v-model="form.time_id"
+                  :label="$t('time')"
+                  :rules="[v => !!v || 'ម៉ោង តម្រូវឱ្យបំពេញ']"
+                />
+              </VCol>
+              <VCol
+                md="4"
+                cols="12"
+                v-if="form.type==2"
+              >
+                <v-autocomplete
+                  :items="options.levels"
+                  item-value="id"
+                  item-title="level"
+                  v-model="form.level_id"
+                  :label="$t('level')"
+                  :rules="[v => !!v || 'កម្រិត តម្រូវឱ្យបំពេញ']"
+                />
+              </VCol>
+              
               <!-- 👉 Form Actions -->
               <VCol
                 cols="12"

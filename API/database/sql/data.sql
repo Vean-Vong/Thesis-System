@@ -20,3 +20,11 @@ INSERT INTO `avec`.`students` (`id`, `code`, `first_name`, `last_name`, `first_n
 -- Teachers Data
 -- ---------------------
 INSERT INTO `avec`.`teachers` (`id`, `code`, `name`, `name_latin`, `sex`, `dob`, `photo_path`, `pob`, `address`, `position`, `phone`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES (uuid() , '0222', 'ដួង ដាលីន', 'Doung Dalin', 2, '1998-05-15', NULL, 'បាត់ដំបង', 'បាត់ដំបង', 3, '098 78 66 34', NULL, NULL, NULL, NULL, NULL);
+
+-- ---------------------
+-- Student Data
+-- ---------------------
+INSERT INTO `avec`.`levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (1, 'Level 1', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-29 10:09:02', '2024-05-31 03:08:11');
+INSERT INTO `avec`.`levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (2, 'Level 2', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-29 10:08:58', '2024-05-31 03:08:11');
+INSERT INTO `avec`.`levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (3, 'Level 3', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-30 10:08:53', '2024-05-31 03:08:11');
+INSERT INTO `avec`.`levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (4, 'Level 4', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-31 03:08:11', '2024-05-31 03:08:11');

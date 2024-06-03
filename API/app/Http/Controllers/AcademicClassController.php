@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\AcademicClass\StoreAddStudentRequest;
 use App\Http\Requests\AcademicClass\StoreAcademicClassRequest;
 use App\Http\Requests\AcademicClass\UpdateAcademicClassRequest;
+use App\Models\Level;
+use App\Models\Room;
+use App\Models\Time;
 
 class AcademicClassController extends Controller
 {
@@ -150,7 +153,10 @@ class AcademicClassController extends Controller
 
         try {
 
-            $result['teachers'] = Teacher::get();
+            $result['teachers'] = Teacher::orderByDESC('name')->get();
+            $result['times'] = Time::orderByDESC('time')->get();
+            $result['levels'] = Level::orderByDESC('level')->get();
+            $result['rooms'] = Room::orderByDESC('room')->get();
             $result['academic_years'] = AcademicYear::select('id', 'name')->orderByDESC('is_active')->get();
 
         } catch (Throwable $e) {
