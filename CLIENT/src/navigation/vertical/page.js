@@ -14,7 +14,7 @@ export default [
   {
     title: 'room',
     to: 'room',
-    icon: { icon: 'mdi-account-tie', size: 15 },
+    icon: { icon: 'mdi-google-classroom', size: 15 },
     active: 'room',
   },
   {

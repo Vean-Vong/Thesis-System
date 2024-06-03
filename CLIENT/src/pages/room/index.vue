@@ -4,7 +4,7 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import _ from 'lodash'
 import { useRouter } from 'vue-router'
 const currentPage = ref(1)
-const headers = ['room', 'headers.status', 'headers.action']
+const headers = ['room', 'headers.action']
 
 const form = reactive({
   filter: null,
@@ -66,8 +66,7 @@ onMounted(() => {
     <v-row>
       <v-col
         cols="12"
-        md="10"
-        lg="10"
+        md="6"
         sm="12"
       >
         <VCard
@@ -142,7 +141,7 @@ onMounted(() => {
                     :colspan="headers.length"
                     class="text-center"
                   >
-                    <div class="text-subtitle-2">{{$t('in progress')}}</div>
+                    <div class="text-subtitle-2">{{ $t('in progress') }}</div>
                   </td>
                 </tr>
                 <tr v-if="!loading && data.length === 0">
@@ -150,7 +149,7 @@ onMounted(() => {
                     :colspan="headers.length"
                     class="text-caption text-center"
                   >
-                  {{$t('No data stored')}}
+                    {{ $t('No data stored') }}
                   </td>
                 </tr>
                 <tr
@@ -158,8 +157,6 @@ onMounted(() => {
                   :key="row.id"
                 >
                   <td v-text="row.room" />
-                  <!-- <td v-text="row.date" /> -->
-                  <td v-text="row.is_active === 1 ? 'កំពុងប្រតិបត្តិការ' : 'អសកម្ម'" />
                   <td>
                     <v-btn
                       @click="show(row.id)"
@@ -172,24 +169,9 @@ onMounted(() => {
                         activator="parent"
                         location="bottom"
                       >
-                        {{$t('edit')}}
+                        {{ $t('edit') }}
                       </v-tooltip>
                     </v-btn>
-                    <!-- <v-btn
-                      :disabled="row.is_active == 1"
-                      @click="onDelete(row.id)"
-                      color="white"
-                      elevation="0"
-                      flat
-                    >
-                      <v-icon color="error">mdi-trash</v-icon>
-                      <v-tooltip
-                        activator="parent"
-                        location="bottom"
-                      >
-                        {{$t('delete')}}
-                      </v-tooltip>
-                    </v-btn> -->
                   </td>
                 </tr>
               </tbody>
@@ -226,34 +208,12 @@ onMounted(() => {
         </VCard>
       </v-col>
     </v-row>
-
-    <!-- <v-dialog
-      v-model="confirmDialog"
-      style="max-width: 500px"
-      persistent
-    >
-      <v-card>
-        <v-card-text> {{$t('delete_year')}} </v-card-text>
-        <v-card-actions class="ml-auto">
-          <v-btn
-            color="error"
-            @click="confirmDialog = false"
-            >{{$t('no')}}</v-btn
-          >
-          <v-btn
-            color="success"
-            @click="confirmDelete"
-            >{{$t('yes')}}</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
   </div>
 </template>
 <route lang="yaml">
-  meta:
-    title: room 
-    layout: default
-    subject: Auth
-    active: 'room'
-  </route>
+meta:
+  title: room
+  layout: default
+  subject: Auth
+  active: 'room'
+</route>
