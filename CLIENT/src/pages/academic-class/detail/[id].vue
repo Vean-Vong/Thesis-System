@@ -32,7 +32,7 @@ const selected_students = ref([])
 const listing = ref(false)
 const store = useAuthStore()
 
-const formatDate = (date)=>{
+const formatDate = date => {
   return moment(date).format('D MMM YYYY')
 }
 const fetchData = () => {
