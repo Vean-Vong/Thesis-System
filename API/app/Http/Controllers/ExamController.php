@@ -27,7 +27,7 @@ class ExamController extends Controller
 
             $exams = Study::leftJoin('exams', 'studies.student_id', 'exams.student_id')
                 ->join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'students.last_name', 'students.dob', 'students.gender', 'studies.academic_class_id', 'exams.*')
+                ->select('studies.student_id', 'students.last_name', 'students.gender', 'studies.academic_class_id', 'exams.*')
                 ->where('exams.academic_class_id', $request->academic_class_id)
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->whereNull('studies.deleted_at')
@@ -46,13 +46,9 @@ class ExamController extends Controller
 
             $data = array_merge($students->toArray(), $exams->toArray());
 
-            $result['form'] = [
-                'academic_class_id' => $request->academic_class_id,
-                'type' => $request->type,
-                'exams' => $data
-            ];
+            // $result['form'] =$data;
 
-
+            $result['form'] = ExamFormResource::collection($data);
 
         } catch(Throwable $e) {
             $result['status'] = 201;
@@ -74,20 +70,12 @@ class ExamController extends Controller
         try {
 
             foreach($request->exams as $exam) {
+                $exam['academic_class_id'] = $request->academic_class_id;
                 Exam::updateOrCreate(
                     [
                         "id" => $exam['id'] ?? null
                     ],
-                    [
-                        'academic_class_id' => $request->academic_class_id,
-                        'type' => $request->type,
-                        'semester' => $request->semester ?? 1,
-                        'student_id' => $exam['student_id'],
-                        'm' => $exam['m'],
-                        'k' => $exam['k'],
-                        'sc' => $exam['sc'],
-                        's' => $exam['s'],
-                    ]
+                    $exam
                 );
             }
 

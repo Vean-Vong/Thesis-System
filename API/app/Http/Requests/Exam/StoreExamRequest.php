@@ -29,16 +29,6 @@ class StoreExamRequest extends FormRequest
                 'exists:academic_classes,id'
             ],
 
-            'semester' => [
-                'nullable',
-                Rule::in([1, 2])
-            ],
-
-            'type' => [
-                'required',
-                Rule::in([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-            ],
-
             'exams' => [
                 'array'
             ],
@@ -46,26 +36,6 @@ class StoreExamRequest extends FormRequest
             'exams.*.student_id' => [
                 'required',
                 'exists:students,id'
-            ],
-
-            'exams.*.k' => [
-                'required',
-                'max:10'
-            ],
-
-            'exams.*.m' => [
-                'required',
-                'max:10'
-            ],
-
-            'exams.*.sc' => [
-                'required',
-                'max:10'
-            ],
-
-            'exams.*.s' => [
-                'required',
-                'max:10'
             ],
 
         ];

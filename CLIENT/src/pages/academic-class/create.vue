@@ -12,6 +12,9 @@ const submitting = ref(false)
 const form = reactive({
   name: null,
   teacher_id: null,
+  room_id: null,
+  time_id: null,
+  level_id: null,
   academic_year_id: null,
 })
 
