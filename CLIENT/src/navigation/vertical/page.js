@@ -12,6 +12,12 @@ export default [
     active: 'student',
   },
   {
+    title: "level",
+    to: "level",
+    icon: { icon: "mdi-account-injury-outline", size: 15 },
+    active: 'level',
+  },
+  {
     title: "academic_Class",
     to: "academic-class",
     icon: { icon: "mdi-account-tie", size: 15 },
