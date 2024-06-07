@@ -327,20 +327,20 @@ onMounted(() => {
                   <td v-text="formatDate(row.student?.dob)" />
                   <td>
                     <div v-if="row.status == 1">
-                      <v-btn
-                        @click="onDelete(row.id)"
+                      <!-- <v-btn  
+                        @click="onDisable(row.id)"
                         color="white"
                         elevation="0"
                         flat
                       >
-                        <v-icon color="error">mdi-trash</v-icon>
+                        <v-icon color="error">mdi-minus-circle</v-icon>
                         <v-tooltip
                           activator="parent"
                           location="bottom"
                         >
-                          {{ $t('remove_student') }}
+                          {{ $t('disable_student') }}
                         </v-tooltip>
-                      </v-btn>
+                      </v-btn> -->
                       <v-btn
                         @click="onMoveStudent(row.id)"
                         color="white"
@@ -355,6 +355,21 @@ onMounted(() => {
                           {{ $t('transfer_students') }}
                         </v-tooltip>
                       </v-btn>
+                      <v-btn
+                        @click="onDelete(row.id)"
+                        color="white"
+                        elevation="0"
+                        flat
+                      >
+                        <v-icon color="error">mdi-trash</v-icon>
+                        <v-tooltip
+                          activator="parent"
+                          location="bottom"
+                        >
+                          {{ $t('remove_student') }}
+                        </v-tooltip>
+                      </v-btn>
+                      
                     </div>
                     <div
                       class="ml-10"

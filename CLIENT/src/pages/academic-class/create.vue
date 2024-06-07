@@ -137,7 +137,7 @@ onMounted(() => {
                 v-if="form.type==2||form.type==3"
               >
                 <v-autocomplete
-                  :items="options.time"
+                  :items="options.times"
                   item-value="id"
                   item-title="time"
                   v-model="form.time_id"

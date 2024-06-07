@@ -6,7 +6,7 @@ import User from '../../class/User'
 import { useAuthStore } from '@/plugins/auth.module'
 import { useRouter } from 'vue-router'
 const currentPage = ref(1)
-const headers = ['headers.name', 'teacher', 'headers.action']
+const headers = ['headers.name', 'teacher', 'room', 'headers.action']
 
 const form = reactive({
   filter: null,
@@ -232,6 +232,7 @@ onMounted(() => {
                 >
                   <td v-text="row.name" />
                   <td v-text="row.teacher.name" />
+                  <td v-text="row.room.room" />
                   <td>
                     <v-btn
                       @click="show(row.id)"
