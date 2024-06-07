@@ -171,7 +171,7 @@ const addScore = () => {
 }
 
 const listingScore = () => {
-  router.push('/academic-class/detail/score/' + params.id + '_' + 'c')
+  router.push('/academic-class/detail/score/show?id=' + params.id)
 }
 
 const onAddAttendance = () => {
