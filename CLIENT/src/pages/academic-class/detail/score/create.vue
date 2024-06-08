@@ -31,7 +31,9 @@ const form = reactive({
       wr: 0,
       li: 0,
       sp: 0,
-      total: 0,
+      mid: 0,
+      attitude: 0,
+      final: 0,
     },
   ],
 });

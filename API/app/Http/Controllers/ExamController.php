@@ -90,7 +90,7 @@ class ExamController extends Controller
                         'mid' => $exam['mid'] ?? 0,
                         'attitude' => $exam['attitude'] ?? 0,
                         'final' => $exam['final'] ?? 0,
-                        'total' => $exam['total'] ?? 0,
+                        'total' => ($exam['att'] + $exam['quiz'] + $exam['hw'] + $exam['re'] + $exam['voc']+$exam['gr']+$exam['liu']+$exam['wr']+$exam['li']+$exam['sp']+$exam['mid']+ $exam['attitude']+$exam['final'] ) ?? 0,
                     ]
                 );
             }

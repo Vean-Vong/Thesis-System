@@ -33,7 +33,6 @@ class ExamFormResource extends JsonResource
             'mid' => $this['mid'] ?? 0,
             'attitude' => $this['attitude'] ?? 0,
             'final' => $this['final'] ?? 0,
-            'total' => $this['total'] ?? 0,
         ];
     }
 }
