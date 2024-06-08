@@ -56,7 +56,7 @@ const fetchForm = () => {
       academic_class_id: route.query.id
     })
     .then((res) => {
-      Object.assign(form, res.data.form);
+      Object.assign(form.exams, res.data.form);
     });
 };
 
@@ -90,7 +90,7 @@ watch(
 );
 
 onMounted(() => {
-  console.table(route.query.id);
+  form.academic_class_id = route.query.id;
   fetchData();
 });
 </script>
@@ -271,6 +271,14 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
+
+<route lang="yaml">
+  meta:
+    title: Score
+    layout: default
+    subject: Auth
+    active: 'academic-class'
+  </route>
 
 <style scoped>
 table {

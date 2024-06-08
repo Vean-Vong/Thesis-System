@@ -75,7 +75,7 @@ class Student extends Model
 
     public function getSexTextAttribute()
     {
-        return $this->sex == 1 ? 'ប្រុស' : 'ស្រី';
+        return $this->gender == 1 ? 'ប្រុស' : 'ស្រី';
     }
     public function getFullNameAttribute()
     {

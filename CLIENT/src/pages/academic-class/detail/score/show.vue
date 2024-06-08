@@ -8,6 +8,7 @@ const params_id = ref(null);
 const params_month = ref(null);
 const params_s = ref(null);
 const router = useRouter();
+const route = useRoute();
 const model = ref({});
 const exam_month = ref({});
 const data = ref([]);
@@ -19,7 +20,7 @@ const onPrint = () => {
 const fetchData = () => {
   api
     .post("academic-classes-detail", {
-      id: params_id.value,
+      id: route.query.id,
     })
     .then((res) => {
       model.value = res.data.model;
@@ -30,88 +31,14 @@ const fetchData = () => {
 const fetchTable = () => {
   api
     .post("exam-show", {
-      academic_class_id: params_id.value,
-      type: params_month.value,
-      semester: params_s.value,
+      academic_class_id: route.query.id,
     })
     .then((res) => {
       data.value = res.data.data;
     });
 };
 
-const semesters = ref([
-  {
-    id: 1,
-    name: "ឆមាសទី១",
-  },
-  {
-    id: 2,
-    name: "ឆមាសទី២",
-  },
-]);
-
-const months = ref([
-  {
-    id: 1,
-    name: "មករា",
-  },
-  {
-    id: 2,
-    name: "កុម្ភៈ",
-  },
-  {
-    id: 3,
-    name: "មីនា",
-  },
-  {
-    id: 4,
-    name: "មេសា",
-  },
-  {
-    id: 5,
-    name: "ឧសភា",
-  },
-  {
-    id: 6,
-    name: "មិថុនា",
-  },
-  {
-    id: 7,
-    name: "កក្កដា",
-  },
-  {
-    id: 8,
-    name: "សីហា",
-  },
-  {
-    id: 9,
-    name: "កញ្ញា",
-  },
-  {
-    id: 10,
-    name: "តុលា",
-  },
-  {
-    id: 11,
-    name: "វិច្ឆិកា",
-  },
-  {
-    id: 12,
-    name: "ធ្នូ",
-  },
-  {
-    id: 0,
-    name: "ឆមាស",
-  },
-]);
-
 onMounted(() => {
-  [params_id.value, params_month.value, params_s.value] = params.id.split("_");
-  months.value.filter((e) => {
-    if (e.id == params_month.value) {
-      exam_month.value = e;
-    }
-  });
   fetchData();
 });
 </script>

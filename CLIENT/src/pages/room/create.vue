@@ -47,18 +47,6 @@ onMounted(() => {});
                   :rules="[(v) => !!v || 'បន្ទប់ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
-              <!-- <VCol md="6" cols="12">
-                <VTextField
-                  v-model="form.date"
-                  label="date"
-                  type="date"
-                  :rules="[(v) => !!v || 'ថ្ងៃ តម្រូវឱ្យបំពេញ']"
-                />
-              </VCol> -->
-              <VCol md="12" cols="12" class="ml-1">
-                <v-checkbox v-model="form.is_active" :val="1" :label="$t('ongoing')">
-                </v-checkbox>
-              </VCol>
               <!-- 👉 Form Actions -->
               <VCol cols="12" class="d-flex flex-wrap gap-4 justify-end">
                 <VBtn type="submit" :loading="submitting" color="success"
