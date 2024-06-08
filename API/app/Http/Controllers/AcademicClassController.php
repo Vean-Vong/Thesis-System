@@ -33,8 +33,8 @@ class AcademicClassController extends Controller
 
             $academic_year_id = $request->academic_year_id ?? AcademicYear::whereIsActive(1)->first()->id ?? 1;
 
-            $academic_classes = AcademicClass::select('id', 'name', 'teacher_id', 'academic_year_id')
-                ->with('teacher')
+            $academic_classes = AcademicClass::select('id', 'name', 'teacher_id', 'room_id', 'academic_year_id')
+                ->with(['teacher', 'room'])
                 ->filter([
                     'search' => $request->search,
                     'academic_year_id' => $academic_year_id
@@ -61,9 +61,7 @@ class AcademicClassController extends Controller
 
         try {
 
-          AcademicClass::create($request->validated() + [
-            'school_id' => auth()->user()->school_id
-          ]);
+          AcademicClass::create($request->validated());
 
           $result['message'] = "រក្សាទុកបានសម្រេច";
 
@@ -82,7 +80,7 @@ class AcademicClassController extends Controller
 
         try {
 
-            $model = AcademicClass::select('id', 'name', 'teacher_id', 'academic_year_id')->findOrFail($request->id);
+            $model = AcademicClass::findOrFail($request->id);
 
             $result['model'] = $model;
 

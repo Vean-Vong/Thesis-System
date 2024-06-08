@@ -1,128 +1,61 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import api from "@/plugins/utilites"
-import { Printd } from "printd";
-const { params } = useRoute();
-const params_id = ref(null);
-const params_month = ref(null);
-const params_s = ref(null);
-const router = useRouter();
-const model = ref({});
-const exam_month = ref({});
-const data = ref([]);
-const refForm = ref();
-const d = new Printd();
+import { onMounted, reactive, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import api from '@/plugins/utilites'
+import { Printd } from 'printd'
+const { params } = useRoute()
+const params_id = ref(null)
+const params_month = ref(null)
+const params_s = ref(null)
+const router = useRouter()
+const route = useRoute()
+const model = ref({})
+const exam_month = ref({})
+const data = ref([])
+const refForm = ref()
+const d = new Printd()
 const onPrint = () => {
-  d.print(document.getElementById("table"));
-};
+  d.print(document.getElementById('table'))
+}
 const fetchData = () => {
   api
-    .post("academic-classes-detail", {
-      id: params_id.value,
+    .post('academic-classes-detail', {
+      id: route.query.id,
     })
-    .then((res) => {
-      model.value = res.data.model;
-    });
-  fetchTable();
-};
+    .then(res => {
+      model.value = res.data.model
+    })
+  fetchTable()
+}
 
 const fetchTable = () => {
   api
-    .post("exam-show", {
-      academic_class_id: params_id.value,
-      type: params_month.value,
-      semester: params_s.value,
+    .post('exam-show', {
+      academic_class_id: route.query.id,
     })
-    .then((res) => {
-      data.value = res.data.data;
-    });
-};
-
-const semesters = ref([
-  {
-    id: 1,
-    name: "ឆមាសទី១",
-  },
-  {
-    id: 2,
-    name: "ឆមាសទី២",
-  },
-]);
-
-const months = ref([
-  {
-    id: 1,
-    name: "មករា",
-  },
-  {
-    id: 2,
-    name: "កុម្ភៈ",
-  },
-  {
-    id: 3,
-    name: "មីនា",
-  },
-  {
-    id: 4,
-    name: "មេសា",
-  },
-  {
-    id: 5,
-    name: "ឧសភា",
-  },
-  {
-    id: 6,
-    name: "មិថុនា",
-  },
-  {
-    id: 7,
-    name: "កក្កដា",
-  },
-  {
-    id: 8,
-    name: "សីហា",
-  },
-  {
-    id: 9,
-    name: "កញ្ញា",
-  },
-  {
-    id: 10,
-    name: "តុលា",
-  },
-  {
-    id: 11,
-    name: "វិច្ឆិកា",
-  },
-  {
-    id: 12,
-    name: "ធ្នូ",
-  },
-  {
-    id: 0,
-    name: "ឆមាស",
-  },
-]);
+    .then(res => {
+      data.value = res.data.data
+    })
+}
 
 onMounted(() => {
-  [params_id.value, params_month.value, params_s.value] = params.id.split("_");
-  months.value.filter((e) => {
-    if (e.id == params_month.value) {
-      exam_month.value = e;
-    }
-  });
-  fetchData();
-});
+  fetchData()
+})
 </script>
 <template>
   <div>
     <VRow>
-      <VCol cols="12" md="12" sm="12">
-        <v-form lazy-validation ref="refForm" @submit.prevent="submit()">
-          <VCard
-            :title="`ថ្នាក់ទី ${model?.name} ឆ្នាំសិក្សា ${model?.academic_year?.name}`"
-          >
+      <VCol
+        cols="12"
+        md="12"
+        sm="12"
+      >
+        <v-form
+          lazy-validation
+          ref="refForm"
+          @submit.prevent="submit()"
+        >
+          <VCard :title="`ថ្នាក់ទី ${model?.name} ឆ្នាំសិក្សា ${model?.academic_year?.name}`">
             <VDivider />
             <v-btn
               class="mt-5 mx-5"
@@ -140,7 +73,10 @@ onMounted(() => {
                   </div> -->
                   <v-spacer />
                   <div>
-                    <v-btn flat color="white" @click="onPrint"
+                    <v-btn
+                      flat
+                      color="white"
+                      @click="onPrint"
                       ><v-icon color="grey">mdi-printer</v-icon></v-btn
                     >
                   </div>
@@ -186,12 +122,7 @@ onMounted(() => {
                     <td
                       colspan="3"
                       valign="center"
-                      style="
-                        text-align: center;
-                        font-family: Khmer Os Muol Light;
-                        line-height: normal;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
                     >
                       ព្រះរាជាណាចក្រកម្ពុជា
                     </td>
@@ -200,12 +131,7 @@ onMounted(() => {
                     <td
                       colspan="4"
                       valign="center"
-                      style="
-                        text-align: center;
-                        font-family: Khmer Os Muol Light;
-                        line-height: normal;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
                     >
                       ខេត្តបាត់ដំបង
                     </td>
@@ -214,12 +140,7 @@ onMounted(() => {
                     <td
                       colspan="3"
                       valign="center"
-                      style="
-                        text-align: center;
-                        font-family: Khmer Os Muol Light;
-                        line-height: normal;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
                     >
                       ជាតិ សាសនា ព្រះមហាក្សត្រ
                     </td>
@@ -228,12 +149,7 @@ onMounted(() => {
                     <td
                       colspan="4"
                       valign="center"
-                      style="
-                        text-align: center;
-                        font-family: Khmer Os Muol Light;
-                        line-height: normal;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
                     >
                       វិទ្យាល័យព្រៃសង្ហា
                     </td>
@@ -242,12 +158,7 @@ onMounted(() => {
                     <td
                       colspan="3"
                       valign="center"
-                      style="
-                        text-align: center;
-                        font-family: Tacteing;
-                        line-height: normal;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Tacteing; line-height: normal; font-size: 12px"
                     >
                       6
                     </td>
@@ -255,32 +166,27 @@ onMounted(() => {
                   <tr>
                     <td
                       colspan="21"
-                      style="
-                        text-align: center;
-                        font-family: Khmer Os Muol Light;
-                        line-height: normal;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
                     >
-                      តារាងពិន្ទុប្រចាំ{{ exam_month.id != 0 ? "ខែ" : ""
-                      }}{{ exam_month.name }}{{ params_s ? "លើកទី" + params_s : "" }}
+                      តារាងពិន្ទុប្រចាំ{{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
+                      }}{{ params_s ? 'លើកទី' + params_s : '' }}
                     </td>
                   </tr>
                   <tr>
                     <td
                       colspan="21"
-                      style="
-                        text-align: center;
-                        font-family: Tacteing;
-                        line-height: 2rem;
-                        font-size: 12px;
-                      "
+                      style="text-align: center; font-family: Tacteing; line-height: 2rem; font-size: 12px"
                     >
                       ros
                     </td>
                   </tr>
                   <tr>
-                    <th rowspan="2" style="border: 1px solid black; padding: 5px">ល.រ</th>
+                    <th
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px"
+                    >
+                      ល.រ
+                    </th>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -291,12 +197,13 @@ onMounted(() => {
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
-                      colspan="3"
                     >
-                      ថ្ងៃខែឆ្នាំកំណើត
+                      ភេទ
                     </th>
-                    <th rowspan="2" style="border: 1px solid black; padding: 5px">ភេទ</th>
-                    <th colspan="8" style="border: 1px solid black; padding: 5px">
+                    <th
+                      colspan="10"
+                      style="border: 1px solid black; padding: 5px"
+                    >
                       ពិន្ទុ
                     </th>
                     <th
@@ -329,62 +236,147 @@ onMounted(() => {
                     </th>
                   </tr>
                   <tr>
-                    <th style="border: 1px solid black; padding: 5px" colspan="2">
-                      ភាសាខ្មែរ
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Att
                     </th>
-                    <th style="border: 1px solid black; padding: 5px" colspan="2">
-                      គណិតវិទ្យា
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Quiz
                     </th>
-                    <th style="border: 1px solid black; padding: 5px" colspan="2">
-                      វិទ្យាសាស្រ្ត
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      HW
                     </th>
-                    <th style="border: 1px solid black; padding: 5px" colspan="2">
-                      សិក្សាសង្គម
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Re
+                    </th>
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Voc.
+                    </th>
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Gr.
+                    </th>
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      LIU
+                    </th>
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Wr
+                    </th>
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Li
+                    </th>
+                    <th
+                      style="border: 1px solid black; padding: 5px"
+                      colspan="1"
+                    >
+                      Sp.
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(ret, index) in data" :key="index">
+                  <tr
+                    v-for="(ret, index) in data"
+                    :key="index"
+                  >
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
                       {{ index + 1 }}
                     </td>
-                    <td colspan="3" style="border: 1px solid black; padding: 5px">
-                      {{ ret.name }}
-                    </td>
                     <td
                       colspan="3"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px"
                     >
-                      {{ ret.dob }}
+                      {{ ret.last_name + ' ' + ret.first_name }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.sex == 1 ? "ប្រុស" : "ស្រី" }}
+                      {{ ret.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
                     <td
-                      colspan="2"
+                      colspan="1"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
-                      {{ ret.k }}
+                      {{ ret.att }}
                     </td>
                     <td
-                      colspan="2"
+                      colspan="1"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
-                      {{ ret.m }}
+                      {{ ret.quiz }}
                     </td>
                     <td
-                      colspan="2"
+                      colspan="1"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
-                      {{ ret.sc }}
+                      {{ ret.hw }}
                     </td>
                     <td
-                      colspan="2"
+                      colspan="1"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
-                      {{ ret.s }}
+                      {{ ret.re }}
+                    </td>
+                    <td
+                      colspan="1"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                    >
+                      {{ ret.voc }}
+                    </td>
+                    <td
+                      colspan="1"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                    >
+                      {{ ret.gr }}
+                    </td>
+                    <td
+                      colspan="1"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                    >
+                      {{ ret.liu }}
+                    </td>
+                    <td
+                      colspan="1"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                    >
+                      {{ ret.wr }}
+                    </td>
+                    <td
+                      colspan="1"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                    >
+                      {{ ret.li }}
+                    </td>
+                    <td
+                      colspan="1"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                    >
+                      {{ ret.sp }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
+                      <!-- {{ ret.att+ret.quiz+ret.hw+ret.re+ret.voc+ret.gr+ret.liu+ret.wr }} -->
                       {{ ret.total }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
@@ -430,13 +422,12 @@ onMounted(() => {
                     </td>
                   </tr>
                   <tr>
-                    <td style="text-align: center" colspan="10"></td>
                     <td
-                      style="
-                        text-align: center;
-                        font-family: Khmer OS Battambang;
-                        line-height: normal;
-                      "
+                      style="text-align: center"
+                      colspan="10"
+                    ></td>
+                    <td
+                      style="text-align: center; font-family: Khmer OS Battambang; line-height: normal"
                       colspan="10"
                     >
                       ថ្ងៃ
@@ -447,18 +438,23 @@ onMounted(() => {
                     </td>
                   </tr>
                   <tr>
-                    <td style="text-align: center" colspan="10"></td>
+                    <td
+                      style="text-align: center"
+                      colspan="10"
+                    ></td>
                     <td
                       style="text-align: center; font-family: Khmer OS Battambang"
                       colspan="10"
                     >
                       ធ្វើនៅបាត់ដំបង, ថ្ងៃទី&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ខែ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ឆ្នាំ២០
+                      ខែ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ២០
                     </td>
                   </tr>
                   <tr>
-                    <td style="text-align: center" colspan="10"></td>
+                    <td
+                      style="text-align: center"
+                      colspan="10"
+                    ></td>
                     <td
                       style="text-align: center; font-family: Khmer OS Battambang"
                       colspan="10"
@@ -467,18 +463,20 @@ onMounted(() => {
                     </td>
                   </tr>
                   <tr>
-                    <td style="text-align: center" colspan="10"></td>
                     <td
-                      style="
-                        text-align: center;
-                        font-family: Khmer OS Battambang;
-                        line-height: 120px;
-                      "
+                      style="text-align: center"
+                      colspan="10"
+                    ></td>
+                    <td
+                      style="text-align: center; font-family: Khmer OS Battambang; line-height: 120px"
                       colspan="10"
                     >
                       {{ model.teacher?.name }}
                     </td>
-                    <td style="text-align: center" colspan="2"></td>
+                    <td
+                      style="text-align: center"
+                      colspan="2"
+                    ></td>
                   </tr>
                 </tbody>
               </table>

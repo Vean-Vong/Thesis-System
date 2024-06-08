@@ -15,21 +15,6 @@ return new class extends Migration
             $table->uuid('id');
             $table->foreignUuid('academic_class_id')->index();
             $table->foreignUuid('student_id')->index();
-            //first semester
-            $table->string('grade_first_semester', 5)->nullable();
-            $table->float('total_first_semester')->nullable();
-            $table->float('avg_first_semester')->nullable();
-            $table->float('number_first_semester')->nullable();
-            //second semester
-            $table->float('total_second_semester')->nullable();
-            $table->float('avg_second_semester')->nullable();
-            $table->string('grade_second_semester', 5)->nullable();
-            $table->float('number_second_semester')->nullable();
-            //year
-            $table->float('total_year')->nullable();
-            $table->float('avg_year_semester')->nullable();
-            $table->string('grade_year', 5)->nullable();
-            $table->float('number_year')->nullable();
             $table->string('description')->nullable();
             $table->boolean('is_finised')->default(false);
             $table->uuid('created_by')->nullable();

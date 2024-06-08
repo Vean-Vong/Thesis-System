@@ -33,9 +33,7 @@ class ExamShowResource extends JsonResource
             'mid' => $this['mid'] ?? 0,
             'attitude' => $this['attitude'] ?? 0,
             'final' => $this['final'] ?? 0,
-            'total' => $this['total'] ?? 0,
-            'avg' => number_format(((isset($this['k']) ? $this['k'] : 0) + (isset($this['m']) ? $this['m'] : 0) + (isset($this['sc']) ? $this['sc'] : 0) + + (isset($this['s']) ? $this['s'] : 0)) / 4, 2, '.', ','),
-            'result' => (((isset($this['k']) ? $this['k'] : 0) + (isset($this['m']) ? $this['m'] : 0) + (isset($this['sc']) ? $this['sc'] : 0) + + (isset($this['s']) ? $this['s'] : 0)) / 4) >= 5 ? 'ជាប់' : 'ធ្លាក់',
+            'total' => $this['total'] ?? 0
         ];
     }
 }
