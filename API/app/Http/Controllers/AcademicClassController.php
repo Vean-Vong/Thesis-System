@@ -61,9 +61,7 @@ class AcademicClassController extends Controller
 
         try {
 
-          AcademicClass::create($request->validated() + [
-            'school_id' => auth()->user()->school_id
-          ]);
+          AcademicClass::create($request->validated());
 
           $result['message'] = "រក្សាទុកបានសម្រេច";
 
