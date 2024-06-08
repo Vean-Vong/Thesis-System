@@ -15,11 +15,19 @@ class Exam extends Model
     protected $fillable = [
         'academic_class_id',
         'student_id',
-        'semester',
-        'type',
-        'm',
-        'k',
-        'sc',
-        's'
+        'att',
+        'quiz',
+        'hw',
+        're',
+        'voc',
+        'gr',
+        'liu',
+        'wr',
+        'li',
+        'sp',
+        'mid',
+        'attitude',
+        'final',
+        'total',
     ];
 }

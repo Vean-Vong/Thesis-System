@@ -16,13 +16,24 @@ class ExamFormResource extends JsonResource
     {
         return [
             'id' => $this['id'] ?? null,
-            'name' => $this['name'],
-            'dob' => $this['dob'],
-            'sex' => $this['sex'],
-            'k' => $this['k'] ?? 0,
-            'm' => $this['m'] ?? 0,
-            'sc' => $this['sc'] ?? 0,
-            's' => $this['s'] ?? 0,
+            'student_id' => $this['student_id'],
+            'last_name' => $this['last_name'],
+            'first_name' => $this['first_name'],
+            'gender' => $this['gender'],
+            'att' => $this['att'] ?? 0,
+            'quiz' => $this['quiz'] ?? 0,
+            'hw' => $this['hw'] ?? 0,
+            're' => $this['re'] ?? 0,
+            'voc' => $this['voc'] ?? 0,
+            'gr' => $this['gr'] ?? 0,
+            'liu' => $this['liu'] ?? 0,
+            'wr' => $this['wr'] ?? 0,
+            'li' => $this['li'] ?? 0,
+            'sp' => $this['sp'] ?? 0,
+            'mid' => $this['mid'] ?? 0,
+            'attitude' => $this['attitude'] ?? 0,
+            'final' => $this['final'] ?? 0,
+            'total' => $this['total'] ?? 0,
         ];
     }
 }
