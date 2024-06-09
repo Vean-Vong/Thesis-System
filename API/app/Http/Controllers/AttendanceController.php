@@ -34,10 +34,11 @@ class AttendanceController extends Controller
 
             $attendances = Study::leftJoin('attendances', 'studies.student_id', 'attendances.student_id')
                 ->join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'attendances.date', 'students.name', 'students.sex', 'attendances.absent', 'attendances.id')
+                ->select('studies.student_id', 'attendances.date', 'students.gender', 'attendances.absent', 'attendances.id')
+                ->selectRaw('CONCAT(students.last_name, " ", students.first_name) as name')
                 ->where('attendances.academic_class_id', $request->academic_class_id)
                 ->where('month', $request->month)
-                ->orderBy('students.name')
+                ->orderBy('students.last_name')
                 ->orderBy('attendances.date')
                 ->whereNull('studies.deleted_at')
                 ->whereNull('attendances.deleted_at')
@@ -46,11 +47,12 @@ class AttendanceController extends Controller
             $student_has_attendance = $attendances->pluck('student_id');
 
             $students = Study::join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'students.name', 'students.sex')
+                ->select('studies.student_id', 'students.gender')
+                ->selectRaw('CONCAT(students.last_name, " ", students.first_name) as name')
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->whereNotIn('studies.student_id', $student_has_attendance)
                 ->whereNull('studies.deleted_at')
-                ->orderBy('students.name')
+                ->orderBy('students.last_name')
                 ->get();
 
             $data = array_merge($attendances->toArray(), $students->toArray());
@@ -64,7 +66,7 @@ class AttendanceController extends Controller
 
 
                 foreach($data as $key => $item) {
-                    $form['attendances'][$item['name']]['sex'] = $item['sex'];
+                    $form['attendances'][$item['name']]['gender'] = $item['gender'];
                     $form['attendances'][$item['name']]['number'] = $key;
                     $form['attendances'][$item['name']]['student_id'] = $item['student_id'];
                     for($i = 1; $i <= $total_day; $i ++) {
@@ -161,24 +163,26 @@ class AttendanceController extends Controller
 
             $attendances = Study::leftJoin('attendances', 'studies.student_id', 'attendances.student_id')
                 ->join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'attendances.date', 'students.name', 'students.sex', 'attendances.absent')
+                ->select('studies.student_id', 'attendances.date', 'students.gender', 'attendances.absent')
+                ->selectRaw('CONCAT(students.last_name, " ", students.first_name) as name')
                 ->where('attendances.academic_class_id', $request->academic_class_id)
                 ->where('month', $request->month)
                 ->whereNull('studies.deleted_at')
-                ->orderBy('students.name')
+                ->orderBy('students.last_name')
                 ->orderBy('attendances.date')
                 ->whereNull('attendances.deleted_at')
-                ->orderBy('students.name')
+                ->orderBy('students.last_name')
                 ->get();
 
             $student_has_attendance = $attendances->pluck('student_id');
 
             $students = Study::join('students', 'studies.student_id', 'students.id')
-                ->select('studies.student_id', 'students.name', 'students.sex')
+                ->select('studies.student_id', 'students.gender')
+                ->selectRaw('CONCAT(students.last_name, " ", students.first_name) as name')
                 ->where('studies.academic_class_id', $request->academic_class_id)
                 ->whereNotIn('studies.student_id', $student_has_attendance)
                 ->whereNull('studies.deleted_at')
-                ->orderBy('students.name')
+                ->orderBy('students.last_name')
                 ->get();
 
             $data = array_merge($attendances->toArray(), $students->toArray());
@@ -191,7 +195,7 @@ class AttendanceController extends Controller
 
 
                 foreach($data as $key => $item) {
-                    $records['attendances'][$item['name']]['sex'] = $item['sex'];
+                    $records['attendances'][$item['name']]['gender'] = $item['gender'];
                     $records['attendances'][$item['name']]['number'] = $key;
                     $records['attendances'][$item['name']]['student_id'] = $item['student_id'];
                     for($i = 1; $i <= $total_day; $i ++) {

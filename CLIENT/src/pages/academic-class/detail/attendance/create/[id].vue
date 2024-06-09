@@ -344,7 +344,13 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
-
+<route lang="yaml">
+meta:
+  title: Attendance Create
+  layout: default
+  subject: Auth
+  active: 'academic-class'
+</route>
 <style scoped lang="scss">
 table {
   border-collapse: collapse;
