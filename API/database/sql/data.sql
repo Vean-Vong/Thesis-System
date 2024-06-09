@@ -38,6 +38,11 @@ INSERT INTO `teachers` (`id`, `code`, `name`, `name_latin`, `sex`, `dob`, `photo
 -- Room Data
 -- ---------------------
 INSERT INTO `rooms` (`id`, `room`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (3, 'Room 1', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', '2024-06-01 07:47:16', '2024-06-03 09:54:32');
+INSERT INTO `rooms` (`id`, `room`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (4, 'Room 2', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-04 15:41:50', '2024-06-04 15:41:50');
+INSERT INTO `rooms` (`id`, `room`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (5, 'Room 3', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-04 15:42:29', '2024-06-04 15:42:29');
+INSERT INTO `rooms` (`id`, `room`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (6, 'Room 4', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-04 15:42:40', '2024-06-04 15:42:40');
+INSERT INTO `rooms` (`id`, `room`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (7, 'Room 5', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-04 15:42:49', '2024-06-04 15:42:49');
+INSERT INTO `rooms` (`id`, `room`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (8, 'Room 6', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-09 02:26:09', '2024-06-09 02:26:09');
 
 -- ---------------------
 -- Level Data
@@ -46,6 +51,20 @@ INSERT INTO `levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `
 INSERT INTO `levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (2, 'Level 2', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-29 10:08:58', '2024-05-31 03:08:11');
 INSERT INTO `levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (3, 'Level 3', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-30 10:08:53', '2024-05-31 03:08:11');
 INSERT INTO `levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (4, 'Level 4', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-05-31 03:08:11', '2024-05-31 03:08:11');
+INSERT INTO `levels` (`id`, `level`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (5, 'level 5', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-09 02:15:36', '2024-06-09 02:15:36');
+
+-- ---------------------
+-- Time Data
+-- ---------------------
+
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (1, '1-2', NULL, NULL, NULL, NULL);
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (2, '2-3', NULL, NULL, NULL, NULL);
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (3, '3-4', NULL, NULL, NULL, NULL);
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (4, '4-5', NULL, NULL, NULL, NULL);
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (5, '5-6', NULL, NULL, NULL, NULL);
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (6, '6-7', NULL, NULL, NULL, NULL);
+INSERT INTO `times` (`id`, `time`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES (7, '7-8', NULL, NULL, NULL, NULL);
+
 
 -- ---------------------
 -- Academic Year
@@ -54,3 +73,16 @@ INSERT INTO `academic_years` (`id`, `name`, `start_date`, `end_date`, `is_active
 INSERT INTO `academic_years` (`id`, `name`, `start_date`, `end_date`, `is_active`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES (2, 'term 2 2024', '2023-06-12', '2024-11-04', 0, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-04 15:43:37', '2024-06-04 15:44:17');
 INSERT INTO `academic_years` (`id`, `name`, `start_date`, `end_date`, `is_active`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES (3, 'term 3 2025', '2024-02-11', '2025-06-07', 0, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, '2024-06-04 15:44:17', '2024-06-04 15:45:05');
 INSERT INTO `academic_years` (`id`, `name`, `start_date`, `end_date`, `is_active`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES (4, 'term 4 2025', '2024-08-21', '2025-12-04', 0, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-04 15:44:46', '2024-06-04 15:44:46');
+
+-- ---------------------
+-- Academic Class
+-- ---------------------
+
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('24325bd4-3602-4e55-ae3d-b99f50c7fcd1', 1, '12D', 'e4d94812-f533-44b0-af86-6e824ec35ffc', 3, NULL, NULL, 2, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-09 02:33:35', '2024-06-09 02:33:35');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('56e55ce5-e9c4-42f7-8a09-aa7fcba83e8b', 1, '12', '87bdecf3-1b6a-11ef-a21e-047c163993b6', 5, NULL, NULL, 3, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-09 02:59:34', '2024-06-09 02:59:34');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('63e05a6f-49b7-4572-8af7-1c85d013c27b', 1, '1A', '8aa5780f-29e2-414b-8a9a-3963fbe55cec', 4, NULL, NULL, 2, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-05 09:36:52', '2024-06-05 09:36:52');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('7328a5a5-91af-4efd-b43f-941f0486aa44', 1, '10', '87bdecf3-1b6a-11ef-a21e-047c163993b6', 6, NULL, NULL, 3, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-09 02:57:50', '2024-06-09 02:57:50');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('9ac5bfcb-7120-4e3b-8cdc-079c1a7c635d', 1, '12D', '04a2c4d4-ddc7-459e-a339-f5d70a2cef6e', 7, NULL, NULL, 1, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-07 07:24:24', '2024-06-07 07:24:24');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('a26b1721-b824-4171-a475-a1e0da271f85', 1, '111', '87bdecf3-1b6a-11ef-a21e-047c163993b6', 8, NULL, NULL, 3, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-09 02:54:39', '2024-06-09 02:54:39');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('ed1a6dc7-af57-4c16-8bb5-61c3102c555a', 2, 'ds', '87bdecf3-1b6a-11ef-a21e-047c163993b6', 6, NULL, NULL, 1, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-05-26 14:17:21', '2024-05-26 14:17:21');
+INSERT INTO `academic_classes` (`id`, `type`, `name`, `teacher_id`, `room_id`, `time_id`, `level_id`, `academic_year_id`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES ('b90acca3-b4a1-46e7-a15e-8d94fe34a574', 3, '9D', '87bdecf3-1b6a-11ef-a21e-047c163993b6', 3, NULL, NULL, 4, '6a0652a1-c83f-4233-9bdb-85ce5851dca7', NULL, NULL, '2024-06-09 03:17:49', '2024-06-09 03:17:49');
