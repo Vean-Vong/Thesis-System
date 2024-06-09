@@ -1,4 +1,6 @@
 {
+  "time-create":"time-create",
+  "time":"time",
   "level-create":"level-create",
   "level":"Level",
   "room_update":"Update Room",

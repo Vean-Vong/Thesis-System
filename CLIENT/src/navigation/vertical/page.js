@@ -19,6 +19,13 @@ export default [
     active: 'level',
   },
   {
+
+    title: "time",
+    to: "time",
+    icon: { icon: "mdi-clock-edit-outline", size: 15 },
+    active: 'time',
+  },
+  {
     title: "academic_Class",
     to: "academic-class",
     icon: { icon: "mdi-account-tie", size: 15 },
