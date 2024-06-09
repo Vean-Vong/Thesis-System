@@ -114,3 +114,10 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
+<route lang="yaml">
+  meta:
+    title: score-update
+    layout: default
+    subject: Auth
+    active: 'academic-class'
+  </route>

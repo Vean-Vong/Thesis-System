@@ -181,9 +181,9 @@ onMounted(() => {
 </template>
 <route lang="yaml">
   meta:
-    title: Academic-Class List
+    title: academic-class-create
     layout: default
     subject: Auth
-    active: 'academic-classes-create'
+    active: 'academic-class'
   </route>
 

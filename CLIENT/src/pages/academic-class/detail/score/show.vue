@@ -117,67 +117,169 @@ onMounted(() => {
                 </colgroup>
                 <thead>
                   <tr>
-                    <td colspan="7"></td>
-                    <td colspan="10"></td>
+                    <td>
+                      <VRow>
+                        <VCol style="margin: 0 90%"
+                          ><v-img
+                            src="/src/assets/images/logo.png"
+                            :width="100"
+                          ></v-img>
+                        </VCol>
+                      </VRow>
+                    </td>
+
+                    <td colspan="16"></td>
                     <td
-                      colspan="3"
-                      valign="center"
-                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                      colspan="9"
+                      valign="bottom"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
-                      ព្រះរាជាណាចក្រកម្ពុជា
+                      KINGDOM OF CAMBODIA
                     </td>
                   </tr>
                   <tr>
                     <td
                       colspan="4"
                       valign="center"
-                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
-                      ខេត្តបាត់ដំបង
+                      Aide volontair aux
                     </td>
                     <td colspan="3"></td>
                     <td colspan="10"></td>
                     <td
                       colspan="3"
                       valign="center"
-                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
-                      ជាតិ សាសនា ព្រះមហាក្សត្រ
+                      NATION RELIGION KING
                     </td>
                   </tr>
                   <tr>
                     <td
                       colspan="4"
                       valign="center"
-                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
-                      វិទ្យាល័យព្រៃសង្ហា
+                      enfants du Cambodage
                     </td>
                     <td colspan="3"></td>
                     <td colspan="10"></td>
                     <td
                       colspan="3"
                       valign="center"
-                      style="text-align: center; font-family: Tacteing; line-height: normal; font-size: 12px"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
                       6
                     </td>
                   </tr>
                   <tr>
                     <td
-                      colspan="21"
-                      style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                      colspan="4"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
-                      តារាងពិន្ទុប្រចាំ{{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
-                      }}{{ params_s ? 'លើកទី' + params_s : '' }}
+                      6
+                      <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
+                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
+                    </td>
+                    <td
+                      colspan="12"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: normal;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                    >
+                      TERM RESULT :
+                      <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
+                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
                   </tr>
-                  <tr>
+
+                  <tr style="line-height: 30px">
                     <td
-                      colspan="21"
-                      style="text-align: center; font-family: Tacteing; line-height: 2rem; font-size: 12px"
+                      colspan="1"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
                     >
-                      ros
+                      Teacher :
+                    </td>
+                    <td
+                      colspan="6"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                    >
+                      Room :
+                    </td>
+                  </tr>
+                  <tr style="line-height: 40px">
+                    <td
+                      colspan="1"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                    >
+                      Level &nbsp;&nbsp;&nbsp;:
+                    </td>
+                    <td
+                      colspan="6"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                    >
+                      Time &nbsp;:
                     </td>
                   </tr>
                   <tr>
@@ -421,20 +523,116 @@ onMounted(() => {
                       {{ ret.result }}
                     </td>
                   </tr>
+                  <td
+                    style="height: 45px"
+                    colspan="7"
+                  ></td>
+                  <td colspan="2">
+                    <table>
+                      <div
+                        style="
+                          width: 250%;
+                          height: 2vh;
+                          font-weight: bold;
+                          font-size: 16px;
+                          font-family: 'Times New Roman', Times, serif;
+                        "
+                      >
+                        <div style="padding: 0 5% 0 5%; border: 1px solid">
+                          <tr>
+                            <td>Note:</td>
+                          </tr>
+                          <tr>
+                            <td>1. A+ =98-100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td>8. E = 50-64</td>
+                          </tr>
+                          <tr>
+                            <td>2. A =90-97</td>
+                            <td>9. F = 0-49</td>
+                          </tr>
+                          <tr>
+                            <td>3. B+ =85-89</td>
+                          </tr>
+                          <tr>
+                            <td>4. B =80-84</td>
+                          </tr>
+                          <tr>
+                            <td>5. C+ =75-79</td>
+                          </tr>
+                          <tr>
+                            <td>6. C =70-74</td>
+                          </tr>
+                          <tr>
+                            <td>7. D =65-69</td>
+                          </tr>
+                        </div>
+                      </div>
+                    </table>
+                  </td>
                   <tr>
                     <td
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                      colspan="2"
+                    >
+                      Date ........./................/2023
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                      colspan="2"
+                    >
+                      Seen and approved
+                    </td>
+                    <td colspan="13"></td>
+                    <td
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                      colspan="18"
+                    >
+                      Date ......./.........................../2023
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                      colspan="2"
+                    >
+                      Director
+                    </td>
+                    <td
                       style="text-align: center"
-                      colspan="10"
+                      colspan="13"
                     ></td>
                     <td
-                      style="text-align: center; font-family: Khmer OS Battambang; line-height: normal"
-                      colspan="10"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                      colspan="16"
                     >
-                      ថ្ងៃ
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ខែ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ឆ្នាំ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ព.ស.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      TEACHER
                     </td>
                   </tr>
                   <tr>
@@ -446,32 +644,26 @@ onMounted(() => {
                       style="text-align: center; font-family: Khmer OS Battambang"
                       colspan="10"
                     >
-                      ធ្វើនៅបាត់ដំបង, ថ្ងៃទី&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      ខែ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ២០
+                      <!-- ហត្ថលេខាគ្រូបន្ទុក -->
                     </td>
                   </tr>
                   <tr>
                     <td
-                      style="text-align: center"
-                      colspan="10"
+                      style="text-align: center; height: 80px"
+                      colspan="15"
                     ></td>
                     <td
-                      style="text-align: center; font-family: Khmer OS Battambang"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                        height: 150px;
+                      "
                       colspan="10"
                     >
-                      ហត្ថលេខាគ្រូបន្ទុក
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style="text-align: center"
-                      colspan="10"
-                    ></td>
-                    <td
-                      style="text-align: center; font-family: Khmer OS Battambang; line-height: 120px"
-                      colspan="10"
-                    >
-                      {{ model.teacher?.name }}
+                      <!-- {{ model.teacher?.name }} -->
+                      Smey Need You
                     </td>
                     <td
                       style="text-align: center"
@@ -487,3 +679,10 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
+<route lang="yaml">
+meta:
+  title: Score
+  layout: default
+  subject: Auth
+  active: 'academic-class'
+</route>

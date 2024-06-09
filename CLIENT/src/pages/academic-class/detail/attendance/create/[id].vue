@@ -303,7 +303,7 @@ onMounted(() => {
                       colspan="4"
                       class="text-center"
                     >
-                      {{ student.sex == 1 ? 'ប្រុស' : 'ស្រី' }}
+                      {{ student.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
                     <td
                       v-for="date in student.days"

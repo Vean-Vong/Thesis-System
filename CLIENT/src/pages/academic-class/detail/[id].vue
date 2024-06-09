@@ -566,9 +566,9 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
-meta:
-  title: Academic-Class student
-  layout: default
-  subject: Auth
-  active: 'academic-classes-list-student'
-</route>
+  meta:
+    title: academic-class
+    layout: default
+    subject: Auth
+    active: 'academic-class'
+  </route>
