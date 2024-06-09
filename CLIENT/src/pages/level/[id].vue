@@ -46,7 +46,7 @@ onMounted(() => {
       md="6"
       sm="10"
     >
-      <VCard :title="$t('level_update')">
+      <VCard :title="$t('level-update')">
         <VDivider />
 
         <VCardText>
