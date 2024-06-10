@@ -303,7 +303,7 @@ onMounted(() => {
                       colspan="4"
                       class="text-center"
                     >
-                      {{ student.sex == 1 ? 'ប្រុស' : 'ស្រី' }}
+                      {{ student.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
                     <td
                       v-for="date in student.days"
@@ -344,7 +344,13 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
-
+<route lang="yaml">
+meta:
+  title: Attendance Create
+  layout: default
+  subject: Auth
+  active: 'academic-class'
+</route>
 <style scoped lang="scss">
 table {
   border-collapse: collapse;

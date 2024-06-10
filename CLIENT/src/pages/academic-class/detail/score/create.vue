@@ -147,7 +147,6 @@ onMounted(() => {
                     <th>Wr<br>10%</th>
                     <th>Li<br>10%</th>
                     <th>Sp.<br>10%</th>
-                    <th>Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -253,7 +252,7 @@ onMounted(() => {
                         :rules="[(v) => v <= 10 || 'ពិន្ទុអតិបរមា១០']"
                       />
                     </td>
-                    <td>
+                    <!-- <td>
                       <v-text-field
                         class="cus"
                         variant="plain"
@@ -262,7 +261,7 @@ onMounted(() => {
                         v-model="exam.total"
                         :rules="[(v) => v <= 10 || 'ពិន្ទុអតិបរមា១០']"
                       />
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
