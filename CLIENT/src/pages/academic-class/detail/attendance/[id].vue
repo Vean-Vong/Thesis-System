@@ -143,5 +143,5 @@ onMounted(() => {
     title: Academic-Class update
     layout: default
     subject: Auth
-    active: 'academic-classes-detail'
+    active: 'academic-classes'
   </route>
