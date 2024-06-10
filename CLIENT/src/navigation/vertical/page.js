@@ -2,7 +2,7 @@ export default [
   {
     title: 'teachers',
     to: 'teacher',
-    icon: { icon: 'mdi-folder-key-network', size: 13 },
+    icon: { icon: 'mdi-account-tie-outline', size: 15 },
     active: 'teacher',
   },
   {
@@ -38,21 +38,21 @@ export default [
   {
     title: 'academic_Class',
     to: 'academic-class',
-    icon: { icon: 'mdi-account-tie', size: 15 },
+    icon: { icon: 'mdi-calendar-text-outline', size: 15 },
     active: 'academic-class',
   },
   {
     title: 'academic_year',
     to: 'academic-year',
-    icon: { icon: 'mdi-account-tie', size: 15 },
+    icon: { icon: 'mdi-calendar-edit-outline', size: 15 },
     active: 'academic-year',
   },
   { heading: 'Settings' },
   {
     title: 'Preference Settings',
     to: 'settings-account-settings',
-    icon: { icon: 'mdi-cog', size: 15 },
-    active: 'account-settings',
+    icon: { icon: 'mdi-cog-outline', size: 15 },
+    active: 'account-settings-outline',
   },
   {
     title: 'Users',
@@ -63,13 +63,13 @@ export default [
   {
     title: 'Roles',
     to: 'settings-role-settings',
-    icon: { icon: 'tabler-users-group', size: 13 },
+    icon: { icon: 'tabler-users-group', size: 15 },
     active: 'role',
   },
   {
     title: 'Schools',
     to: 'school',
-    icon: { icon: 'mdi-folder-key-network', size: 13 },
+    icon: { icon: 'mdi-office-building-outline', size: 15 },
     active: 'school',
   },
 

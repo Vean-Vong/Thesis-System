@@ -57,7 +57,7 @@ const go = to => {
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle class="text-xl text-info"> {{ $t('total_data_table') }}: </VCardTitle>
+      <VCardTitle class="text-xl text-primary"> {{ $t('total_data_table') }}: </VCardTitle>
     </VCardItem>
 
     <VCardText>
@@ -65,48 +65,62 @@ const go = to => {
         <VCol
           v-for="item in statistics"
           :key="item.title"
-          cols="6"
-          sm="3"
+          cols="12"
+          sm="6"
+          md="3"
+         
         >
-          <div
-            class="d-flex align-center link"
+        <VCard
+
+          :class="stat-card"
+          :color="item.color"
+
+            class="d-flex align-center mb-4 py-4 rounded-2 "
+            dark
+             elevation="20"
             @click="go(item.to)"
           >
-            <div class="me-3">
-              <VAvatar
-                :color="item.color"
-                rounded
-                size="48"
-                class="elevation-1"
-              >
-                <VIcon
-                  size="28"
-                  :icon="item.icon"
-                />
-              </VAvatar>
+          
+            <VAvatar
+              :color="item.color"
+              rounded
+              size="80"
+              class="elevation-1 me-5 ms-5"
+              
+            >
+            
+            
+              <VIcon
+                size="50"
+                :icon="item.icon"
+                
+                
+              />
+            </VAvatar>
+            <v-divider vertical class="text-white " :thickness="3"></v-divider>
+            <div class="d-flex flex-column mx-5">
+              <div class="text-lg" >{{ $t(item.i18nKey) }}</div>
             </div>
+            
+            <span class="text-h2 font-weight-medium text-white px-5 mx-2">{{ item.stats }}</span>
 
-            <div class="d-flex flex-column">
-              <span class="text-lg"> {{ $t(item.i18nKey) }} </span>
-              <span class="text-h6 font-weight-medium"
-                ><Number
-                  ref="number1"
-                  :from="0"
-                  :to="item.stats"
-                  :duration="1"
-                  easing="Power1.easeOut"
-              /></span>
-            </div>
-          </div>
+          </VCArd>
+          
         </VCol>
       </VRow>
     </VCardText>
   </VCard>
 </template>
 
+
 <style scoped>
 .link:hover {
   cursor: pointer;
+
+}
+.stat-card {
+  background: linear-gradient(to bottom right, #42a5f5, #0d47a1); /* Gradient background */
+  /* Add any additional styling here */
 }
 </style>
 <route lang="yaml">
