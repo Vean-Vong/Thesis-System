@@ -35,7 +35,24 @@ const fetchTable = () => {
     })
     .then(res => {
       data.value = res.data.data
+      Rankings() //ranking
     })
+}
+//ranking table
+const Rankings = () => {
+  // Sort the data by total score in descending order
+  data.value.sort((a, b) => b.total - a.total)
+
+  // Assign ranks, ensuring that items with the same total score get the same rank
+  let rank = 1
+  data.value.forEach((item, index) => {
+    if (index > 0 && item.total === data.value[index - 1].total) {
+      item.rank = data.value[index - 1].rank
+    } else {
+      item.rank = rank
+    }
+    rank++
+  })
 }
 
 onMounted(() => {
@@ -215,8 +232,6 @@ onMounted(() => {
                       "
                     >
                       6
-                      <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
-                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
                     <td
                       colspan="12"
@@ -228,7 +243,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      TERM RESULT :
+                      TERM RESULT
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -287,54 +302,55 @@ onMounted(() => {
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      ល.រ
+                      N<sup>o</sup>
                     </th>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                       colspan="3"
                     >
-                      ឈ្មោះ
+                      Name
                     </th>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      ភេទ
+                      Sex
                     </th>
                     <th
                       colspan="10"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      ពិន្ទុ
+                      Score
                     </th>
                     <th
                       colspan="1"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      សរុប
+                      Total
                     </th>
                     <th
                       colspan="1"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      មធ្យមភាគ
+                      Ave.
+                    </th>
+
+                    <th
+                      colspan="1"
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px"
+                    >
+                      Rank
                     </th>
                     <th
                       colspan="2"
                       style="border: 1px solid black; padding: 5px"
                       rowspan="2"
                     >
-                      និទ្ទេស
-                    </th>
-                    <th
-                      colspan="1"
-                      rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
-                    >
-                      លទ្ធផល
+                      Result
                     </th>
                   </tr>
                   <tr>
@@ -478,49 +494,77 @@ onMounted(() => {
                       {{ ret.sp }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      <!-- {{ ret.att+ret.quiz+ret.hw+ret.re+ret.voc+ret.gr+ret.liu+ret.wr }} -->
                       {{ ret.total }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.avg }}
+                      {{ ret.total / 10 }}
+                    </td>
+                    <!-- rank -->
+                    <td style="text-align: center; border: 1px solid black; padding: 5px">
+                      {{ ret.rank }}
                     </td>
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="2"
-                      v-if="ret.avg >= 9.5"
+                      v-if="ret.total >= 98"
                     >
-                      ល្អណាស់
+                      A+
                     </td>
                     <td
                       colspan="2"
                       style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.avg >= 8.0 && ret.avg < 9.5"
+                      v-else-if="ret.total >= 90 && ret.total <= 97"
                     >
-                      ល្អ
+                      A
                     </td>
                     <td
                       colspan="2"
                       style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.avg > 6.5 && ret.avg < 8.0"
+                      v-else-if="ret.total > 85 && ret.total <= 89"
                     >
-                      ល្អបង្គួរ
+                      B+
                     </td>
                     <td
                       colspan="2"
                       style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.avg >= 5.0 && ret.avg < 6.5"
+                      v-else-if="ret.total >= 80 && ret.total <= 84"
                     >
-                      មធ្យម
+                      B
+                    </td>
+                    <td
+                      colspan="2"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      v-else-if="ret.total >= 75 && ret.total <= 79"
+                    >
+                      C+
+                    </td>
+                    <td
+                      colspan="2"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      v-else-if="ret.total >= 70 && ret.total <= 74"
+                    >
+                      C
+                    </td>
+                    <td
+                      colspan="2"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      v-else-if="ret.total >= 65 && ret.total <= 69"
+                    >
+                      D
+                    </td>
+                    <td
+                      colspan="2"
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      v-else-if="ret.total >= 50 && ret.total <= 64"
+                    >
+                      E
                     </td>
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="2"
                       v-else
                     >
-                      ខ្សោយ
-                    </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.result }}
+                      F
                     </td>
                   </tr>
                   <td

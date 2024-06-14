@@ -91,6 +91,8 @@ class ExamController extends Controller
                         'attitude' => $exam['attitude'] ?? 0,
                         'final' => $exam['final'] ?? 0,
                         'total' => ($exam['att'] + $exam['quiz'] + $exam['hw'] + $exam['re'] + $exam['voc']+$exam['gr']+$exam['liu']+$exam['wr']+$exam['li']+$exam['sp']+$exam['mid']+ $exam['attitude']+$exam['final'] ) ?? 0,
+                        // 'avg' => ($exam['att'] + $exam['quiz'] + $exam['hw'] + $exam['re'] + $exam['voc']+$exam['gr']+$exam['liu']+$exam['wr']+$exam['li']+$exam['sp']+$exam['mid']+ $exam['attitude']+$exam['final'] )/10 ?? 0,
+                        
                     ]
                 );
             }

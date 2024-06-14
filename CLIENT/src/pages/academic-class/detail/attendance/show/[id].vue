@@ -45,16 +45,16 @@ const fetchTable = () => {
     })
 }
 
-const semesters = ref([
-  {
-    id: 1,
-    name: 'ឆមាសទី១',
-  },
-  {
-    id: 2,
-    name: 'ឆមាសទី២',
-  },
-])
+// const semesters = ref([
+//   {
+//     id: 1,
+//     name: 'ឆមាសទី១',
+//   },
+//   {
+//     id: 2,
+//     name: 'ឆមាសទី២',
+//   },
+// ])
 
 const months = ref([
   {
@@ -428,14 +428,13 @@ onMounted(() => {
                   </td>
                 </tr>
                 <tr>
-                  <!-- <th colspan="1" style="border: 1px solid black; padding: 5px">ល.រ</th> -->
-                  <th
+                  <!-- <th
                     rowspan="2"
                     colspan="1"
                     style="border: 1px solid black; padding: 5px"
                   >
                     ល.រ
-                  </th>
+                  </th> -->
                   <th
                     style="border: 1px solid black; padding: 5px"
                     :colspan="data?.attendances[0]?.student?.days?.length > 28 ? '15' : '15'"
@@ -462,12 +461,12 @@ onMounted(() => {
                   v-for="(student, index) in data.attendances"
                   :key="index"
                 >
-                  <td
+                  <!-- <td
                     class="text-center;"
                     style="border: 1px solid black; padding: 5px"
                   >
-                    {{ student.name }}
-                  </td>
+                    {{ student.number }}
+                  </td> -->
                   <td
                     style="border: 1px solid black; padding: 5px; text-align: left; padding-left: 3px"
                     :colspan="student?.days?.length > 28 ? '15' : '15'"
