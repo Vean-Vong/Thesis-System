@@ -1,4 +1,4 @@
-<!-- អង់គ្លេស -->
+<!-- កាត់ដេរ -->
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -334,7 +334,7 @@ onMounted(() => {
                     </th>
                   </tr>
                   <tr>
-                    <th
+                    <!-- <th
                       style="border: 1px solid black; padding: 5px"
                       colspan="1"
                     >
@@ -393,7 +393,7 @@ onMounted(() => {
                       colspan="1"
                     >
                       Sp.
-                    </th>
+                    </th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -490,6 +490,7 @@ onMounted(() => {
                     >
                       {{ GradePlus(ret.total) }}
                     </td>
+                    
                   </tr>
                   <td
                     style="height: 45px"

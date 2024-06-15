@@ -36,7 +36,10 @@ class UpdateAcademicClassRequest extends FormRequest
                 'exists:teachers,id',
                 // Rule::unique('academic_classes', 'teacher_id')->where('school_id', auth()->user()->school_id)->where('academic_year_id', request('academic_year_id'))->ignore(request('id'))
             ],
-
+            'type' => 'required',
+            'room_id' => 'required',
+            'time_id' => 'nullable',
+            'level_id' => 'nullable',
             'academic_year_id' => [
                 'required',
                 'exists:academic_years,id'

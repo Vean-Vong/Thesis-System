@@ -16,6 +16,9 @@ class AcademicClass extends Model
         'name',
         'type',
         'teacher_id',
+        'room_id',
+        'time_id',
+        'level_id',
         'academic_year_id',
     ];
 
