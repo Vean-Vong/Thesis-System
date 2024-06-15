@@ -45,16 +45,16 @@ const fetchTable = () => {
     })
 }
 
-const semesters = ref([
-  {
-    id: 1,
-    name: 'ឆមាសទី១',
-  },
-  {
-    id: 2,
-    name: 'ឆមាសទី២',
-  },
-])
+// const semesters = ref([
+//   {
+//     id: 1,
+//     name: 'ឆមាសទី១',
+//   },
+//   {
+//     id: 2,
+//     name: 'ឆមាសទី២',
+//   },
+// ])
 
 const months = ref([
   {
@@ -110,7 +110,32 @@ const months = ref([
     name: 'ឆមាស',
   },
 ])
-
+const storeID = ref([
+  {
+    id: 1,
+    name: '1',
+  },
+  {
+    id: 2,
+    name: '2',
+  },
+  {
+    id: 3,
+    name: '3',
+  },
+  {
+    id: 4,
+    name: '4',
+  },
+  {
+    id: 5,
+    name: '5',
+  },
+  {
+    id: 6,
+    name: '6',
+  },
+])
 onMounted(() => {
   ;[params_id.value, params_month.value, params_s.value] = params.id.split('_')
   months.value.filter(e => {
@@ -234,72 +259,185 @@ onMounted(() => {
 
               <thead>
                 <tr>
-                  <td colspan="12"></td>
-                  <td colspan="28"></td>
+                  <td>
+                    <VRow>
+                      <VCol style="margin: 0 70%"
+                        ><v-img
+                          src="/src/assets/images/logo.png"
+                          :width="100"
+                        ></v-img>
+                      </VCol>
+                    </VRow>
+                  </td>
+
+                  <td colspan="18"></td>
+                  <td colspan="24"></td>
                   <td
-                    colspan="10"
-                    valign="center"
-                    style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                    colspan="8"
+                    valign="bottom"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 30px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
-                    ព្រះរាជាណាចក្រកម្ពុជា
+                    KINGDOM OF CAMBODIA
                   </td>
                 </tr>
                 <tr>
                   <td
-                    colspan="12"
+                    colspan="9"
                     valign="center"
-                    style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 30px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
-                    ខេត្តបាត់ដំបង
+                    Aide volontair aux
                   </td>
-                  <td colspan="28"></td>
+                  <td colspan="17"></td>
+                  <td colspan="17"></td>
                   <td
-                    colspan="10"
+                    colspan="8"
                     valign="center"
-                    style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 30px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
-                    ជាតិ សាសនា ព្រះមហាក្សត្រ
+                    NATION RELIGION KING
                   </td>
                 </tr>
                 <tr>
                   <td
-                    colspan="12"
+                    colspan="9"
                     valign="center"
-                    style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 30px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
-                    វិទ្យាល័យព្រៃសង្ហា
+                    enfants du Cambodage
                   </td>
-                  <td colspan="28"></td>
+                  <td colspan="18"></td>
+                  <td colspan="20"></td>
                   <td
-                    colspan="10"
+                    colspan="1"
                     valign="center"
-                    style="text-align: center; font-family: Tacteing; line-height: normal; font-size: 12px"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 30px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
                     6
                   </td>
                 </tr>
                 <tr>
                   <td
-                    colspan="50"
-                    style="text-align: center; font-family: Khmer Os Muol Light; line-height: normal; font-size: 12px"
+                    colspan="8"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 30px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
-                    តារាងអវត្តមានប្រចាំ{{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
-                    }}{{ params_s ? 'លើកទី' + params_s : '' }}
+                    6
+                    <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
+                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                   </td>
-                </tr>
-                <tr>
+
+                  <td colspan="12"></td>
                   <td
-                    colspan="50"
-                    style="text-align: center; font-family: Tacteing; line-height: 2rem; font-size: 12px"
+                    colspan="12"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: normal;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
                   >
-                    ros
+                    Attendace
+                    {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name }}{{ params_s ? 'លើកទី' + params_s : '' }}
+                  </td>
+                </tr>
+                <br />
+                <tr style="line-height: 30px">
+                  <td
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                  >
+                    Teacher :
+                  </td>
+                  <td colspan="6"></td>
+                  <td
+                    colspan="6"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                  >
+                    Room :
+                  </td>
+                </tr>
+                <tr style="line-height: 40px">
+                  <td
+                    colspan="1"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                  >
+                    Level &nbsp;&nbsp;&nbsp;:
+                  </td>
+                  <td colspan="6"></td>
+                  <td
+                    colspan="6"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                  >
+                    Time &nbsp;:
                   </td>
                 </tr>
                 <tr>
-                  <!-- <th colspan="2">ល.រ</th> -->
+                  <!-- <th
+                    rowspan="2"
+                    colspan="1"
+                    style="border: 1px solid black; padding: 5px"
+                  >
+                    ល.រ
+                  </th> -->
                   <th
                     style="border: 1px solid black; padding: 5px"
-                    :colspan="data?.attendances[0]?.student?.days?.length > 28 ? '15' : '19'"
+                    :colspan="data?.attendances[0]?.student?.days?.length > 28 ? '15' : '15'"
                   >
                     ឈ្មោះ
                   </th>
@@ -323,12 +461,15 @@ onMounted(() => {
                   v-for="(student, index) in data.attendances"
                   :key="index"
                 >
-                  <!-- <td colspan="2" class="text-center">
-                      {{ student.number }}
-                    </td> -->
+                  <!-- <td
+                    class="text-center;"
+                    style="border: 1px solid black; padding: 5px"
+                  >
+                    {{ student.number }}
+                  </td> -->
                   <td
-                    style="border: 1px solid black; padding: 5px text-align: left; padding-left: 3px"
-                    :colspan="student?.days?.length > 28 ? '15' : '19'"
+                    style="border: 1px solid black; padding: 5px; text-align: left; padding-left: 3px"
+                    :colspan="student?.days?.length > 28 ? '15' : '15'"
                   >
                     {{ index }}
                   </td>
@@ -337,7 +478,7 @@ onMounted(() => {
                     class="text-center"
                     style="border: 1px solid black; padding: 5px"
                   >
-                    {{ student.sex == 1 ? 'ប្រុស' : 'ស្រី' }}
+                    {{ student.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                   </td>
                   <td
                     v-for="date in student.days"
@@ -348,45 +489,108 @@ onMounted(() => {
                     {{ date.absent }}
                   </td>
                 </tr>
+                <br />
                 <tr>
-                  <td colspan="30"></td>
                   <td
-                    style="text-align: center; font-family: Khmer OS Battambang; line-height: normal"
-                    colspan="20"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                    colspan="2"
                   >
-                    ថ្ងៃ
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    ខែ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    ឆ្នាំ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    ព.ស.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Date ........./................/2023
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="30"></td>
+                  <td
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                    colspan="2"
+                  >
+                    Seen and approved
+                  </td>
+                  <td colspan="20"></td>
+                  <td colspan="20"></td>
+                  <td
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                    colspan="24"
+                  >
+                    Date ......./.........................../2023
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                    colspan="2"
+                  >
+                    Director
+                  </td>
+                  <td
+                    style="text-align: center"
+                    colspan="20"
+                  ></td>
+                  <td
+                    style="text-align: center"
+                    colspan="20"
+                  ></td>
+                  <td
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                    colspan="16"
+                  >
+                    TEACHER
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="text-align: center"
+                    colspan="10"
+                  ></td>
                   <td
                     style="text-align: center; font-family: Khmer OS Battambang"
-                    colspan="20"
+                    colspan="10"
                   >
-                    ធ្វើនៅបាត់ដំបង, ថ្ងៃទី&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    ខែ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ឆ្នាំ២០
+                    <!-- ហត្ថលេខាគ្រូបន្ទុក -->
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="30"></td>
                   <td
-                    style="text-align: center; font-family: Khmer OS Battambang"
-                    colspan="20"
-                  >
-                    ហត្ថលេខាគ្រូបន្ទុក
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="30"></td>
+                    style="text-align: center; height: 80px"
+                    colspan="22"
+                  ></td>
+                  <td colspan="20"></td>
                   <td
-                    style="text-align: center; font-family: Khmer OS Battambang; line-height: 120px"
-                    colspan="20"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                      height: 150px;
+                    "
+                    colspan="10"
                   >
-                    {{ model.teacher?.name }}
+                    <!-- {{ model.teacher?.name }} -->
+                    Smey Need You
                   </td>
                   <td
                     style="text-align: center"
@@ -401,3 +605,10 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
+<route lang="yaml">
+meta:
+  title: attendance
+  layout: default
+  subject: Auth
+  active: 'academic-class'
+</route>

@@ -18,18 +18,18 @@ const fetchData = () => {
     });
 };
 
-const months = ref([
-  {
-    id: 0,
-    name: "ឆមាសទី១",
-    semester: 1,
-  },
-  {
-    id: 0,
-    name: "ឆមាសទី២",
-    semester: 2,
-  },
-]);
+// const months = ref([
+//   {
+//     id: 0,
+//     name: "ឆមាសទី១",
+//     semester: 1,
+//   },
+//   {
+//     id: 0,
+//     name: "ឆមាសទី២",
+//     semester: 2,
+//   },
+// ]);
 
 const onSelectMonth = (id, s) => {
   if (params_create.value) {

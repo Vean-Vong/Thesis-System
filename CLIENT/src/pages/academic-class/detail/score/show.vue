@@ -3,14 +3,9 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/plugins/utilites'
 import { Printd } from 'printd'
-const { params } = useRoute()
-const params_id = ref(null)
-const params_month = ref(null)
-const params_s = ref(null)
-const router = useRouter()
+import { DataRankings, GradePlus } from '@/helper/calculate-score'
 const route = useRoute()
 const model = ref({})
-const exam_month = ref({})
 const data = ref([])
 const refForm = ref()
 const d = new Printd()
@@ -35,6 +30,7 @@ const fetchTable = () => {
     })
     .then(res => {
       data.value = res.data.data
+      DataRankings(data) //ranking
     })
 }
 
@@ -55,14 +51,14 @@ onMounted(() => {
           ref="refForm"
           @submit.prevent="submit()"
         >
-          <VCard :title="`ថ្នាក់ទី ${model?.name} ឆ្នាំសិក្សា ${model?.academic_year?.name}`">
+          <VCard :title="`Class: ${model?.name} ( ${model?.academic_year?.name} )`">
             <VDivider />
             <v-btn
               class="mt-5 mx-5"
               color="secondary"
               variant="outlined"
               @click="$router.go(-1)"
-              ><v-icon>mdi-arrow-back</v-icon>&nbsp;ថយក្រោយ</v-btn
+              ><v-icon>mdi-arrow-back</v-icon>&nbsp; Back</v-btn
             >
             <VCardText>
               <v-row class="text-h6 font-weight-bold text-center my-5 mx-3">
@@ -215,8 +211,6 @@ onMounted(() => {
                       "
                     >
                       6
-                      <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
-                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
                     <td
                       colspan="12"
@@ -228,7 +222,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      TERM RESULT :
+                      TERM RESULT
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -287,54 +281,55 @@ onMounted(() => {
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      ល.រ
+                      N<sup>o</sup>
                     </th>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                       colspan="3"
                     >
-                      ឈ្មោះ
+                      Name
                     </th>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      ភេទ
+                      Sex
                     </th>
                     <th
                       colspan="10"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      ពិន្ទុ
+                      Score
                     </th>
                     <th
                       colspan="1"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      សរុប
+                      Total
                     </th>
                     <th
                       colspan="1"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      មធ្យមភាគ
+                      Ave.
+                    </th>
+
+                    <th
+                      colspan="1"
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px"
+                    >
+                      Rank
                     </th>
                     <th
                       colspan="2"
                       style="border: 1px solid black; padding: 5px"
                       rowspan="2"
                     >
-                      និទ្ទេស
-                    </th>
-                    <th
-                      colspan="1"
-                      rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
-                    >
-                      លទ្ធផល
+                      Result
                     </th>
                   </tr>
                   <tr>
@@ -478,50 +473,23 @@ onMounted(() => {
                       {{ ret.sp }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      <!-- {{ ret.att+ret.quiz+ret.hw+ret.re+ret.voc+ret.gr+ret.liu+ret.wr }} -->
                       {{ ret.total }}
                     </td>
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.avg }}
+                      {{ ret.total / 10 }}
                     </td>
-                    <td
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      colspan="2"
-                      v-if="ret.avg >= 9.5"
-                    >
-                      ល្អណាស់
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.avg >= 8.0 && ret.avg < 9.5"
-                    >
-                      ល្អ
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.avg > 6.5 && ret.avg < 8.0"
-                    >
-                      ល្អបង្គួរ
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.avg >= 5.0 && ret.avg < 6.5"
-                    >
-                      មធ្យម
-                    </td>
-                    <td
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      colspan="2"
-                      v-else
-                    >
-                      ខ្សោយ
-                    </td>
+                    <!-- rank -->
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.result }}
+                      {{ ret.rank }}
                     </td>
+
+                    <td
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      colspan="2"
+                    >
+                      {{ GradePlus(ret.total) }}
+                    </td>
+                    
                   </tr>
                   <td
                     style="height: 45px"

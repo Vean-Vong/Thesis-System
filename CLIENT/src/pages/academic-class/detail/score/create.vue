@@ -34,6 +34,7 @@ const form = reactive({
       mid: 0,
       attitude: 0,
       final: 0,
+      avg:0,
     },
   ],
 });
@@ -252,16 +253,6 @@ onMounted(() => {
                         :rules="[(v) => v <= 10 || 'ពិន្ទុអតិបរមា១០']"
                       />
                     </td>
-                    <!-- <td>
-                      <v-text-field
-                        class="cus"
-                        variant="plain"
-                        density="compact"
-                        
-                        v-model="exam.total"
-                        :rules="[(v) => v <= 10 || 'ពិន្ទុអតិបរមា១០']"
-                      />
-                    </td> -->
                   </tr>
                 </tbody>
               </table>

@@ -274,7 +274,7 @@ onMounted(() => {
 
                 <thead>
                   <tr>
-                    <!-- <th colspan="2">ល.រ</th> -->
+                    <th colspan="2">ល.រ</th>
                     <th :colspan="form?.attendances[0]?.student?.days?.length > 28 ? '15' : '18'">ឈ្មោះ</th>
                     <th colspan="4">ភេទ</th>
                     <th
@@ -290,9 +290,9 @@ onMounted(() => {
                     v-for="(student, index) in form.attendances"
                     :key="index"
                   >
-                    <!-- <td colspan="2" class="text-center">
+                    <td colspan="2" class="text-center">
                       {{ student.number }}
-                    </td> -->
+                    </td>
                     <td
                       :colspan="student?.days?.length > 28 ? '15' : '18'"
                       class="text-left"
