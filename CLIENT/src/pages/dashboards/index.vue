@@ -2,6 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/plugins/utilites'
+import VueApexCharts from 'vue3-apexcharts'
+import Id from '../academic-class/[id].vue';
 const router = useRouter()
 onMounted(() => {
   api.post('summary').then(response => {
@@ -10,6 +12,7 @@ onMounted(() => {
     })
   })
 })
+
 const statistics = ref([
   {
     title: 'Class Total',
@@ -49,6 +52,85 @@ const statistics = ref([
   },
 ])
 
+const series = ref([{
+  name: 'Inflation',
+  data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
+}])
+
+const chartOptions = ref({
+  chart: {
+    height: 350,
+    type: 'bar'
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 10,
+      dataLabels: {
+        position: 'top' // top, center, bottom
+      }
+    }
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: function (val) {
+      return val + "%"
+    },
+    offsetY: -20,
+    style: {
+      fontSize: '12px',
+      colors: ["#304758"]
+    }
+  },
+  xaxis: {
+    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    position: 'top',
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    crosshairs: {
+      fill: {
+        type: 'gradient',
+        gradient: {
+          colorFrom: '#D8E3F0',
+          colorTo: '#BED1E6',
+          stops: [0, 100],
+          opacityFrom: 0.4,
+          opacityTo: 0.5
+        }
+      }
+    },
+    tooltip: {
+      enabled: true
+    }
+  },
+  yaxis: {
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: false,
+      formatter: function (val) {
+        return val + "%"
+      }
+    }
+  },
+  title: {
+    text: 'data of the student',
+    floating: true,
+    offsetY: 330,
+    align: 'center',
+    style: {
+      color: '#444'
+    }
+  }
+})
+
 const go = to => {
   router.push(to)
 }
@@ -57,9 +139,8 @@ const go = to => {
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle class="text-xl text-primary"> {{ $t('total_data_table') }}: </VCardTitle>
+      <VCardTitle class="text-xl text-primary">{{ $t('total_data_table') }}:</VCardTitle>
     </VCardItem>
-
     <VCardText>
       <VRow>
         <VCol
@@ -67,66 +148,67 @@ const go = to => {
           :key="item.title"
           cols="12"
           sm="6"
-          md="3"
-         
+          md="4"
+          lg="3"
         >
-        <VCard
-
-          :class="stat-card"
-          :color="item.color"
-
-            class="d-flex align-center mb-4 py-4 rounded-2 "
+          <VCard
+            :class="stat-card"
+            :color="item.color"
+            class="d-flex align-center mb-4 py-5 rounded-2"
             dark
-             elevation="20"
+            elevation="20"
             @click="go(item.to)"
           >
-          
             <VAvatar
               :color="item.color"
               rounded
-              size="80"
-              class="elevation-1 me-5 ms-5"
-              
+              size="50"
+              class="elevation-1 me-2 ms-2"
             >
-            
-            
               <VIcon
-                size="50"
+                size="30"
                 :icon="item.icon"
-                
-                
               />
             </VAvatar>
-            <v-divider vertical class="text-white " :thickness="3"></v-divider>
-            <div class="d-flex flex-column mx-5">
-              <div class="text-lg" >{{ $t(item.i18nKey) }}</div>
+            <v-divider vertical class="text-white" :thickness="1"></v-divider>
+            <div class="d-flex flex-column mx-4">
+              <div class="">{{ $t(item.i18nKey) }}</div>
             </div>
-            
-            <span class="text-h2 font-weight-medium text-white px-5 mx-2">{{ item.stats }}</span>
-
-          </VCArd>
-          
+            <span class="text-2xl font-weight-medium text-white ms-auto mx-5">{{ item.stats }}</span>
+          </VCard>
         </VCol>
       </VRow>
+
+      <div class="">
+        <VueApexCharts type="bar" height="350" :options="chartOptions" :series="series"></VueApexCharts>
+      </div>
+
     </VCardText>
   </VCard>
 </template>
 
+<script>
+import VueApexCharts from 'vue3-apexcharts'
+export default {
+  components: {
+    VueApexCharts
+  }
+}
+</script>
 
 <style scoped>
 .link:hover {
   cursor: pointer;
-
 }
 .stat-card {
   background: linear-gradient(to bottom right, #42a5f5, #0d47a1); /* Gradient background */
-  /* Add any additional styling here */
 }
 </style>
+
 <route lang="yaml">
   meta:
     title: Dashboard
     layout: default
     subject: Auth
     active: 'dashboard'
-  </route>
+</route>
