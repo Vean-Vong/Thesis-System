@@ -3,14 +3,9 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/plugins/utilites'
 import { Printd } from 'printd'
-const { params } = useRoute()
-const params_id = ref(null)
-const params_month = ref(null)
-const params_s = ref(null)
-const router = useRouter()
+import { DataRankings, GradePlus } from '@/helper/calculate-score'
 const route = useRoute()
 const model = ref({})
-const exam_month = ref({})
 const data = ref([])
 const refForm = ref()
 const d = new Printd()
@@ -35,24 +30,8 @@ const fetchTable = () => {
     })
     .then(res => {
       data.value = res.data.data
-      Rankings() //ranking
+      DataRankings(data) //ranking
     })
-}
-//ranking table
-const Rankings = () => {
-  // Sort the data by total score in descending order
-  data.value.sort((a, b) => b.total - a.total)
-
-  // Assign ranks, ensuring that items with the same total score get the same rank
-  let rank = 1
-  data.value.forEach((item, index) => {
-    if (index > 0 && item.total === data.value[index - 1].total) {
-      item.rank = data.value[index - 1].rank
-    } else {
-      item.rank = rank
-    }
-    rank++
-  })
 }
 
 onMounted(() => {
@@ -72,14 +51,14 @@ onMounted(() => {
           ref="refForm"
           @submit.prevent="submit()"
         >
-          <VCard :title="`ថ្នាក់ទី ${model?.name} ឆ្នាំសិក្សា ${model?.academic_year?.name}`">
+          <VCard :title="`Class: ${model?.name} ( ${model?.academic_year?.name} )`">
             <VDivider />
             <v-btn
               class="mt-5 mx-5"
               color="secondary"
               variant="outlined"
               @click="$router.go(-1)"
-              ><v-icon>mdi-arrow-back</v-icon>&nbsp;ថយក្រោយ</v-btn
+              ><v-icon>mdi-arrow-back</v-icon>&nbsp; Back</v-btn
             >
             <VCardText>
               <v-row class="text-h6 font-weight-bold text-center my-5 mx-3">
@@ -503,69 +482,14 @@ onMounted(() => {
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
                       {{ ret.rank }}
                     </td>
+
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="2"
-                      v-if="ret.total >= 98"
                     >
-                      A+
+                      {{ GradePlus(ret.total) }}
                     </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total >= 90 && ret.total <= 97"
-                    >
-                      A
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total > 85 && ret.total <= 89"
-                    >
-                      B+
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total >= 80 && ret.total <= 84"
-                    >
-                      B
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total >= 75 && ret.total <= 79"
-                    >
-                      C+
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total >= 70 && ret.total <= 74"
-                    >
-                      C
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total >= 65 && ret.total <= 69"
-                    >
-                      D
-                    </td>
-                    <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      v-else-if="ret.total >= 50 && ret.total <= 64"
-                    >
-                      E
-                    </td>
-                    <td
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                      colspan="2"
-                      v-else
-                    >
-                      F
-                    </td>
+                    
                   </tr>
                   <td
                     style="height: 45px"
