@@ -176,7 +176,7 @@ class AcademicClassController extends Controller
                 $q->select('id', 'name');
             }, 'academicYear' => function ($q) {
                 $q->select('id', 'name');
-            }])->select('id', 'name', 'teacher_id', 'academic_year_id')->findOrFail($request->id);
+            }])->select('id', 'name', 'type', 'teacher_id', 'academic_year_id')->findOrFail($request->id);
 
             $result['model'] = $model;
 

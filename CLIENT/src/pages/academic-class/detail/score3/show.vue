@@ -1,4 +1,4 @@
-<!-- អង់គ្លេស -->
+<!-- កុំព្យូទ័រ -->
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -223,7 +223,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      TERM RESULT
+                      TERM RESULT កុំព្យូទ័រ
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -277,7 +277,7 @@ onMounted(() => {
                       Time &nbsp;:
                     </td>
                   </tr>
-                  <tr>
+                  <tr >
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -287,31 +287,39 @@ onMounted(() => {
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
-                      colspan="3"
+                      colspan="7"
                     >
                       Name
                     </th>
                     <th
                       rowspan="2"
+                      colspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
                       Sex
                     </th>
-                    <th
+                    <!-- <th
+                      rowspan="2"
+                      colspan="2"
+                      style="border: 1px solid black; padding: 5px"
+                    >
+                      Att
+                    </th> -->
+                    <!-- <th
                       colspan="10"
                       style="border: 1px solid black; padding: 5px"
                     >
                       Score
-                    </th>
+                    </th> -->
                     <th
-                      colspan="1"
+                      colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      Total
+                      Final
                     </th>
-                    <th
-                      colspan="1"
+                    <!-- <th
+                      colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
@@ -319,7 +327,7 @@ onMounted(() => {
                     </th>
 
                     <th
-                      colspan="1"
+                      colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
@@ -331,9 +339,9 @@ onMounted(() => {
                       rowspan="2"
                     >
                       Result
-                    </th>
+                    </th> -->
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <th
                       style="border: 1px solid black; padding: 5px"
                       colspan="1"
@@ -394,7 +402,7 @@ onMounted(() => {
                     >
                       Sp.
                     </th>
-                  </tr>
+                  </tr> -->
                 </thead>
                 <tbody>
                   <tr

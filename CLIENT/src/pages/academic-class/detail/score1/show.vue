@@ -127,7 +127,7 @@ onMounted(() => {
 
                     <td colspan="16"></td>
                     <td
-                      colspan="9"
+                      colspan="8"
                       valign="bottom"
                       style="
                         text-align: center;
@@ -223,7 +223,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      TERM RESULT
+                      TERM RESULT កាត់ដេរ
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -277,7 +277,7 @@ onMounted(() => {
                       Time &nbsp;:
                     </td>
                   </tr>
-                  <tr>
+                  <tr >
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -287,31 +287,39 @@ onMounted(() => {
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
-                      colspan="3"
+                      colspan="7"
                     >
                       Name
                     </th>
                     <th
                       rowspan="2"
+                      colspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
                       Sex
                     </th>
-                    <th
+                    <!-- <th
+                      rowspan="2"
+                      colspan="2"
+                      style="border: 1px solid black; padding: 5px"
+                    >
+                      Att
+                    </th> -->
+                    <!-- <th
                       colspan="10"
                       style="border: 1px solid black; padding: 5px"
                     >
                       Score
-                    </th>
+                    </th> -->
                     <th
-                      colspan="1"
+                      colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      Total
+                      Final
                     </th>
-                    <th
-                      colspan="1"
+                    <!-- <th
+                      colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
@@ -319,7 +327,7 @@ onMounted(() => {
                     </th>
 
                     <th
-                      colspan="1"
+                      colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
@@ -331,10 +339,10 @@ onMounted(() => {
                       rowspan="2"
                     >
                       Result
-                    </th>
+                    </th> -->
                   </tr>
-                  <tr>
-                    <!-- <th
+                  <!-- <tr>
+                    <th
                       style="border: 1px solid black; padding: 5px"
                       colspan="1"
                     >
@@ -393,8 +401,8 @@ onMounted(() => {
                       colspan="1"
                     >
                       Sp.
-                    </th> -->
-                  </tr>
+                    </th>
+                  </tr> -->
                 </thead>
                 <tbody>
                   <tr
@@ -405,21 +413,21 @@ onMounted(() => {
                       {{ index + 1 }}
                     </td>
                     <td
-                      colspan="3"
+                      colspan="7"
                       style="border: 1px solid black; padding: 5px"
                     >
                       {{ ret.last_name + ' ' + ret.first_name }}
                     </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
+                    <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
                       {{ ret.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
-                    <td
-                      colspan="1"
+                     <!-- <td
+                      colspan="2"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
                       {{ ret.att }}
-                    </td>
-                    <td
+                    </td> -->
+                    <!--<td
                       colspan="1"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
@@ -472,15 +480,15 @@ onMounted(() => {
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
                       {{ ret.sp }}
+                    </td> -->
+                    <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
+                      {{ ret.final }}
                     </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.total }}
-                    </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
+                    <!-- <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
                       {{ ret.total / 10 }}
                     </td>
-                    <!-- rank -->
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
+                    rank
+                    <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
                       {{ ret.rank }}
                     </td>
 
@@ -489,8 +497,7 @@ onMounted(() => {
                       colspan="2"
                     >
                       {{ GradePlus(ret.total) }}
-                    </td>
-                    
+                    </td> -->
                   </tr>
                   <td
                     style="height: 45px"
