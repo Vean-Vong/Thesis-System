@@ -10,9 +10,22 @@ const model = ref({})
 const data = ref([])
 const refForm = ref()
 const d = new Printd()
+
+const imgP = `
+  table{
+    margin-top: -20px;
+    margin: 0;
+  }
+  img{
+    margin: 0;
+    width: 90px;
+    height: auto;
+    max-width: none;
+  }`
 const onPrint = () => {
-  d.print(document.getElementById('table'))
+  d.print(document.getElementById('table'), [ imgP ])
 }
+
 const fetchData = () => {
   api
     .post('academic-classes-detail', {
