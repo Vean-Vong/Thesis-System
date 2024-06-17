@@ -10,8 +10,20 @@ const model = ref({})
 const data = ref([])
 const refForm = ref()
 const d = new Printd()
+
+const imgP = `
+  table{
+    margin-top: -20px;
+    margin: 0;
+  }
+  img{
+    margin: 0;
+    width: 90px;
+    height: auto;
+    max-width: none;
+  }`
 const onPrint = () => {
-  d.print(document.getElementById('table'))
+  d.print(document.getElementById('table'), [ imgP ])
 }
 const fetchData = () => {
   api
@@ -88,7 +100,6 @@ onMounted(() => {
                   color: black;
                 "
                 id="table"
-                class="mt-5"
               >
                 <colgroup>
                   <col width="5%" />
@@ -116,18 +127,18 @@ onMounted(() => {
                   <tr>
                     <td>
                       <VRow>
-                        <VCol style="margin: 0 90%"
+                        <VCol style="margin: 0 60%"
                           ><v-img
                             src="/src/assets/images/logo.png"
-                            :width="100"
+                            :width="90"
                           ></v-img>
                         </VCol>
                       </VRow>
                     </td>
 
-                    <td colspan="16"></td>
+                    <td colspan="13"></td>
                     <td
-                      colspan="9"
+                      colspan="13"
                       valign="bottom"
                       style="
                         text-align: center;
@@ -154,10 +165,9 @@ onMounted(() => {
                     >
                       Aide volontair aux
                     </td>
-                    <td colspan="3"></td>
-                    <td colspan="10"></td>
+                    <td colspan="11"></td>
                     <td
-                      colspan="3"
+                      colspan="4"
                       valign="center"
                       style="
                         text-align: center;
@@ -186,33 +196,8 @@ onMounted(() => {
                     </td>
                     <td colspan="3"></td>
                     <td colspan="10"></td>
-                    <td
-                      colspan="3"
-                      valign="center"
-                      style="
-                        text-align: center;
-                        font-weight: bold;
-                        line-height: 30px;
-                        font-size: 16px;
-                        font-family: 'Times New Roman', Times, serif;
-                      "
-                    >
-                      6
-                    </td>
                   </tr>
                   <tr>
-                    <td
-                      colspan="4"
-                      style="
-                        text-align: center;
-                        font-weight: bold;
-                        line-height: 30px;
-                        font-size: 16px;
-                        font-family: 'Times New Roman', Times, serif;
-                      "
-                    >
-                      6   
-                    </td>
                     <td
                       colspan="12"
                       style="
@@ -654,3 +639,13 @@ meta:
   subject: Auth
   active: 'academic-class'
 </route>
+<style>
+
+@media print {
+  img{
+    width: 100px;
+    height: auto;
+    max-width: none;
+  }
+}
+</style>
