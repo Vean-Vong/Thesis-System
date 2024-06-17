@@ -18,70 +18,36 @@ const fetchData = () => {
     });
 };
 
-const months = ref([
-  {
-    id: 1,
-    name: "មករា",
-  },
-  {
-    id: 2,
-    name: "កុម្ភៈ",
-  },
-  {
-    id: 3,
-    name: "មីនា",
-  },
-  {
-    id: 4,
-    name: "មេសា",
-  },
-  {
-    id: 5,
-    name: "ឧសភា",
-  },
-  {
-    id: 6,
-    name: "មិថុនា",
-  },
-  {
-    id: 7,
-    name: "កក្កដា",
-  },
-  {
-    id: 8,
-    name: "សីហា",
-  },
-  {
-    id: 9,
-    name: "កញ្ញា",
-  },
-  {
-    id: 10,
-    name: "តុលា",
-  },
-  {
-    id: 11,
-    name: "វិច្ឆិកា",
-  },
-  {
-    id: 12,
-    name: "ធ្នូ",
-  },
-]);
-
-const study_months = ref([]);
+// const months = ref([
+//   {
+//     id: 0,
+//     name: "ឆមាសទី១",
+//     semester: 1,
+//   },
+//   {
+//     id: 0,
+//     name: "ឆមាសទី២",
+//     semester: 2,
+//   },
+// ]);
 
 const onSelectMonth = (id, s) => {
   if (params_create.value) {
     router.push(
-      `/academic-class/detail/attendance/show/${params_id.value}_${id}${
+      `/academic-class/detail/score/show/${params_id.value}_${id}${
         s != undefined ? "_" + s : ""
       }`
     );
   } else {
-    router.push(`/academic-class/detail/attendance/create/${params_id.value}_${id}`);
+    router.push(
+      `/academic-class/detail/score/create/${params_id.value}_${id}${
+        s != undefined ? "_" + s : ""
+      }`
+    );
   }
 };
+
+const study_months = ref([]);
 
 const fetchMonth = () => {
   api
@@ -116,7 +82,7 @@ onMounted(() => {
           >
           <VCardText>
             <div class="text-h6 font-weight-bold">
-              ជ្រើសរើសខែសម្រាប់{{ params_create ? "បង្ហាញ" : "ដាក់" }}វត្តមាន
+              ជ្រើសរើសខែសម្រាប់{{ params_create ? "បង្ហាញ" : "ដាក់" }}ពិន្ទុ
             </div>
             <v-row class="mt-5">
               <v-col
@@ -127,7 +93,17 @@ onMounted(() => {
                 v-for="month in study_months"
                 :key="month"
               >
-                <v-card @click="onSelectMonth(month.id)">
+                <v-card @click="onSelectMonth(month.id, month.semester)">
+                  <v-card-title class="text-center">{{ month.name }}</v-card-title>
+                </v-card>
+              </v-col>
+            </v-row>
+            <div class="text-h6 font-weight-bold my-7">
+              ជ្រើសរើសឆមាសសម្រាប់{{ params_create ? "បង្ហាញ" : "ដាក់" }}ពិន្ទុ
+            </div>
+            <v-row class="mt-5">
+              <v-col cols="12" md="6" lg="6" sm="6" v-for="month in months" :key="month">
+                <v-card @click="onSelectMonth(month.id, month.semester)">
                   <v-card-title class="text-center">{{ month.name }}</v-card-title>
                 </v-card>
               </v-col>
@@ -140,7 +116,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
   meta:
-    title: Academic-Class update
+    title: score-update
     layout: default
     subject: Auth
     active: 'academic-class'

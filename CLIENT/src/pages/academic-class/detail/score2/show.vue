@@ -1,3 +1,4 @@
+<!-- អង់គ្លេស -->
 <script setup>
 import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -207,7 +208,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      TERM RESULT
+                      TERM RESULT អង់គ្លេស
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -474,7 +475,6 @@ onMounted(() => {
                     >
                       {{ GradePlus(ret.total) }}
                     </td>
-                    
                   </tr>
                   <td
                     style="height: 45px"

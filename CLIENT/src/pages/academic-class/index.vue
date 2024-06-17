@@ -124,6 +124,7 @@ onMounted(() => {
                   append-inner-icon="mdi-search"
                   @keypress.enter="q"
                   @click:append-inner="q"
+                  @update:modelValue="fetchData"
                 />
               </VCol>
               <VCol
@@ -136,6 +137,7 @@ onMounted(() => {
                   item-value="id"
                   item-title="name"
                   :placeholder="$t('academic_year')"
+                  @update:modelValue="fetchData"
                 />
               </VCol>
 

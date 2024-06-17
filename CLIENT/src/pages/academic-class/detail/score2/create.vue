@@ -117,7 +117,7 @@ onMounted(() => {
               <v-row>
                 <v-col cols="12" md="4" lg="4" sm="12">
                   <div class="text-h6 font-weight-bold">
-                    តារាងដាក់ពិន្ទុ
+                    តារាងដាក់ពិន្ទុ     អង់គ្លេស
                   </div>
                 </v-col>
                 <v-col cols="12" md="2" lg="2" sm="12" class="py-0"></v-col>

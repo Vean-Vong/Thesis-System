@@ -37,6 +37,9 @@ class StoreAcademicClassRequest extends FormRequest
                 // Rule::unique('academic_classes', 'teacher_id')->where('school_id', auth()->user()->school_id)->where('academic_year_id', request('academic_year_id'))
             ],
             'type' => 'required',
+            'room_id' => 'required',
+            'time_id' => 'nullable',
+            'level_id' => 'nullable',
 
             'academic_year_id' => [
                 'required',

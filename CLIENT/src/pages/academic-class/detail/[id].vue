@@ -31,7 +31,7 @@ const headers2 = ['headers.id', 'headers.name', 'headers.gender', 'dob', 'header
 const selected_students = ref([])
 const listing = ref(false)
 const store = useAuthStore()
-
+const Type = ref(null)
 const formatDate = date => {
   return moment(date).format('D MMM YYYY')
 }
@@ -42,6 +42,7 @@ const fetchData = () => {
     })
     .then(res => {
       model.value = res.data.model
+      Type.value = res.data.model.type  //fetch type in api
     })
   listingStudent()
 }
@@ -167,11 +168,27 @@ const listingStudent = () => {
 }
 
 const addScore = () => {
-  router.push('/academic-class/detail/score/create?id=' + params.id)
+  let type;
+  if (Type.value === 1) {
+    type = 'score1';
+  } else if (Type.value === 2) {
+    type = 'score2';
+  } else if (Type.value === 3) {
+    type = 'score3';
+  }
+  router.push(`/academic-class/detail/${type}/create?id=${params.id}`);
 }
 
 const listingScore = () => {
-  router.push('/academic-class/detail/score/show?id=' + params.id)
+  let type;
+  if (Type.value === 1) {
+    type = 'score1';
+  } else if (Type.value === 2) {
+    type = 'score2';
+  } else if (Type.value === 3) {
+    type = 'score3';
+  }
+  router.push(`/academic-class/detail/${type}/show?id=${params.id}`);
 }
 
 const onAddAttendance = () => {
@@ -369,7 +386,6 @@ onMounted(() => {
                           {{ $t('remove_student') }}
                         </v-tooltip>
                       </v-btn>
-                      
                     </div>
                     <div
                       class="ml-10"
@@ -566,9 +582,9 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
-  meta:
-    title: academic-class
-    layout: default
-    subject: Auth
-    active: 'academic-class'
-  </route>
+meta:
+  title: academic-class
+  layout: default
+  subject: Auth
+  active: 'academic-class'
+</route>

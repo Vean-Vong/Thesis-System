@@ -1,12 +1,22 @@
 <script setup>
 import api from '@/plugins/utilites'
-import { reactive, ref, onMounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-const options = ref({
-  employees: [],
-  academic_years: [],
-})
+import { reactive, ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
 const router = useRouter()
+const route = useRoute()
+const options = ref({
+  teachers: [],
+  levels: [],
+  times: [],
+  rooms: [],
+  academic_years: [],
+  class_type: [
+    { id: 1, name: 'កាត់ដេ' },
+    { id: 2, name: 'អង់គ្លេស' },
+    { id: 3, name: 'កុំព្យូទ័រ' },
+  ]
+})
 const submitting = ref(false)
 
 const form = reactive({
@@ -16,16 +26,33 @@ const form = reactive({
   time_id: null,
   level_id: null,
   academic_year_id: null,
+  type: null
 })
 
 const refForm = ref()
+
+const fetchOptions = async () => {
+  const res = await api.post('academic-classes-option')
+  options.value.teachers = res.data.teachers
+  options.value.levels = res.data.levels
+  options.value.times = res.data.times
+  options.value.rooms = res.data.rooms
+  options.value.academic_years = res.data.academic_years
+}
+
+const fetchData = async (id) => {
+  const res = await api.post('academic-classes-show', { id })
+  Object.assign(form, res.data.model)
+}
+
 const onSubmit = async () => {
   const { valid } = await refForm.value?.validate()
   if (valid) {
     submitting.value = true
-    api
-      .post('academic-classes-create', form)
-      .then(res => {
+    const endpoint = form.id ? `academic-classes-update/${form.id}` : 'academic-classes-create'
+    const method = form.id ? 'put' : 'post'
+    api[method](endpoint, form)
+      .then(() => {
         router.push('/academic-class')
       })
       .finally(() => {
@@ -34,19 +61,11 @@ const onSubmit = async () => {
   }
 }
 
-onMounted(() => {
-  api.post('academic-classes-option').then(res => {
-    options.value.teachers = res.data.teachers
-    options.value.levels = res.data.levels
-    options.value.times = res.data.times
-    options.value.rooms = res.data.rooms
-    options.value.academic_years = res.data.academic_years
-    options.value.class_type = [
-      { id: 1, name: 'កាត់ដេ' },
-      { id: 2, name: 'អង់គ្លេស' },
-      { id: 3, name: 'កុំព្យូទ័រ' },
-    ]
-  })
+onMounted(async () => {
+  await fetchOptions()
+  if (route.params.id) {
+    await fetchData(route.params.id)
+  }
 })
 </script>
 
@@ -57,16 +76,14 @@ onMounted(() => {
       md="6"
       sm="8"
     >
-      <VCard :title="$t('create class')">
+      <VCard :title="route.params.id ? $t('edit class') : $t('create class')">
         <VDivider />
-
         <VCardText>
-          <!-- 👉 Form -->
           <VForm
             class="mt-6"
             ref="refForm"
             lazy-validation
-            @submit.prevent="onSubmit()"
+            @submit.prevent="onSubmit"
           >
             <VRow>
               <VCol
@@ -83,7 +100,7 @@ onMounted(() => {
                 md="4"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.class_type"
                   item-value="id"
                   item-title="name"
@@ -96,7 +113,7 @@ onMounted(() => {
                 md="3"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.academic_years"
                   item-value="id"
                   item-title="name"
@@ -109,7 +126,7 @@ onMounted(() => {
                 md="4"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.teachers"
                   item-value="id"
                   item-title="name"
@@ -122,7 +139,7 @@ onMounted(() => {
                 md="4"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.rooms"
                   item-value="id"
                   item-title="room"
@@ -134,9 +151,9 @@ onMounted(() => {
               <VCol
                 md="4"
                 cols="12"
-                v-if="form.type==2||form.type==3"
+                v-if="form.type == 2 || form.type == 3"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.times"
                   item-value="id"
                   item-title="time"
@@ -148,9 +165,9 @@ onMounted(() => {
               <VCol
                 md="4"
                 cols="12"
-                v-if="form.type==2"
+                v-if="form.type == 2"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.levels"
                   item-value="id"
                   item-title="level"
@@ -159,8 +176,6 @@ onMounted(() => {
                   :rules="[v => !!v || 'កម្រិត តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
-              
-              <!-- 👉 Form Actions -->
               <VCol
                 cols="12"
                 class="d-flex flex-wrap gap-4 justify-end"
@@ -169,8 +184,7 @@ onMounted(() => {
                   type="submit"
                   :loading="submitting"
                   color="success"
-                  ><VIcon>mdi-add</VIcon> {{ $t('Save changes') }}</VBtn
-                >
+                ><VIcon>mdi-content-save</VIcon> {{ $t('Save changes') }}</VBtn>
               </VCol>
             </VRow>
           </VForm>
@@ -179,11 +193,11 @@ onMounted(() => {
     </VCol>
   </VRow>
 </template>
-<route lang="yaml">
-  meta:
-    title: academic-class-create
-    layout: default
-    subject: Auth
-    active: 'academic-class'
-  </route>
 
+<route lang="yaml">
+meta:
+  title: academic-class
+  layout: default
+  subject: Auth
+  active: 'academic-class'
+</route>
