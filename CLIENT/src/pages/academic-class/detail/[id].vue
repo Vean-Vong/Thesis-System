@@ -42,7 +42,7 @@ const fetchData = () => {
     })
     .then(res => {
       model.value = res.data.model
-      Type.value = res.data.model.type  //fetch type in api
+      Type.value = res.data.model.type //fetch type in api
     })
   listingStudent()
 }
@@ -168,27 +168,27 @@ const listingStudent = () => {
 }
 
 const addScore = () => {
-  let type;
+  let type
   if (Type.value === 1) {
-    type = 'score1';
+    type = 'score1'
   } else if (Type.value === 2) {
-    type = 'score2';
+    type = 'score2'
   } else if (Type.value === 3) {
-    type = 'score3';
+    type = 'score3'
   }
-  router.push(`/academic-class/detail/${type}/create?id=${params.id}`);
+  router.push(`/academic-class/detail/${type}/create?id=${params.id}`)
 }
 
 const listingScore = () => {
-  let type;
+  let type
   if (Type.value === 1) {
-    type = 'score1';
+    type = 'score1'
   } else if (Type.value === 2) {
-    type = 'score2';
+    type = 'score2'
   } else if (Type.value === 3) {
-    type = 'score3';
+    type = 'score3'
   }
-  router.push(`/academic-class/detail/${type}/show?id=${params.id}`);
+  router.push(`/academic-class/detail/${type}/show?id=${params.id}`)
 }
 
 const onAddAttendance = () => {

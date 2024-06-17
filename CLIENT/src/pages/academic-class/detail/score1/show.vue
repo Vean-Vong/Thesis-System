@@ -277,7 +277,7 @@ onMounted(() => {
                       Time &nbsp;:
                     </td>
                   </tr>
-                  <tr >
+                  <tr>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -418,10 +418,13 @@ onMounted(() => {
                     >
                       {{ ret.last_name + ' ' + ret.first_name }}
                     </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
+                    <td
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      colspan="2"
+                    >
                       {{ ret.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
-                     <!-- <td
+                    <!-- <td
                       colspan="2"
                       style="text-align: center; border: 1px solid black; padding: 5px"
                     >
@@ -481,7 +484,10 @@ onMounted(() => {
                     >
                       {{ ret.sp }}
                     </td> -->
-                    <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
+                    <td
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      colspan="2"
+                    >
                       {{ ret.final }}
                     </td>
                     <!-- <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
@@ -514,7 +520,7 @@ onMounted(() => {
                           font-family: 'Times New Roman', Times, serif;
                         "
                       >
-                        <div style="padding: 0 5% 0 5%; border: 1px solid">
+                        <!-- <div style="padding: 0 5% 0 5%; border: 1px solid">
                           <tr>
                             <td>Note:</td>
                           </tr>
@@ -541,7 +547,7 @@ onMounted(() => {
                           <tr>
                             <td>7. D =65-69</td>
                           </tr>
-                        </div>
+                        </div> -->
                       </div>
                     </table>
                   </td>

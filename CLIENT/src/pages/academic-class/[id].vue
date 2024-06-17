@@ -76,7 +76,7 @@ onMounted(() => {
       md="6"
       sm="8"
     >
-      <VCard :title="$t('create class')">
+      <VCard :title="$t('update class')">
         <VDivider />
 
         <VCardText>

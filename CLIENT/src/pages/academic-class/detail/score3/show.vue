@@ -277,7 +277,7 @@ onMounted(() => {
                       Time &nbsp;:
                     </td>
                   </tr>
-                  <tr >
+                  <tr>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -421,83 +421,87 @@ onMounted(() => {
                     <td style="text-align: center; border: 1px solid black; padding: 5px">
                       {{ ret.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.att }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.quiz }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.hw }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.re }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.voc }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.gr }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.liu }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.wr }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.li }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.sp }}
-                    </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.total }}
-                    </td>
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.total / 10 }}
-                    </td>
-                    <!-- rank -->
-                    <td style="text-align: center; border: 1px solid black; padding: 5px">
-                      {{ ret.rank }}
-                    </td>
 
+                    <!-- <td
+                   colspan="2"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.att }}
+                 </td> -->
+                    <!--<td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.quiz }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.hw }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.re }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.voc }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.gr }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.liu }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.wr }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.li }}
+                 </td>
+                 <td
+                   colspan="1"
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                 >
+                   {{ ret.sp }}
+                 </td> -->
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="2"
                     >
-                      {{ GradePlus(ret.total) }}
+                      {{ ret.final }}
                     </td>
+                    <!-- <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
+                   {{ ret.total / 10 }}
+                 </td>
+                 rank
+                 <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
+                   {{ ret.rank }}
+                 </td>
+
+                 <td
+                   style="text-align: center; border: 1px solid black; padding: 5px"
+                   colspan="2"
+                 >
+                   {{ GradePlus(ret.total) }}
+                 </td> -->
                   </tr>
                   <td
                     style="height: 45px"
@@ -514,7 +518,7 @@ onMounted(() => {
                           font-family: 'Times New Roman', Times, serif;
                         "
                       >
-                        <div style="padding: 0 5% 0 5%; border: 1px solid">
+                        <!-- <div style="padding: 0 5% 0 5%; border: 1px solid">
                           <tr>
                             <td>Note:</td>
                           </tr>
@@ -541,7 +545,7 @@ onMounted(() => {
                           <tr>
                             <td>7. D =65-69</td>
                           </tr>
-                        </div>
+                        </div> -->
                       </div>
                     </table>
                   </td>
