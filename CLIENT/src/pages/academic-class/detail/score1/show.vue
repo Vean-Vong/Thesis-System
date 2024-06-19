@@ -23,7 +23,7 @@ const imgP = `
     max-width: none;
   }`
 const onPrint = () => {
-  d.print(document.getElementById('table'), [ imgP ])
+  d.print(document.getElementById('table'), [imgP])
 }
 
 const fetchData = () => {
@@ -65,22 +65,19 @@ onMounted(() => {
           ref="refForm"
           @submit.prevent="submit()"
         >
-          <VCard :title="`Class: ${model?.name} ( ${model?.academic_year?.name} )`">
+          <VCard :title="`${$t('class')} ${model.name} ${$t('academic_year')} ${model.academic_year?.name}`">
             <VDivider />
             <v-btn
               class="mt-5 mx-5"
               color="secondary"
               variant="outlined"
               @click="$router.go(-1)"
-              ><v-icon>mdi-arrow-back</v-icon>&nbsp; Back</v-btn
+              ><v-icon>mdi-arrow-back</v-icon>&nbsp; {{ $t('back') }}</v-btn
             >
             <VCardText>
               <v-row class="text-h6 font-weight-bold text-center my-5 mx-3">
                 <div style="width: 40%"></div>
                 <v-row style="width: 60%">
-                  <!-- <div>
-                    
-                  </div> -->
                   <v-spacer />
                   <div>
                     <v-btn
@@ -129,7 +126,7 @@ onMounted(() => {
                   <tr>
                     <td>
                       <VRow>
-                        <VCol style="margin: 0 90%"
+                        <VCol style="margin: 0 85%"
                           ><v-img
                             src="/src/assets/images/logo.png"
                             :width="100"
@@ -138,7 +135,7 @@ onMounted(() => {
                       </VRow>
                     </td>
 
-                    <td colspan="16"></td>
+                    <td colspan="12"></td>
                     <td
                       colspan="8"
                       valign="bottom"
@@ -168,9 +165,9 @@ onMounted(() => {
                       Aide volontair aux
                     </td>
                     <td colspan="3"></td>
-                    <td colspan="10"></td>
+                    <td colspan="6"></td>
                     <td
-                      colspan="3"
+                      colspan="8"
                       valign="center"
                       style="
                         text-align: center;
@@ -198,9 +195,9 @@ onMounted(() => {
                       enfants du Cambodage
                     </td>
                     <td colspan="3"></td>
-                    <td colspan="10"></td>
+                    <td colspan="6"></td>
                     <td
-                      colspan="3"
+                      colspan="8"
                       valign="center"
                       style="
                         text-align: center;
@@ -227,7 +224,7 @@ onMounted(() => {
                       6
                     </td>
                     <td
-                      colspan="12"
+                      colspan="10"
                       style="
                         text-align: center;
                         font-weight: bold;
@@ -290,17 +287,18 @@ onMounted(() => {
                       Time &nbsp;:
                     </td>
                   </tr>
-                  <tr>
+                  <tr style="font-family: 'Times New Roman', Times, serif;font-size: 17px;">
+                    
                     <th
                       rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px;"
                     >
                       N<sup>o</sup>
                     </th>
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
-                      colspan="7"
+                      colspan="8"
                     >
                       Name
                     </th>
@@ -311,19 +309,6 @@ onMounted(() => {
                     >
                       Sex
                     </th>
-                    <!-- <th
-                      rowspan="2"
-                      colspan="2"
-                      style="border: 1px solid black; padding: 5px"
-                    >
-                      Att
-                    </th> -->
-                    <!-- <th
-                      colspan="10"
-                      style="border: 1px solid black; padding: 5px"
-                    >
-                      Score
-                    </th> -->
                     <th
                       colspan="2"
                       rowspan="2"
@@ -331,12 +316,12 @@ onMounted(() => {
                     >
                       Final
                     </th>
-                    <!-- <th
+                    <th
                       colspan="2"
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
                     >
-                      Ave.
+                      Averange
                     </th>
 
                     <th
@@ -351,71 +336,9 @@ onMounted(() => {
                       style="border: 1px solid black; padding: 5px"
                       rowspan="2"
                     >
-                      Result
-                    </th> -->
+                      Grade
+                    </th>
                   </tr>
-                  <!-- <tr>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Att
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Quiz
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      HW
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Re
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Voc.
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Gr.
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      LIU
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Wr
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Li
-                    </th>
-                    <th
-                      style="border: 1px solid black; padding: 5px"
-                      colspan="1"
-                    >
-                      Sp.
-                    </th>
-                  </tr> -->
                 </thead>
                 <tbody>
                   <tr
@@ -426,7 +349,7 @@ onMounted(() => {
                       {{ index + 1 }}
                     </td>
                     <td
-                      colspan="7"
+                      colspan="8"
                       style="border: 1px solid black; padding: 5px"
                     >
                       {{ ret.last_name + ' ' + ret.first_name }}
@@ -437,77 +360,23 @@ onMounted(() => {
                     >
                       {{ ret.gender == 1 ? 'ប្រុស' : 'ស្រី' }}
                     </td>
-                    <!-- <td
-                      colspan="2"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.att }}
-                    </td> -->
-                    <!--<td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.quiz }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.hw }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.re }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.voc }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.gr }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.liu }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.wr }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.li }}
-                    </td>
-                    <td
-                      colspan="1"
-                      style="text-align: center; border: 1px solid black; padding: 5px"
-                    >
-                      {{ ret.sp }}
-                    </td> -->
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="2"
                     >
                       {{ ret.final }}
                     </td>
-                    <!-- <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
-                      {{ ret.total / 10 }}
+                    <td
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      colspan="2"
+                    >
+                      {{ ret.final / 10 }}
                     </td>
-                    rank
-                    <td style="text-align: center; border: 1px solid black; padding: 5px" colspan="2">
+
+                    <td
+                      style="text-align: center; border: 1px solid black; padding: 5px"
+                      colspan="2"
+                    >
                       {{ ret.rank }}
                     </td>
 
@@ -515,55 +384,13 @@ onMounted(() => {
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="2"
                     >
-                      {{ GradePlus(ret.total) }}
-                    </td> -->
+                      {{ GradePlus(ret.final) }}
+                    </td>
                   </tr>
                   <td
                     style="height: 45px"
-                    colspan="7"
+                    
                   ></td>
-                  <td colspan="2">
-                    <table>
-                      <div
-                        style="
-                          width: 250%;
-                          height: 2vh;
-                          font-weight: bold;
-                          font-size: 16px;
-                          font-family: 'Times New Roman', Times, serif;
-                        "
-                      >
-                        <!-- <div style="padding: 0 5% 0 5%; border: 1px solid">
-                          <tr>
-                            <td>Note:</td>
-                          </tr>
-                          <tr>
-                            <td>1. A+ =98-100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>8. E = 50-64</td>
-                          </tr>
-                          <tr>
-                            <td>2. A =90-97</td>
-                            <td>9. F = 0-49</td>
-                          </tr>
-                          <tr>
-                            <td>3. B+ =85-89</td>
-                          </tr>
-                          <tr>
-                            <td>4. B =80-84</td>
-                          </tr>
-                          <tr>
-                            <td>5. C+ =75-79</td>
-                          </tr>
-                          <tr>
-                            <td>6. C =70-74</td>
-                          </tr>
-                          <tr>
-                            <td>7. D =65-69</td>
-                          </tr>
-                        </div> -->
-                      </div>
-                    </table>
-                  </td>
                   <tr>
                     <td
                       style="
@@ -572,7 +399,7 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="2"
+                      colspan="3"
                     >
                       Date ........./................/2023
                     </td>
@@ -585,11 +412,11 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="2"
+                      colspan="3"
                     >
                       Seen and approved
                     </td>
-                    <td colspan="13"></td>
+                    <td colspan="10"></td>
                     <td
                       style="
                         text-align: center;
@@ -597,7 +424,7 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="18"
+                      colspan="15"
                     >
                       Date ......./.........................../2023
                     </td>
@@ -610,13 +437,13 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="2"
+                      colspan="3"
                     >
                       Director
                     </td>
                     <td
                       style="text-align: center"
-                      colspan="13"
+                      colspan="10"
                     ></td>
                     <td
                       style="
@@ -645,7 +472,7 @@ onMounted(() => {
                   <tr>
                     <td
                       style="text-align: center; height: 80px"
-                      colspan="15"
+                      colspan="14"
                     ></td>
                     <td
                       style="
@@ -657,8 +484,7 @@ onMounted(() => {
                       "
                       colspan="10"
                     >
-                      <!-- {{ model.teacher?.name }} -->
-                      Smey Need You
+                      {{ model.teacher?.name }}
                     </td>
                     <td
                       style="text-align: center"

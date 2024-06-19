@@ -188,7 +188,7 @@ onMounted(() => {
                   type="submit"
                   :loading="submitting"
                   color="success"
-                  ><VIcon>mdi-add</VIcon> {{ $t('Save changes') }}</VBtn
+                  ><VIcon>mdi-content-save</VIcon> {{ $t('Save changes') }}</VBtn
                 >
               </VCol>
             </VRow>

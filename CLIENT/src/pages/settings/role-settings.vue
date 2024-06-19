@@ -1,17 +1,17 @@
 <script setup>
-import AppDataTable from "@/components/AppDataTable.vue";
-import api from "@/plugins/utilites";
-import router from "@/router";
-import { useAuthStore } from "@/plugins/auth.module";
-import ConfirmDialog from "@/components/ConfirmDialog.vue";
-const user = useAuthStore().user;
-const { t } = useI18n();
-const items = ref([]);
-const search = ref(null);
-const loading = ref(false);
-const delete_item = ref(null);
-const deleting = ref(false);
-const dialog = ref(false);
+import AppDataTable from '@/components/AppDataTable.vue'
+import api from '@/plugins/utilites'
+import router from '@/router'
+import { useAuthStore } from '@/plugins/auth.module'
+import ConfirmDialog from '@/components/ConfirmDialog.vue'
+const user = useAuthStore().user
+const { t } = useI18n()
+const items = ref([])
+const search = ref(null)
+const loading = ref(false)
+const delete_item = ref(null)
+const deleting = ref(false)
+const dialog = ref(false)
 
 const meta = ref({
   current_page: 1,
@@ -20,110 +20,110 @@ const meta = ref({
   per_page: 15,
   to: 1,
   total: 0,
-});
+})
 
 const initData = () => {
-  loading.value = true;
+  loading.value = true
   api
-    .post("/roles-list", {
+    .post('/roles-list', {
       page: meta?.current_page,
       limit: meta?.per_page,
       search: search.value,
     })
-    .then((res) => {
-      items.value = res.data.data.data;
-      meta.value = res.data.data.meta;
+    .then(res => {
+      items.value = res.data.data.data
+      meta.value = res.data.data.meta
     })
     .finally(() => {
-      loading.value = false;
-    });
-};
+      loading.value = false
+    })
+}
 
 onMounted(() => {
-  initData();
-});
+  initData()
+})
 
 const onSearch = () => {
-  initData();
-};
+  initData()
+}
 
 const headers = [
   {
-    title: t("No"),
-    key: "no",
-    align: "left",
+    title: t('No'),
+    key: 'no',
+    align: 'left',
     sortable: false,
-    minWidth: "100px",
+    minWidth: '100px',
   },
   {
-    title: t("headers.name"),
-    key: "name",
-    align: "center",
+    title: t('headers.name'),
+    key: 'name',
+    align: 'center',
     sortable: false,
   },
   {
-    title: t("Permissions Count"),
-    key: "permissions_count",
-    align: "center",
+    title: t('Permissions Count'),
+    key: 'permissions_count',
+    align: 'center',
     sortable: false,
-    minWidth: "200px",
-    maxWidth: "500px",
+    minWidth: '200px',
+    maxWidth: '500px',
   },
 
   {
-    title: t("Users Count"),
-    key: "user_counts",
-    align: "center",
+    title: t('Users Count'),
+    key: 'user_counts',
+    align: 'center',
     sortable: false,
-    minWidth: "200px",
-    maxWidth: "500px",
+    minWidth: '200px',
+    maxWidth: '500px',
   },
   {
-    title: t("Actions"),
-    key: "actions",
-    align: "center",
+    title: t('Actions'),
+    key: 'actions',
+    align: 'center',
     sortable: false,
   },
-];
+]
 
-const viewCallback = (item) => {
-  router.push({ name: "settings-form-role-detail-form", query: { id: item } });
-};
+const viewCallback = item => {
+  router.push({ name: 'settings-form-role-detail-form', query: { id: item } })
+}
 
-const editCallback = (item) => {
-  router.push({ name: "settings-form-role-update-form", query: { id: item } });
-};
+const editCallback = item => {
+  router.push({ name: 'settings-form-role-update-form', query: { id: item } })
+}
 
-const updateCallback = (item) => {
-  meta.current_page = item.page;
-  meta.per_page = item.limit;
-  initData();
-};
-const deleteCallback = (item) => {
-  dialog.value = true;
-  delete_item.value = item;
-};
+const updateCallback = item => {
+  meta.current_page = item.page
+  meta.per_page = item.limit
+  initData()
+}
+const deleteCallback = item => {
+  dialog.value = true
+  delete_item.value = item
+}
 
 const cancelCallback = () => {
-  dialog.value = false;
-  delete_item.value = null;
-};
+  dialog.value = false
+  delete_item.value = null
+}
 
 const confirmDeleteCallback = () => {
-  deleting.value = true;
+  deleting.value = true
   api
-    .post("roles-delete", { id: delete_item.value })
-    .then((res) => {
+    .post('roles-delete', { id: delete_item.value })
+    .then(res => {
       if (res.status == 200) {
-        initData();
+        initData()
       }
     })
     .finally(() => {
-      deleting.value = false;
-      delete_item.value = null;
-      dialog.value = false;
-    });
-};
+      deleting.value = false
+      delete_item.value = null
+      dialog.value = false
+    })
+}
 </script>
 
 <template>
@@ -143,10 +143,10 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit roles')"
-    :can-view="user.can('view roles')"
-    :can-delete="user.can('delete roles')"
-    :can-create="user.can('create roles')"
+    :can-edit="user.can('edit_roles')"
+    :can-view="user.can('view_roles')"
+    :can-delete="user.can('delete_roles')"
+    :can-create="user.can('create_roles')"
     @on-edit="editCallback"
     @on-view="viewCallback"
     @on-update="updateCallback"
@@ -156,23 +156,31 @@ const confirmDeleteCallback = () => {
     :loading="loading"
     ><template #forFilter>
       <!-- <p>Search and Filter</p> -->
-      <VRow class="justify-start" dense>
-        <VCol cols="8" md="3">
+      <VRow
+        class="justify-start"
+        dense
+      >
+        <VCol
+          cols="8"
+          md="3"
+        >
           <AppTextField
             :placeholder="$t('Search')"
             @keyup.enter="onSearch"
             v-model="search"
           />
         </VCol>
-        <VCol cols="4" md="2">
+        <VCol
+          cols="4"
+          md="2"
+        >
           <AppSearchButton
             @click="onSearch"
             :title="$t('Search')"
             :showIcon="1"
           ></AppSearchButton>
         </VCol>
-      </VRow> 
-      </template
+      </VRow> </template
   ></AppDataTable>
 </template>
 
@@ -181,5 +189,5 @@ meta:
   title: Role
   layout: default
   subject: Auth
-  active: "role"
+  active: 'role'
 </route>

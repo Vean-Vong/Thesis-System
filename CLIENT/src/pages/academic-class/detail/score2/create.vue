@@ -103,7 +103,7 @@ onMounted(() => {
       <VCol cols="12" md="12" sm="12">
         <v-form lazy-validation ref="refForm" @submit.prevent="submit()">
           <VCard
-            :title="`ថ្នាក់ទី ${model?.name} ឆ្នាំសិក្សា ${model?.academic_year?.name}`"
+            :title="`${$t('class')} ${model.name} ${$t('academic_year')} ${model.academic_year?.name}`"
           >
             <VDivider />
             <v-btn
@@ -111,7 +111,7 @@ onMounted(() => {
               color="secondary"
               variant="outlined"
               @click="$router.go(-1)"
-              ><v-icon>mdi-arrow-back</v-icon>&nbsp;ថយក្រោយ</v-btn
+              ><v-icon>mdi-arrow-back</v-icon>&nbsp;{{ $t('back') }}</v-btn
             >
             <VCardText>
               <v-row>
@@ -125,7 +125,7 @@ onMounted(() => {
                 </v-col>
                 <v-col cols="2" md="2" lg="2" sm="2" class="mt-1" align="end">
                   <v-btn color="success" type="submit" :loading="submitting"
-                    >រក្សាទុក</v-btn
+                    ><VIcon>mdi-content-save</VIcon> {{ $t('Save changes') }}</v-btn
                   >
                 </v-col>
               </v-row>

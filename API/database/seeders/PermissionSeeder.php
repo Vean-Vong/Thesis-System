@@ -29,14 +29,20 @@ class PermissionSeeder extends Seeder
         $user_access->save();
 
         $role = new Permission();
-        $role->name = 'role';
-        $role->display_name = 'តួនាទី';
+        $role->name = 'view_roles';
+        $role->display_name = 'គ្រប់គ្រងតួនាទី';
         $role->save();
 
         $role_access = new Permission();
         $role_access->parent_id = $role->id;
-        $role_access->name = 'role_access';
-        $role_access->display_name = 'គ្រប់គ្រងតួនាទី';
+        $role_access->name = 'create_roles';
+        $role_access->display_name = ' បង្កើតតួនាទី';
+        $role_access->save();
+
+        $role_access = new Permission();
+        $role_access->parent_id = $role->id;
+        $role_access->name = 'edit_roles';
+        $role_access->display_name = ' កែប្រែតួនាទី';
         $role_access->save();
 
         $school = new Permission();

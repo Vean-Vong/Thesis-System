@@ -66,13 +66,4 @@ export default [
     icon: { icon: 'tabler-users-group', size: 15 },
     active: 'role',
   },
-  {
-    title: 'Schools',
-    to: 'school',
-    icon: { icon: 'mdi-office-building-outline', size: 15 },
-    active: 'school',
-  },
-
-  // ],
-  // },
 ]

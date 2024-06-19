@@ -64,22 +64,19 @@ onMounted(() => {
           ref="refForm"
           @submit.prevent="submit()"
         >
-          <VCard :title="`Class: ${model?.name} ( ${model?.academic_year?.name} )`">
+          <VCard :title="`${$t('class')} ${model.name} ${$t('academic_year')} ${model.academic_year?.name}`">
             <VDivider />
             <v-btn
               class="mt-5 mx-5"
               color="secondary"
               variant="outlined"
               @click="$router.go(-1)"
-              ><v-icon>mdi-arrow-back</v-icon>&nbsp; Back</v-btn
+              ><v-icon>mdi-arrow-back</v-icon>&nbsp; {{ $t('back') }}</v-btn
             >
             <VCardText>
               <v-row class="text-h6 font-weight-bold text-center my-5 mx-3">
                 <div style="width: 40%"></div>
                 <v-row style="width: 60%">
-                  <!-- <div>
-                    
-                  </div> -->
                   <v-spacer />
                   <div>
                     <v-btn
@@ -93,7 +90,7 @@ onMounted(() => {
               </v-row>
               <table
                 style="
-                  width: 100%;
+                  width: 98%;
                   font-family: Khmer OS Battambang;
                   border-collapse: collapse;
                   padding: 5px;
@@ -127,18 +124,18 @@ onMounted(() => {
                   <tr>
                     <td>
                       <VRow>
-                        <VCol style="margin: 0 60%"
+                        <VCol style="margin: 0 90%"
                           ><v-img
                             src="/src/assets/images/logo.png"
-                            :width="90"
+                            :width="100"
                           ></v-img>
                         </VCol>
                       </VRow>
                     </td>
 
-                    <td colspan="13"></td>
+                    <td colspan="14"></td>
                     <td
-                      colspan="13"
+                      colspan="8"
                       valign="bottom"
                       style="
                         text-align: center;
@@ -165,9 +162,10 @@ onMounted(() => {
                     >
                       Aide volontair aux
                     </td>
-                    <td colspan="11"></td>
+                    <td colspan="3"></td>
+                    <td colspan="8"></td>
                     <td
-                      colspan="4"
+                      colspan="8"
                       valign="center"
                       style="
                         text-align: center;
@@ -195,9 +193,34 @@ onMounted(() => {
                       enfants du Cambodage
                     </td>
                     <td colspan="3"></td>
-                    <td colspan="10"></td>
+                    <td colspan="8"></td>
+                    <td
+                      colspan="8"
+                      valign="center"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                    >
+                      6
+                    </td>
                   </tr>
                   <tr>
+                    <td
+                      colspan="4"
+                      style="
+                        text-align: center;
+                        font-weight: bold;
+                        line-height: 30px;
+                        font-size: 16px;
+                        font-family: 'Times New Roman', Times, serif;
+                      "
+                    >
+                      6
+                    </td>
                     <td
                       colspan="12"
                       style="
@@ -262,7 +285,7 @@ onMounted(() => {
                       Time &nbsp;:
                     </td>
                   </tr>
-                  <tr>
+                  <tr style="font-family: 'Times New Roman', Times, serif;font-size: 17px;">
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -478,9 +501,9 @@ onMounted(() => {
                   </tr>
                   <td
                     style="height: 45px"
-                    colspan="7"
+                    colspan="6"
                   ></td>
-                  <td colspan="2">
+                  <td colspan="3">
                     <table>
                       <div
                         style="
@@ -530,7 +553,7 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="2"
+                      colspan="3"
                     >
                       Date ........./................/2023
                     </td>
@@ -543,11 +566,11 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="2"
+                      colspan="3"
                     >
                       Seen and approved
                     </td>
-                    <td colspan="13"></td>
+                    <td colspan="12"></td>
                     <td
                       style="
                         text-align: center;
@@ -568,13 +591,13 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                      colspan="2"
+                      colspan="3"
                     >
                       Director
                     </td>
                     <td
                       style="text-align: center"
-                      colspan="13"
+                      colspan="12"
                     ></td>
                     <td
                       style="
@@ -615,8 +638,7 @@ onMounted(() => {
                       "
                       colspan="10"
                     >
-                      <!-- {{ model.teacher?.name }} -->
-                      Smey Need You
+                      {{ model.teacher?.name }}
                     </td>
                     <td
                       style="text-align: center"
