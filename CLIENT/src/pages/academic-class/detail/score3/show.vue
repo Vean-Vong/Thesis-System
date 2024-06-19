@@ -4,7 +4,7 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/plugins/utilites'
 import { Printd } from 'printd'
-import { DataRankings, GradePlus } from '@/helper/calculate-score'
+import { DataRankings, GradePlus, Result } from '@/helper/calculate-score'
 const route = useRoute()
 const model = ref({})
 const data = ref([])
@@ -450,7 +450,7 @@ onMounted(() => {
                       style="text-align: center; border: 1px solid black; padding: 5px"
                       colspan="1"
                     >
-                      {{ ret.final }}
+                      {{ Result(ret.total) }}
                     </td>
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
@@ -458,7 +458,6 @@ onMounted(() => {
                     >
                       {{ ret.rank }}
                     </td>
-                    <!-- rank -->
 
                     <td
                       style="text-align: center; border: 1px solid black; padding: 5px"
