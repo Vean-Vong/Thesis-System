@@ -253,7 +253,6 @@ class AcademicClassController extends Controller
 
         $result['status'] = 200;
 
-
         try {
 
             $result['data'] = Study::where('academic_class_id', $request->academic_class_id)->whereHas('student', function ($q) use ($request) {
@@ -355,6 +354,33 @@ class AcademicClassController extends Controller
         }
 
         return $months;
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
+    public function listStudyHistory(Request $request)
+    {
+
+        $result['status'] = 200;
+
+        try {
+
+            $student = Student::findOrFail($request->student_id);
+
+            // Study::where('students.id', 'studies.student_id')->get();
+
+            $academic_classes = AcademicClass::join('studies', 'studies.academic_class_id', 'academic_classes.id')
+                    ->with(['teacher', 'room', 'time', 'level', 'academicYear'])
+                    // ->select('id', 'name', 'academic_year_id')
+                    ->where('student_id', $student->id)
+                    ->get();
+
+            $result['student'] = $student;
+            $result['academic_classes'] = $academic_classes;
 
         } catch (Throwable $e) {
             $result['status'] = 201;
