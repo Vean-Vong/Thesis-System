@@ -149,7 +149,7 @@ const confirmDeleteCallback = () => {
     :can-create="user.can('create_roles')"
     @on-edit="editCallback"
     @on-view="viewCallback"
-    @on-update="updateCallback"
+    @on-create="createCallback"
     @on-delete="deleteCallback"
     :tableTitle="$t('List of Roles')"
     btnSubmit="CreateNew"

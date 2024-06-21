@@ -18,8 +18,6 @@ class RoleController extends Controller
     public function list(Request $request)
     {
 
-        abort_if(Gate::denies('role_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {
@@ -37,8 +35,6 @@ class RoleController extends Controller
 
     public function store(StoreRoleRequest $request)
     {
-
-        abort_if(Gate::denies('role_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
         $result['status'] = 200;
 
@@ -68,8 +64,6 @@ class RoleController extends Controller
     public function show(Request $request)
     {
 
-        abort_if(Gate::denies('role_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {
@@ -87,8 +81,6 @@ class RoleController extends Controller
 
     public function update(UpdateRoleRequest $request)
     {
-
-        abort_if(Gate::denies('role_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
         $result['status'] = 200;
 
@@ -118,9 +110,6 @@ class RoleController extends Controller
 
     public function delete(Request $request)
     {
-
-        abort_if(Gate::denies('role_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {

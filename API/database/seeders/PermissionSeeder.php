@@ -24,14 +24,38 @@ class PermissionSeeder extends Seeder
 
         $user_access = new Permission();
         $user_access->parent_id = $user->id;
-        $user_access->name = 'user_access';
+        $user_access->name = 'view_users';
         $user_access->display_name = 'គ្រប់គ្រងអ្នកប្រើប្រាស់';
         $user_access->save();
 
+        $user_access = new Permission();
+        $user_access->parent_id = $user->id;
+        $user_access->name = 'create_users';
+        $user_access->display_name = 'បង្កើតអ្នកប្រើប្រាស់';
+        $user_access->save();
+
+        $user_access = new Permission();
+        $user_access->parent_id = $user->id;
+        $user_access->name = 'edit_users';
+        $user_access->display_name = 'កែប្រែអ្នកប្រើប្រាស់';
+        $user_access->save();
+
+        $user_access = new Permission();
+        $user_access->parent_id = $user->id;
+        $user_access->name = 'delete_users';
+        $user_access->display_name = 'លុបអ្នកប្រើប្រាស់';
+        $user_access->save();
+
         $role = new Permission();
-        $role->name = 'view_roles';
-        $role->display_name = 'គ្រប់គ្រងតួនាទី';
+        $role->name = 'role';
+        $role->display_name = 'តួនាទី';
         $role->save();
+
+        $role_access = new Permission();
+        $role_access->parent_id = $role->id;
+        $role_access->name = 'view_roles';
+        $role_access->display_name = 'តួនាទី';
+        $role_access->save();
 
         $role_access = new Permission();
         $role_access->parent_id = $role->id;
@@ -43,6 +67,12 @@ class PermissionSeeder extends Seeder
         $role_access->parent_id = $role->id;
         $role_access->name = 'edit_roles';
         $role_access->display_name = ' កែប្រែតួនាទី';
+        $role_access->save();
+
+        $role_access = new Permission();
+        $role_access->parent_id = $role->id;
+        $role_access->name = 'delete_roles';
+        $role_access->display_name = ' លុបតួនាទី';
         $role_access->save();
 
         $school = new Permission();
