@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('academic-classes-list-student', [AcademicClassController::class, 'listStudent']);
     Route::post('academic-classes-remove-student', [AcademicClassController::class, 'removeStudent']);
     Route::post('academic-classes-move-student', [AcademicClassController::class, 'moveStudent']);
+    Route::post('academic-classes-make-as-stop-student', [AcademicClassController::class, 'makeAsStopStudent']);
+    Route::post('academic-classes-make-as-new-student', [AcademicClassController::class, 'makeAsNewStudent']);
     Route::post('academic-classes-month', [AcademicClassController::class, 'getMonth']);
     Route::post('academic-classes-list-study-history', [AcademicClassController::class, 'listStudyHistory']);
 

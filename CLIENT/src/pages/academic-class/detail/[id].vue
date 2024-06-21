@@ -27,7 +27,7 @@ const delete_item = ref(null)
 const confirmDialog = ref(false)
 const dialog_add_student = ref(false)
 const headers = ['Add', 'headers.id', 'headers.name', 'headers.gender', 'dob']
-const headers2 = ['headers.id', 'headers.name', 'headers.gender', 'dob', 'headers.action']
+const headers2 = ['headers.id', 'headers.name', 'headers.gender', 'dob','status', 'is_new', 'headers.action']
 const selected_students = ref([])
 const listing = ref(false)
 const store = useAuthStore()
@@ -122,6 +122,16 @@ const onMoveStudent = id => {
   delete_item.value = id
   confirmDialog.value = true
 }
+const onStopStudent = id => {
+  action.value = 3
+  delete_item.value = id
+  confirmDialog.value = true
+}
+const onNewStudent = id => {
+  action.value = 4
+  delete_item.value = id
+  confirmDialog.value = true
+}
 
 const confirmAction = () => {
   if (action.value === 1) {
@@ -139,6 +149,30 @@ const confirmAction = () => {
   } else if (action.value === 2) {
     api
       .post('academic-classes-move-student', {
+        id: delete_item.value,
+      })
+      .then(res => {
+        listingStudent()
+      })
+      .finally(() => {
+        confirmDialog.value = false
+        delete_item.value = null
+      })
+  } else if (action.value === 3) {
+    api
+      .post('academic-classes-make-as-stop-student', {
+        id: delete_item.value,
+      })
+      .then(res => {
+        listingStudent()
+      })
+      .finally(() => {
+        confirmDialog.value = false
+        delete_item.value = null
+      })
+  }else if (action.value === 4) {
+    api
+      .post('academic-classes-make-as-new-student', {
         id: delete_item.value,
       })
       .then(res => {
@@ -343,22 +377,41 @@ onMounted(() => {
                   <td v-text="row.student?.sex_text" />
                   <td v-text="formatDate(row.student?.dob)" />
                   <td>
-                    <div v-if="row.status == 1">
-                      <!-- <v-btn  
-                        @click="onDisable(row.id)"
+                    <span v-if="row.status==0">Transfer</span>
+                    <span v-if="row.status==1">Studying</span>
+                    <span v-if="row.status==2">Stop</span>
+                  </td>
+                  <td v-text="row.is_new==1?'New':''" />
+                  <td>
+                    <v-btn v-if="row.is_new!=1"
+                        @click="onNewStudent(row.id)"
                         color="white"
                         elevation="0"
                         flat
                       >
-                        <v-icon color="error">mdi-minus-circle</v-icon>
+                        <v-icon color="error">mdi-new-box</v-icon>
                         <v-tooltip
                           activator="parent"
                           location="bottom"
                         >
-                          {{ $t('disable_student') }}
+                          {{ $t('make_as_new_student') }}
                         </v-tooltip>
-                      </v-btn> -->
-                      <v-btn
+                    </v-btn>
+                    <v-btn v-if="row.status!=2"
+                        @click="onStopStudent(row.id)"
+                        color="white"
+                        elevation="0"
+                        flat
+                      >
+                        <v-icon color="error">mdi-stop-circle</v-icon>
+                        <v-tooltip
+                          activator="parent"
+                          location="bottom"
+                        >
+                          {{ $t('make_as_stop_student') }}
+                        </v-tooltip>
+                    </v-btn>
+                    <v-btn  v-if="row.status!=0"
                         @click="onMoveStudent(row.id)"
                         color="white"
                         elevation="0"
@@ -371,8 +424,8 @@ onMounted(() => {
                         >
                           {{ $t('transfer_students') }}
                         </v-tooltip>
-                      </v-btn>
-                      <v-btn
+                    </v-btn>
+                    <v-btn v-if="row.status!=0"
                         @click="onDelete(row.id)"
                         color="white"
                         elevation="0"
@@ -385,14 +438,7 @@ onMounted(() => {
                         >
                           {{ $t('remove_student') }}
                         </v-tooltip>
-                      </v-btn>
-                    </div>
-                    <div
-                      class="ml-10"
-                      v-else
-                    >
-                      បានផ្ទេរ
-                    </div>
+                    </v-btn>
                   </td>
                 </tr>
                 <tr></tr>

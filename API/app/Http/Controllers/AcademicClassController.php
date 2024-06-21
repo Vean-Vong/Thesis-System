@@ -260,7 +260,7 @@ class AcademicClassController extends Controller
             })
                 ->orderBy(Student::select('last_name')
                 ->whereColumn('students.id', 'studies.student_id'))
-                ->select('id', 'student_id', 'status')->get()->load(['student' => function ($q){
+                ->select('id', 'student_id', 'status', 'is_new')->get()->load(['student' => function ($q){
                     $q->select('id', 'code','last_name', 'first_name', 'gender', 'dob');
                 }]);
 
@@ -327,6 +327,49 @@ class AcademicClassController extends Controller
             $model->save();
 
             $result['message'] = 'ផ្ទេរសិស្សបានសម្រេច';
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
+    public function makeAsStopStudent(Request $request)
+    {
+
+        $result['status'] = 200;
+
+        try {
+
+            $model = Study::findOrFail($request->id);
+
+            $model->status = 2;
+
+            $model->save();
+
+            $result['message'] = 'ប្រតិបត្តិការជោគជ័យ!';
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
+    public function makeAsNewStudent(Request $request)
+    {
+        $result['status'] = 200;
+
+        try {
+
+            $model = Study::findOrFail($request->id);
+
+            $model->is_new = 1;
+
+            $model->save();
+
+            $result['message'] = 'ប្រតិបត្តិការជោគជ័យ!';
 
         } catch (Throwable $e) {
             $result['status'] = 201;
