@@ -1,8 +1,8 @@
 <script setup>
 import api from '@/plugins/utilites'
-import { onMounted, reactive, ref, watch } from 'vue'
-import _ from 'lodash'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+
 const currentPage = ref(1)
 const headers = [
   'headers.id',
@@ -11,6 +11,7 @@ const headers = [
   'headers.phone_number',
   'headers.fatherName',
   'headers.motherName',
+  'headers.status',
   'headers.action',
 ]
 
@@ -34,7 +35,7 @@ const q = () => {
 const fetchData = () => {
   loading.value = true
   api
-    .post(`students-list`, {
+    .post('students-list', {
       perPage: perPage.value,
       page: currentPage.value,
       search: search.value,
@@ -92,199 +93,134 @@ onMounted(() => {
 
 <template>
   <div>
-    <VCard
-      :title="$t('vcard.title3')"
-      class="mb-5"
-    >
+    <VCard :title="$t('vcard.title3')" class="mb-5">
       <VDivider />
-      <VCard-text>
+      <VCardText>
         <VRow justify="start">
-          <VCol
-            cols="12"
-            md="4"
-          >
-            <VTextField
-              v-model="search"
-              :placeholder="$t('Search')"
-              append-inner-icon="mdi-search"
-              @keypress.enter="q"
-              @click:append-inner="q"
-            />
+          <VCol cols="12" md="4">
+            <VTextField v-model="search" :placeholder="$t('Search')" append-inner-icon="mdi-search" @keypress.enter="q"
+              @click:append-inner="q" />
           </VCol>
-          <VCol
-            cols="12"
-            md="4"
-          ></VCol>
-          <v-col
-            cols="6"
-            md="4"
-            class="text-end"
-          >
-            <VBtn
-              size="large"
-              variant="elevated"
-              prepend-icon="mdi-plus"
-              color="info"
-              to="student/create"
-            >
+          <VCol cols="12" md="4"></VCol>
+          <VCol cols="6" md="4" class="text-end">
+            <VBtn size="large" variant="elevated" prepend-icon="mdi-plus" color="info" to="student/create">
               {{ $t('add new') }}
-            </VBtn></v-col
-          >
+            </VBtn>
+          </VCol>
         </VRow>
-        <VTable
-          :headers="headers"
-          :items="data"
-          item-key="fullName"
-          class="table-rounded"
-        >
+        <VTable :headers="headers" :items="data" item-key="fullName" class="table-rounded">
           <thead>
             <tr>
-              <th
-                v-for="header in headers"
-                :key="header"
-              >
+              <th v-for="header in headers" :key="header">
                 {{ $t(header) }}
               </th>
             </tr>
           </thead>
 
           <tbody>
-            <td
-              v-if="loading"
-              :colspan="headers.length"
-            >
-              <v-progress-linear
-                indeterminate
-                class="line"
-              ></v-progress-linear>
+            <td v-if="loading" :colspan="headers.length">
+              <VProgressLinear indeterminate class="line"></VProgressLinear>
             </td>
             <tr v-if="loading && data.length === 0">
-              <td
-                :colspan="headers.length"
-                class="text-center"
-              >
+              <td :colspan="headers.length" class="text-center">
                 <div class="text-subtitle-2">{{ $t('in progress') }}</div>
               </td>
             </tr>
             <tr v-if="!loading && data.length === 0">
-              <td
-                :colspan="headers.length"
-                class="text-caption text-center"
-              >
+              <td :colspan="headers.length" class="text-caption text-center">
                 {{ $t('No data stored') }}
               </td>
             </tr>
-            <tr
-              v-for="row in data"
-              :key="row.id"
-            >
+            <tr v-for="row in data" :key="row.id">
               <td v-text="row.code" />
               <td v-text="row.last_name + ' ' + row.first_name" />
               <td v-text="row.sex_text" />
               <td v-text="row.phone" />
               <td v-text="row.d_last_name + ' ' + row.d_first_name" />
               <td v-text="row.m_last_name + ' ' + row.m_first_name" />
+              <td v-text="row.status" />
+
               <td>
-                <v-btn
-                  @click="show(row.id)"
-                  color="white"
-                  elevation="0"
-                  flat
-                >
-                  <v-icon color="grey">mdi-eye</v-icon>
-                  <v-tooltip
-                    activator="parent"
-                    location="bottom"
-                  >
-                    {{ $t('checked') }}
-                  </v-tooltip>
-                </v-btn>
-                <v-btn
-                  @click="edit(row.id)"
-                  color="white"
-                  elevation="0"
-                  flat
-                >
-                  <v-icon color="success">mdi-square-edit-outline</v-icon>
-                  <v-tooltip
-                    activator="parent"
-                    location="bottom"
-                  >
-                    {{ $t('edit') }}
-                  </v-tooltip>
-                </v-btn>
-                <v-btn
-                  @click="onDelete(row.id)"
-                  color="white"
-                  elevation="0"
-                  flat
-                >
-                  <v-icon color="error">mdi-trash</v-icon>
-                  <v-tooltip
-                    activator="parent"
-                    location="bottom"
-                  >
-                    {{ $t('delete') }}
-                  </v-tooltip>
-                </v-btn>
+                <div class="menu-container">
+                  <VMenu open-on-hover location="start">
+                    <template #activator="{ props }">
+                      <VBtn class="menu-btn" color="primary" v-bind="props" icon="mdi-dots-vertical" variant="plain">
+                      </VBtn>
+                    </template>
+                    <VList class="menu-list">
+                      <VListItem @click="show(row.id)">
+                        <VListItemContent class="menu-item">
+                          <VIcon color="grey">mdi-eye</VIcon>
+                          <VListItemTitle>View</VListItemTitle>
+                        </VListItemContent>
+                      </VListItem>
+
+                      <VListItem @click="edit(row.id)">
+                        <VListItemContent class="menu-item">
+                          <VIcon color="success">mdi-square-edit-outline</VIcon>
+                          <VListItemTitle>Update</VListItemTitle>
+                        </VListItemContent>
+                      </VListItem>
+
+                      <VListItem @click="onDelete(row.id)">
+                        <VListItemContent class="menu-item">
+                          <VIcon color="error">mdi-minus-circle</VIcon>
+                          <VListItemTitle>Disable</VListItemTitle>
+                        </VListItemContent>
+                      </VListItem>
+                    </VList>
+                  </VMenu>
+                </div>
               </td>
             </tr>
           </tbody>
         </VTable>
-      </VCard-text>
-      <VCard-actions>
-        <v-row>
-          <v-col
-            cols="12"
-            lg="6"
-            md="12"
-            sm="12"
-            xs="12"
-            class="mt-3 text-center"
-          >
-            <span v-if="!loading">{{ from }} - {{ to }} {{ total === 0 ? '' : `of ${total}` }}</span></v-col
-          >
-          <v-col
-            cols="12"
-            lg="6"
-            md="12"
-            sm="12"
-            xs="12"
-          >
-            <VPagination
-              v-model="currentPage"
-              class="ml-auto"
-              :length="numPages"
-              :total-visible="10"
-            />
-          </v-col>
-        </v-row>
-      </VCard-actions>
+      </VCardText>
+      <VCardActions>
+        <VRow>
+          <VCol cols="12" lg="6" md="12" sm="12" xs="12" class="mt-3 text-center">
+            <span v-if="!loading">{{ from }} - {{ to }} {{ total === 0 ? '' : `of ${total}` }}</span>
+          </VCol>
+          <VCol cols="12" lg="6" md="12" sm="12" xs="12">
+            <VPagination v-model="currentPage" class="ml-auto" :length="numPages" :total-visible="10" />
+          </VCol>
+        </VRow>
+      </VCardActions>
     </VCard>
 
-    <v-dialog
-      v-model="confirmDialog"
-      style="max-width: 500px"
-      persistent
-    >
-      <v-card>
-        <v-card-text> {{ $t('delete_student') }} </v-card-text>
-        <v-card-actions class="ml-auto">
-          <v-btn
-            color="error"
-            @click="confirmDialog = false"
-            >{{ $t('no') }}</v-btn
-          >
-          <v-btn
-            color="success"
-            @click="confirmAction"
-            >{{ $t('yes') }}</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <VDialog v-model="confirmDialog" style="max-width: 500px" persistent>
+      <VCard>
+        <VCardText> {{ $t('delete_student') }} </VCardText>
+        <VCardActions class="ml-auto">
+          <VBtn color="error" @click="confirmDialog = false">{{ $t('no') }}</VBtn>
+          <VBtn color="success" @click="confirmAction">{{ $t('yes') }}</VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </div>
 </template>
+
+<style>
+.menu-container {
+  position: relative;
+}
+
+.menu-container .v-menu__content {
+  transform-origin: right top !important;
+  left: auto !important;
+  right: 100% !important;
+}
+
+.menu-list .menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.menu-list .v-icon {
+  margin-right: 10px;
+}
+</style>
+
 <route lang="yaml">
 meta:
   title: Student
