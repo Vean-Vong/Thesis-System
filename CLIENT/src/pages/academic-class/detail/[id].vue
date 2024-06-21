@@ -382,7 +382,7 @@ onMounted(() => {
                     <span v-if="row.status==2">Stop</span>
                   </td>
                   <td v-text="row.is_new==1?'New':''" />
-                  <td>
+                  <td v-if="row.status!=0">
                     <v-btn v-if="row.is_new!=1"
                         @click="onNewStudent(row.id)"
                         color="white"
@@ -411,7 +411,7 @@ onMounted(() => {
                           {{ $t('make_as_stop_student') }}
                         </v-tooltip>
                     </v-btn>
-                    <v-btn  v-if="row.status!=0"
+                    <v-btn
                         @click="onMoveStudent(row.id)"
                         color="white"
                         elevation="0"
@@ -425,7 +425,7 @@ onMounted(() => {
                           {{ $t('transfer_students') }}
                         </v-tooltip>
                     </v-btn>
-                    <v-btn v-if="row.status!=0"
+                    <v-btn
                         @click="onDelete(row.id)"
                         color="white"
                         elevation="0"
