@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignUuid('student_id')->index();
             $table->string('description')->nullable();
             $table->boolean('is_finised')->default(false);
+            $table->boolean('is_new')->default(false);
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();
             $table->tinyInteger('status')->default(1)->comment('!= 1 => បានផ្ទេរ');

@@ -44,6 +44,16 @@ class AcademicClass extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function time()
+    {
+        return $this->belongsTo(Time::class);
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class);
+    }
+
     public function academicYear()
     {
         return $this->belongsTo(AcademicYear::class);

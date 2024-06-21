@@ -253,7 +253,6 @@ class AcademicClassController extends Controller
 
         $result['status'] = 200;
 
-
         try {
 
             $result['data'] = Study::where('academic_class_id', $request->academic_class_id)->whereHas('student', function ($q) use ($request) {
@@ -261,7 +260,7 @@ class AcademicClassController extends Controller
             })
                 ->orderBy(Student::select('last_name')
                 ->whereColumn('students.id', 'studies.student_id'))
-                ->select('id', 'student_id', 'status')->get()->load(['student' => function ($q){
+                ->select('id', 'student_id', 'status', 'is_new')->get()->load(['student' => function ($q){
                     $q->select('id', 'code','last_name', 'first_name', 'gender', 'dob');
                 }]);
 
@@ -336,6 +335,49 @@ class AcademicClassController extends Controller
         return response()->json($result);
     }
 
+    public function makeAsStopStudent(Request $request)
+    {
+
+        $result['status'] = 200;
+
+        try {
+
+            $model = Study::findOrFail($request->id);
+
+            $model->status = 2;
+
+            $model->save();
+
+            $result['message'] = 'ប្រតិបត្តិការជោគជ័យ!';
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
+    public function makeAsNewStudent(Request $request)
+    {
+        $result['status'] = 200;
+
+        try {
+
+            $model = Study::findOrFail($request->id);
+
+            $model->is_new = 1;
+
+            $model->save();
+
+            $result['message'] = 'ប្រតិបត្តិការជោគជ័យ!';
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
     public function getMonth(Request $request)
     {
         abort_if(Gate::denies('score_save') && Gate::denies('score_list') && Gate::denies('attendance_save') && Gate::denies('attendance_list'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
@@ -355,6 +397,33 @@ class AcademicClassController extends Controller
         }
 
         return $months;
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+        return response()->json($result);
+    }
+
+    public function listStudyHistory(Request $request)
+    {
+
+        $result['status'] = 200;
+
+        try {
+
+            $student = Student::findOrFail($request->student_id);
+
+            // Study::where('students.id', 'studies.student_id')->get();
+
+            $academic_classes = AcademicClass::join('studies', 'studies.academic_class_id', 'academic_classes.id')
+                    ->with(['teacher', 'room', 'time', 'level', 'academicYear'])
+                    // ->select('id', 'name', 'academic_year_id')
+                    ->where('student_id', $student->id)
+                    ->get();
+
+            $result['student'] = $student;
+            $result['academic_classes'] = $academic_classes;
 
         } catch (Throwable $e) {
             $result['status'] = 201;
