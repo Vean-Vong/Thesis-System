@@ -22,8 +22,6 @@ class UserController extends Controller
     public function list(Request $request)
     {
 
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {
@@ -43,8 +41,6 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
         $result['status'] = 200;
 
@@ -82,8 +78,6 @@ class UserController extends Controller
     public function show(Request $request)
     {
 
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {
@@ -101,8 +95,6 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request)
     {
-
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
         $result['status'] = 200;
 
@@ -132,8 +124,6 @@ class UserController extends Controller
     public function delete(Request $request)
     {
 
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {
@@ -156,8 +146,6 @@ class UserController extends Controller
     public function resetPassword(Request $request)
     {
 
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {
@@ -179,8 +167,6 @@ class UserController extends Controller
 
     public function callOrgRole(Request $request)
     {
-
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
 
         $result['status'] = 200;
 
