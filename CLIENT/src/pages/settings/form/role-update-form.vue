@@ -13,7 +13,7 @@ onMounted(() => {
   const query = router.currentRoute.value.query;
 
   api
-    .post("/roles-show", { id: query.id })
+    .post("/roles-edit", { id: query.id })
     .then((res) => {
       form.value = res.data.data;
     })
@@ -45,21 +45,22 @@ const onUpdate = async () => {
   }
 };
 
-const selectAll = (permissions) => {
-  for (const permission of permissions) {
-    if (!form.value.permissions.includes(permission.name)) {
-      form.value.permissions.push(permission.name);
+const selectAll = ret => {
+  for (const permission of ret.childrens) {
+    if (!form.value.permissions.includes(permission.id)) {
+      form.value.permissions.push(permission.id)
     }
   }
-};
+}
 
-const deselectAll = (permissions) => {
-  for (const permission of permissions) {
-    if (form.value.permissions.includes(permission.name)) {
-      form.value.permissions.splice(form.value.permissions.indexOf(permission.name), 1);
+const deselectAll = ret => {
+  for (const permission of ret.childrens) {
+    const index = form.value.permissions.indexOf(permission.id)
+    if (index > -1) {
+      form.value.permissions.splice(index, 1)
     }
   }
-};
+}
 
 const toSentenceFunction = (p) => {
   return p.charAt(0).toUpperCase() + p.substr(1);

@@ -98,8 +98,6 @@ class TeacherController extends Controller
     public function delete(Request $request)
     {
 
-        abort_if(Gate::denies('user_access'), 403, 'អ្នកមិនអាចប្រើប្រាស់ចំណុចនេះទេ។');
-
         $result['status'] = 200;
 
         try {

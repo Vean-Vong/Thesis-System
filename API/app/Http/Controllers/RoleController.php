@@ -61,6 +61,29 @@ class RoleController extends Controller
         return response()->json($result);
     }
 
+    public function Edit(Request $request)
+    {
+
+        $result['status'] = 200;
+
+        try {
+
+            $role = Role::findOrFail($request->id);
+
+            $permissions = PermissionRole::select('permission_id')->where('role_id', $role->id)->get()->pluck('permission_id');
+
+            $role['permissions'] = $permissions;
+
+            $result['data'] = $role;
+
+        } catch (Throwable $e) {
+            $result['status'] = 201;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
     public function show(Request $request)
     {
 
@@ -71,6 +94,7 @@ class RoleController extends Controller
             $role = Role::findOrFail($request->id);
 
             $result['data'] = new RoleResource($role);
+
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();
