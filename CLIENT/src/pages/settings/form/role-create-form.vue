@@ -25,7 +25,7 @@ const onCreate = async () => {
   const { valid } = await refForm.value?.validate()
   if (valid) {
     api
-      .post('/roles-store', form.value)
+      .post('/roles-create', form.value)
       .then(res => {
         if (res.status == 200) router.back()
       })
@@ -37,15 +37,15 @@ const onCreate = async () => {
 
 const selectAll = ret => {
   for (const permission of ret.childrens) {
-    if (!form.value.permissions.includes(permission.name)) {
-      form.value.permissions.push(permission.name)
+    if (!form.value.permissions.includes(permission.id)) {
+      form.value.permissions.push(permission.id)
     }
   }
 }
 
 const deselectAll = ret => {
   for (const permission of ret.childrens) {
-    const index = form.value.permissions.indexOf(permission.name)
+    const index = form.value.permissions.indexOf(permission.id)
     if (index > -1) {
       form.value.permissions.splice(index, 1)
     }
@@ -128,7 +128,7 @@ const toSentenceFunction = p => {
                         :key="p"
                         v-model="form.permissions"
                         :label="permission.display_name"
-                        :value="permission.name"
+                        :value="permission.id"
                         density="compact"
                         class="pa-0 ma-0 text-caption flex-1"
                         hide-details

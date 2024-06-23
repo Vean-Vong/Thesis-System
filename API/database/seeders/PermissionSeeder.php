@@ -51,11 +51,11 @@ class PermissionSeeder extends Seeder
         $role->display_name = 'តួនាទី';
         $role->save();
 
-        $role_access = new Permission();
-        $role_access->parent_id = $role->id;
-        $role_access->name = 'view_roles';
-        $role_access->display_name = 'តួនាទី';
-        $role_access->save();
+        // $role_access = new Permission();
+        // $role_access->parent_id = $role->id;
+        // $role_access->name = 'view_roles';
+        // $role_access->display_name = 'តួនាទី';
+        // $role_access->save();
 
         $role_access = new Permission();
         $role_access->parent_id = $role->id;

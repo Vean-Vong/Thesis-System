@@ -67,17 +67,28 @@ const toSentenceFunction = (p) => {
 </script>
 
 <template>
-  <AppFormUpdateTemplate cols="10" @submit="onUpdate" :title="$t('Update Role')">
-    <VForm class="px-3" ref="refForm" lazy-validation>
+  <AppFormCreateTemplate
+    cols="10"
+    @submit="onUpdate"
+    :title="$t('update New Role')"
+  >
+    <VForm
+      class="px-3"
+      ref="refForm"
+      lazy-validation
+    >
       <VRow>
         <VCol cols="12">
           <VRow no-gutters>
-            <VCol cols="12" md="6">
+            <VCol
+              cols="12"
+              md="6"
+            >
               <AppTextField
-                id="name"
-                :rules="[(v) => !!v || $t('Name') + $t('required')]"
-                v-model="form.name"
                 required="true"
+                :rules="[v => !!v || $t('Name') + $t('required')]"
+                id="name"
+                v-model="form.name"
                 :label="$t('Name')"
               />
             </VCol>
@@ -87,57 +98,54 @@ const toSentenceFunction = (p) => {
         <VCol cols="12">
           <VCard>
             <VCardText>
-              <p class="text-lg">{{ t("Select") }}{{ t("Permissions") }}</p>
+              <p class="text-lg">{{ $t('Select Permissions') }}</p>
             </VCardText>
             <VCardActions>
               <VExpansionPanels multiple>
-                <VExpansionPanel v-for="(it, idx) in permissions" :key="idx">
-                  <template v-for="(itx, g) in it" :key="g">
-                    <VExpansionPanelTitle>
-                      {{ $t(toSentenceFunction(g)) }}
-                    </VExpansionPanelTitle>
-                    <VExpansionPanelText>
-                      <VSheet
-                        class="d-flex flex-column flex-lg-row align-center flex-wrap"
+                <VExpansionPanel
+                  v-for="(ret, i) in permissions"
+                  :key="i"
+                >
+                  <VExpansionPanelTitle>
+                    {{ ret.name }}
+                  </VExpansionPanelTitle>
+                  <VExpansionPanelText>
+                    <div
+                      class="flex-1"
+                      style="width: 25%"
+                    >
+                      <VBtn
+                        variant="flat"
+                        size="x-small"
+                        color="primary"
+                        @click="selectAll(ret)"
                       >
-                        <div class="me-4 my-lg-0 my-4">
-                          <VRow no-gutters>
-                            <VCol cols="12" md="6" sm="6">
-                              <VBtn
-                                variant="flat"
-                                size="x-small"
-                                color="primary"
-                                @click="selectAll(itx)"
-                              >
-                                {{ $t("Select All") }}
-                              </VBtn>
-                            </VCol>
-                            <VCol cols="12" md="6" sm="6">
-                              <VBtn
-                                variant="flat"
-                                size="x-small"
-                                color="error"
-                                @click="deselectAll(itx)"
-                              >
-                                {{ $t("Deselect All") }}
-                              </VBtn>
-                            </VCol>
-                          </VRow>
-                        </div>
-                        <VCheckbox
-                          v-for="(permission, p) in itx"
-                          :key="p"
-                          v-model="form.permissions"
-                          :label="$t(permission.name)"
-                          :value="permission.name"
-                          density="compact"
-                          class="pa-0 ma-0 text-caption flex-1 list-width"
-                          hide-details
-                          single-line
-                        />
-                      </VSheet>
-                    </VExpansionPanelText>
-                  </template>
+                        Select All
+                      </VBtn>
+                      <VBtn
+                        variant="flat"
+                        size="x-small"
+                        color="error"
+                        @click="deselectAll(ret)"
+                      >
+                        Deselect All
+                      </VBtn>
+                    </div>
+                    <VSheet class="d-flex align-content-center align-center flex-wrap">
+                      <VCheckbox
+                        v-for="(permission, p) in ret.childrens"
+                        :key="p"
+                        v-model="form.permissions"
+                        :label="permission.display_name"
+                        :value="permission.id"
+                        density="compact"
+                        class="pa-0 ma-0 text-caption flex-1"
+                        hide-details
+                        single-line
+                        style="width: 25%"
+                      />
+                    </VSheet>
+                  </VExpansionPanelText>
                 </VExpansionPanel>
               </VExpansionPanels>
             </VCardActions>
@@ -145,16 +153,17 @@ const toSentenceFunction = (p) => {
         </VCol>
       </VRow>
     </VForm>
-  </AppFormUpdateTemplate>
+  </AppFormCreateTemplate>
 </template>
 
 <route lang="yaml">
 meta:
-  title: Role Edit
+  title: Role Update
   layout: default
   subject: Auth
-  active: "role"
+  active: 'role'
 </route>
+
 
 <style scoped>
 .list-width {
