@@ -134,7 +134,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
 meta:
-  title: time
+  title: Time
   layout: default
   subject: Auth
   active: 'time'

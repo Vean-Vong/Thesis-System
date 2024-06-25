@@ -151,21 +151,21 @@ onMounted(() => {
                       <VListItem @click="show(row.id)">
                         <VListItemContent class="menu-item">
                           <VIcon color="grey">mdi-eye</VIcon>
-                          <VListItemTitle>View</VListItemTitle>
+                          <VListItemTitle>{{ $t('detail') }}</VListItemTitle>
                         </VListItemContent>
                       </VListItem>
 
                       <VListItem @click="edit(row.id)">
                         <VListItemContent class="menu-item">
                           <VIcon color="success">mdi-square-edit-outline</VIcon>
-                          <VListItemTitle>Update</VListItemTitle>
+                          <VListItemTitle>{{$t('edit')}}</VListItemTitle>
                         </VListItemContent>
                       </VListItem>
 
                       <VListItem @click="onDelete(row.id)">
                         <VListItemContent class="menu-item">
                           <VIcon color="error">mdi-minus-circle</VIcon>
-                          <VListItemTitle>Disable</VListItemTitle>
+                          <VListItemTitle>{{$t('delete')}}</VListItemTitle>
                         </VListItemContent>
                       </VListItem>
                     </VList>

@@ -212,7 +212,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
 meta:
-  title: room
+  title: Room
   layout: default
   subject: Auth
   active: 'room'

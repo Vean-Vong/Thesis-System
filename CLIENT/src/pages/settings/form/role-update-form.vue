@@ -71,7 +71,7 @@ const toSentenceFunction = (p) => {
   <AppFormCreateTemplate
     cols="10"
     @submit="onUpdate"
-    :title="$t('update New Role')"
+    :title="$t('edit roles')"
   >
     <VForm
       class="px-3"

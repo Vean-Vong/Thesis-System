@@ -39,7 +39,7 @@ onMounted(() => {})
       md="8"
       sm="10"
     >
-      <VCard :title="$t('academic_year')">
+      <VCard :title="$t('academic_year_create')">
         <VDivider />
 
         <VCardText>
@@ -104,7 +104,7 @@ onMounted(() => {})
                   type="submit"
                   :loading="submitting"
                   color="success"
-                  ><VIcon>mdi-add</VIcon> {{ $t('Save changes') }}</VBtn
+                  ><VIcon class="me-2">mdi-content-save-all</VIcon>{{ $t('Save changes') }}</VBtn
                 >
               </VCol>
             </VRow>
@@ -116,7 +116,7 @@ onMounted(() => {})
 </template>
 <route lang="yaml">
 meta:
-  title: create-academic-year
+  title: Create Term
   layout: default
   subject: Auth
   active: 'academic-year'

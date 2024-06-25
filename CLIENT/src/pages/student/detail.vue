@@ -220,3 +220,10 @@ onMounted(() => {
     </v-card>
   </div>
 </template>
+<route lang="yaml">
+  meta:
+    title: Detail Student 
+    layout: default
+    subject: Auth
+    active: 'student'
+  </route>

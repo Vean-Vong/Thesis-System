@@ -89,8 +89,8 @@ onMounted(() => {
 </template>
 <route lang="yaml">
 meta:
-  title: room-update
+  title: Update Room
   layout: default
   subject: Auth
-  active: 'room-update'
+  active: 'room'
 </route>

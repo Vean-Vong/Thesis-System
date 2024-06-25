@@ -272,7 +272,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
   meta:
-    title: academic-year 
+    title: Term
     layout: default
     subject: Auth
     active: 'academic-year'
