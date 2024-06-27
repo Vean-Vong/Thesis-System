@@ -233,7 +233,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      TERM RESULT 
+                      {{ model.academic_year?.name }}
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -249,7 +249,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Teacher :{{ model.teacher?.name }}
+                      Teacher :
                     </td>
                     <td
                       colspan="6"
@@ -260,7 +260,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Room :
+                      Room : {{ model.name }}
                     </td>
                   </tr>
                   <tr style="line-height: 40px">

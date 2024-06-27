@@ -33,8 +33,8 @@ class AcademicClassController extends Controller
 
             $academic_year_id = $request->academic_year_id ?? AcademicYear::whereIsActive(1)->first()->id ?? 1;
 
-            $academic_classes = AcademicClass::select('id', 'name', 'teacher_id', 'room_id', 'academic_year_id')
-                ->with(['teacher', 'room'])
+            $academic_classes = AcademicClass::select('id', 'name', 'teacher_id', 'room_id', 'academic_year_id','level_id','time_id')
+                ->with(['teacher', 'room','level','time'])
                 ->filter([
                     'search' => $request->search,
                     'academic_year_id' => $academic_year_id
@@ -175,9 +175,11 @@ class AcademicClassController extends Controller
             $model = AcademicClass::with(['teacher' => function ($q) {
                 $q->select('id', 'name');
             }, 'academicYear' => function ($q) {
-                $q->select('id', 'name');
-            }])->select('id', 'name', 'type', 'teacher_id', 'academic_year_id')->findOrFail($request->id);
+                $q->select('id', 'name',);
+            }])->select('id', 'name', 'type', 'teacher_id', 'academic_year_id',)->findOrFail($request->id);
 
+
+            
             $result['model'] = $model;
 
         } catch (Throwable $e) {

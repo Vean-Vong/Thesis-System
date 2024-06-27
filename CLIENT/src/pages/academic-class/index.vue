@@ -370,7 +370,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
 meta:
-  title: academic-class
+  title: Study Class
   layout: default
   subject: Auth
   active: 'academic-class'
