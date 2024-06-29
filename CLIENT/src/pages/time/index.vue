@@ -71,7 +71,7 @@ onMounted(() => {
             <VRow justify="start">
               <VCol cols="12" md="4">
                 <VTextField v-model="search" :placeholder="$t('Search')" append-inner-icon="mdi-search"
-                  @keypress.enter="q" @click:append-inner="q" />
+                  @keypress.enter="q" @click:append-inner="q" @update:modelValue="fetchData"/>
               </VCol>
               <VCol cols="12" md="4"></VCol>
               <v-col cols="6" md="4" class="text-end">
