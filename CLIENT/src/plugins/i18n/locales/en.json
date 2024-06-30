@@ -1,4 +1,6 @@
 {
+  "setting": "Settings",
+  "is_new": "Is New",
   "make_as_stop_student": "Make as Stop Student",
   "make_as_new_student": "Make as New Student",
   "academic_year_create": "Create Term",

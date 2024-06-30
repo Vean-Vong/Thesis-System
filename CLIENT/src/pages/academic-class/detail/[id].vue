@@ -381,68 +381,76 @@ onMounted(() => {
                     <span v-if="row.status == 2">Stop</span>
                   </td>
                   <td v-text="row.is_new == 1 ? 'New' : ''" />
-                  <td v-if="row.status != 0">
-                    <v-btn
-                      v-if="row.is_new != 1"
-                      @click="onNewStudent(row.id)"
-                      color="white"
-                      elevation="0"
-                      flat
-                    >
-                      <v-icon color="error">mdi-new-box</v-icon>
-                      <v-tooltip
-                        activator="parent"
+                  <td>
+                    <div class="d-flex justify-space-around">
+                      <VMenu
+                        open-on-hover
                         location="bottom"
+                        transition="slide-y-transition"
                       >
-                        {{ $t('make_as_new_student') }}
-                      </v-tooltip>
-                    </v-btn>
-                    <v-btn
-                      v-if="row.status != 2"
-                      @click="onStopStudent(row.id)"
-                      color="white"
-                      elevation="0"
-                      flat
-                    >
-                      <v-icon color="error">mdi-stop-circle</v-icon>
-                      <v-tooltip
-                        activator="parent"
-                        location="bottom"
-                      >
-                        {{ $t('make_as_stop_student') }}
-                      </v-tooltip>
-                    </v-btn>
-                    <v-btn
-                      @click="onMoveStudent(row.id)"
-                      color="white"
-                      elevation="0"
-                      flat
-                    >
-                      <v-icon color="warning">mdi-forwardburger</v-icon>
-                      <v-tooltip
-                        activator="parent"
-                        location="bottom"
-                      >
-                        {{ $t('transfer_students') }}
-                      </v-tooltip>
-                    </v-btn>
-                    <v-btn
-                      @click="onDelete(row.id)"
-                      color="white"
-                      elevation="0"
-                      flat
-                    >
-                      <v-icon color="error">mdi-trash</v-icon>
-                      <v-tooltip
-                        activator="parent"
-                        location="bottom"
-                      >
-                        {{ $t('remove_student') }}
-                      </v-tooltip>
-                    </v-btn>
+                        <template v-slot:activator="{ props }">
+                          <VBtn
+                            class="menu-btn"
+                            color="primary"
+                            v-bind="props"
+                            icon="mdi-dots-vertical"
+                            variant="plain"
+                          ></VBtn>
+                        </template>
+                        <VList
+                          class="menu-list"
+                          style="margin-left: -120px"
+                        >
+                          <VListItem
+                            v-if="row.is_new != 1"
+                            @click="onNewStudent(row.id)"
+                          >
+                            <VListItemContent
+                              class="menu-item"
+                              style="display: flex; gap: 4px"
+                            >
+                              <VIcon color="error">mdi-new-box</VIcon>
+                              <VListItemTitle>{{ $t('make_as_new_student') }}</VListItemTitle>
+                            </VListItemContent>
+                          </VListItem>
+
+                          <VListItem
+                            v-if="row.status != 2"
+                            @click="onStopStudent(row.id)"
+                          >
+                            <VListItemContent
+                              class="menu-item"
+                              style="display: flex; gap: 4px"
+                            >
+                              <VIcon color="error">mdi-stop-circle</VIcon>
+                              <VListItemTitle>{{ $t('make_as_stop_student') }}</VListItemTitle>
+                            </VListItemContent>
+                          </VListItem>
+
+                          <VListItem @click="onMoveStudent(row.id)">
+                            <VListItemContent
+                              class="menu-item"
+                              style="display: flex; gap: 4px"
+                            >
+                              <VIcon color="warning">mdi-forwardburger</VIcon>
+                              <VListItemTitle>{{ $t('transfer_students') }}</VListItemTitle>
+                            </VListItemContent>
+                          </VListItem>
+
+                          <VListItem @click="onDelete(row.id)">
+                            <VListItemContent
+                              class="menu-item"
+                              style="display: flex; gap: 4px"
+                            >
+                              <VIcon color="error">mdi-trash</VIcon>
+                              <VListItemTitle>{{ $t('remove_student') }}</VListItemTitle>
+                            </VListItemContent>
+                          </VListItem>
+                        </VList>
+                      </VMenu>
+                    </div>
                   </td>
                 </tr>
-                <tr></tr>
               </tbody>
             </VTable>
           </v-card-text>

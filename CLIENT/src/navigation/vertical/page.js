@@ -47,7 +47,7 @@ export default [
     icon: { icon: 'mdi-calendar-edit-outline', size: 15 },
     active: 'academic-year',
   },
-  { heading: 'Settings' },
+  { heading: 'setting' },
   {
     title: 'Preference Settings',
     to: 'settings-account-settings',
