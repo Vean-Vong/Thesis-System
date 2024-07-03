@@ -47,7 +47,7 @@ const statistics = ref([
     icon: 'mdi-account-star',
     color: 'warning',
     name: 'users',
-    to: '/user',
+    to: 'settings/user-settings',
     i18nKey: 'total_users',
   },
 ])

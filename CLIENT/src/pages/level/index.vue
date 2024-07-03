@@ -86,6 +86,7 @@ onMounted(() => {
                   append-inner-icon="mdi-search"
                   @keypress.enter="q"
                   @click:append-inner="q"
+                  @update:modelValue="fetchData"
                 />
               </VCol>
               <VCol
@@ -212,7 +213,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
 meta:
-  title: level
+  title: Level
   layout: default
   subject: Auth
   active: 'level'

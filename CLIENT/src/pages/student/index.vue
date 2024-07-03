@@ -99,7 +99,7 @@ onMounted(() => {
         <VRow justify="start">
           <VCol cols="12" md="4">
             <VTextField v-model="search" :placeholder="$t('Search')" append-inner-icon="mdi-search" @keypress.enter="q"
-              @click:append-inner="q" />
+              @click:append-inner="q" @update:modelValue="fetchData"/>
           </VCol>
           <VCol cols="12" md="4"></VCol>
           <VCol cols="6" md="4" class="text-end">
@@ -151,21 +151,21 @@ onMounted(() => {
                       <VListItem @click="show(row.id)">
                         <VListItemContent class="menu-item">
                           <VIcon color="grey">mdi-eye</VIcon>
-                          <VListItemTitle>View</VListItemTitle>
+                          <VListItemTitle>{{ $t('detail') }}</VListItemTitle>
                         </VListItemContent>
                       </VListItem>
 
                       <VListItem @click="edit(row.id)">
                         <VListItemContent class="menu-item">
                           <VIcon color="success">mdi-square-edit-outline</VIcon>
-                          <VListItemTitle>Update</VListItemTitle>
+                          <VListItemTitle>{{$t('edit')}}</VListItemTitle>
                         </VListItemContent>
                       </VListItem>
 
                       <VListItem @click="onDelete(row.id)">
                         <VListItemContent class="menu-item">
                           <VIcon color="error">mdi-minus-circle</VIcon>
-                          <VListItemTitle>Disable</VListItemTitle>
+                          <VListItemTitle>{{$t('delete')}}</VListItemTitle>
                         </VListItemContent>
                       </VListItem>
                     </VList>

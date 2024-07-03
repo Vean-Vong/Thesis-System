@@ -625,7 +625,7 @@ onMounted(() => {
 
 <route lang="yaml">
 meta:
-  title: Update_Student_List
+  title: Update Student
   layout: default
   subject: Auth
   active: 'student'

@@ -62,8 +62,8 @@ onMounted(() => {});
 </template>
 <route lang="yaml">
   meta:
-    title: room-create 
+    title: Create Room 
     layout: default
     subject: Auth
-    active: 'room-create'
+    active: 'room'
   </route>

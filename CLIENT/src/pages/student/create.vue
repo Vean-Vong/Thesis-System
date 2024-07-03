@@ -607,7 +607,7 @@ const submitHandler = async () => {
 
 <route lang="yaml">
 meta:
-  title: Student List
+  title: Create Student 
   layout: default
   subject: Auth
   active: 'student'

@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->boolean('is_finised')->default(false);
             $table->boolean('is_new')->default(false);
+            $table->date('stop_date')->nullable();
+            $table->date('transfer_date')->nullable();
+            $table->date('remove_date')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();
             $table->tinyInteger('status')->default(1)->comment('!= 1 => បានផ្ទេរ');

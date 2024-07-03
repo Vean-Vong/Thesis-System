@@ -68,3 +68,10 @@ onMounted(() => {
     </v-card>
   </div>
 </template>
+<route lang="yaml">
+  meta:
+    title: Detail Teacher
+    layout: default
+    subject: Auth
+    active: 'teacher'
+  </route>

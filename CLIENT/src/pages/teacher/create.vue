@@ -294,7 +294,7 @@ const submitHandler = async () => {
                   :loading="submitting"
                   color="success"
                 >
-                  <VIcon>mdi-add</VIcon>
+                <VIcon class="me-2">mdi-content-save-all</VIcon>
                   {{ $t('Save changes') }}
                 </VBtn>
 
@@ -316,7 +316,7 @@ const submitHandler = async () => {
 </template>
 <route lang="yaml">
   meta:
-    title: teachers-list
+    title: Teacher
     layout: default
     subject: Auth
     active: 'teacher'
