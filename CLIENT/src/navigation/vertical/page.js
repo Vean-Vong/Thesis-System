@@ -15,7 +15,7 @@ export default [
 
     title: "level",
     to: "level",
-    icon: { icon: "mdi-layers-triple", size: 15 },
+    icon: { icon: "mdi-layers-triple-outline", size: 15 },
     active: 'level',
   },
   {
@@ -29,7 +29,7 @@ export default [
     title: "academic_Class",
     to: "academic-class",
     icon: { icon: "mdi-account-tie", size: 15 },
-    
+
     title: 'room',
     to: 'room',
     icon: { icon: 'mdi-google-classroom', size: 15 },
