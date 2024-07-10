@@ -74,6 +74,10 @@ const show = id => {
   router.push(`/academic-class/detail/${id}`)
 }
 
+const check = id => {
+  router.push(`/academic-class/check?id=${id}`)
+}
+
 const onDelete = id => {
   confirmDialog.value = true
   delete_item.value = id
@@ -251,6 +255,20 @@ onMounted(() => {
                       </v-tooltip>
                     </v-btn>
                     <v-btn
+                      @click="check(row.id)"
+                      color="white"
+                      elevation="0"
+                      flat
+                    >
+                      <v-icon color="grey">mdi-note-check</v-icon>
+                      <v-tooltip
+                        activator="parent"
+                        location="bottom"
+                      >
+                        {{ $t('check') }}
+                      </v-tooltip>
+                    </v-btn>
+                    <v-btn
                       @click="edit(row.id)"
                       color="white"
                       elevation="0"
@@ -264,21 +282,9 @@ onMounted(() => {
                         {{ $t('edit') }}
                       </v-tooltip>
                     </v-btn>
-                    <!-- <v-btn
-                      v-if="user.can('academic_class_edit')"
-                      @click="edit(row.id)"
-                      color="white"
-                      elevation="0"
-                      flat
-                    >
-                      <v-icon color="success">mdi-square-edit-outline</v-icon>
-                      <v-tooltip
-                        activator="parent"
-                        location="bottom"
-                      >
-                        កែប្រែ
-                      </v-tooltip>
-                    </v-btn> -->
+                    
+                    
+                    
                     <v-btn
                       @click="onDelete(row.id)"
                       color="white"

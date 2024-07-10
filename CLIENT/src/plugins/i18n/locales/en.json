@@ -1,4 +1,5 @@
 {
+  "check": "Check Student",
   "setting": "Settings",
   "is_new": "Is New",
   "make_as_stop_student": "Make as Stop Student",
@@ -55,7 +56,7 @@
   "back": "Back",
   "NO": "No",
   "class": "Grade",
-  "checked": "Checked",
+  "checked": "Check Class",
   "ongoing": "Ongoing",
   "in progress": "In Progress...",
   "edit": "Edit",
