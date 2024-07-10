@@ -1,10 +1,6 @@
 {
-<<<<<<< HEAD
   "check": "Check Student",
-=======
-  "study_history": "study_history",
-  "time": "time",
->>>>>>> fc297f5af4a433dcbf5f0c932cfe686fdf90a285
+  "study_history": "Study History",
   "setting": "Settings",
   "is_new": "Is New",
   "make_as_stop_student": "Make as Stop Student",
@@ -13,7 +9,7 @@
   "edit roles": "Update Role",
   "time_update": "Update Time",
   "time-create": "Create Time",
-  "time": "Time",
+  "time1": "Time",
   "level-update": "Update Level",
   "level-create": "Create Level",
   "level": "Level",

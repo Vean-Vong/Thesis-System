@@ -1,10 +1,6 @@
 {
-<<<<<<< HEAD
   "check": "ពិនិត្យមើលសិស្ស",
-=======
   "study_history": "ប្រវិត្តិនៃការសិក្សា",
-  "time-create": "ម៉ោងសិក្សា",
->>>>>>> fc297f5af4a433dcbf5f0c932cfe686fdf90a285
   "setting": "ការកំណត់",
   "is_new": "សិស្សថ្មី",
   "make_as_stop_student": "សិស្សឈប់",
@@ -48,7 +44,6 @@
   "insert_student_to_class": "ដាក់សិស្សចូលថ្នាក់",
   "confirm_stop_student": "តើអ្នកប្រាកដក្នុងការបញ្ឈប់សិស្សពីថ្នាក់នេះ?",
   "confirm_new_student": "តើអ្នកប្រាកដក្នុងការដាក់សិស្សថ្មីថ្នាក់នេះ?",
-  "insert_student_to_class": "​ដាក់សិស្សចូលថ្នាក់",
   "select_student": "ដាក់សិស្សចូលថ្នាក់",
   "remove_student": "ដកសិស្សចេញ",
   "transfer_students": "ផ្ទេរសិស្សចេញ",
@@ -74,7 +69,6 @@
   "delete_class": "តើអ្នកប្រាកដក្នុងការលុបថ្នាក់សិក្សានេះ។",
   "update teacher": "កែប្រែគ្រូបង្រៀន",
   "update student": "កែប្រែសិស្ស",
-  "update year": "កែប្រែឆ្នាំសិក្សា",
   "update year": "កែប្រែវគ្គសិក្សា",
   "update school": "កែប្រែសាលារៀន",
   "update class": "កែប្រែថ្នាក់រៀន",
