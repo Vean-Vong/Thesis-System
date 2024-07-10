@@ -1,22 +1,29 @@
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/plugins/utilites'
 import moment from 'moment'
+
 const route = useRoute()
 
 const student = ref({})
+const academicClasses = ref([])
 
-let getData = () => {
-  console.table(route.query.id)
+const getData = () => {
   if (route.query.id) {
-    api.post(`students-show`, { id: route.query.id }).then(res => {
-      console.log(res.data.model)
-      student.value = res.data?.model
-      console.table(student)
+    api.post('academic-classes-list-study-history', { student_id: route.query.id }).then(res => {
+      if (res.data.status === 200) {
+        student.value = res.data.student
+        academicClasses.value = res.data.academic_classes
+      } else {
+        console.error(res.data.message)
+      }
+    }).catch(error => {
+      console.error(error)
     })
   }
 }
+
 const formatDate = date => {
   return moment(date).format('D-MMM-YYYY')
 }
@@ -25,49 +32,31 @@ onMounted(() => {
   getData()
 })
 </script>
+
 <template>
-  <!-- <h1>{{ route.query.id }}</h1> -->
   <div>
-    <v-card>
-      <v-card-title> {{ $t('student_list') }} </v-card-title>
-    </v-card>
+    <VCard>
+      <VCardTitle>{{ $t('student_list') }}</VCardTitle>
+    </VCard>
+
     <v-card class="mt-7">
-      <v-btn
-        class="mt-4 mx-5"
-        color="secondary"
-        variant="outlined"
-        @click="$router.go(-1)"
-        ><v-icon>mdi-arrow-back</v-icon>&nbsp;{{ $t('back') }}</v-btn
-      >
-      <v-row>
-        <v-col
-          col="12"
-          md="3"
-          class="mt-8 ml-12"
-        >
-          <v-img
-            alt="student"
-            src="https://cdn-icons-png.flaticon.com/512/1154/1154987.png"
-            width="70%"
-          >
-          </v-img>
-        </v-col>
-        <v-col>
-          <v-row class="align-center mx-4">
-            <v-card-title
-              class="text-center bg-success rounded-pill w-25"
-              style="padding: 2px"
-            >
-              {{ $t('profile') }}
-            </v-card-title>
-            <v-card-title
-              class="bg-success rounded-pill w-75"
-              style="margin-left: -3px; padding: 3px"
-            >
-            </v-card-title>
-          </v-row>
-          <v-row>
-            <v-col>
+      <v-btn class="mt-4 mx-5 " color="primary" variant="outlined" @click="$router.go(-1)">
+        <v-icon>mdi-arrow-back</v-icon>&nbsp;{{ $t('back') }}
+      </v-btn>
+      <v-divider class="mt-4"></v-divider>
+      <div>
+        <v-row class="mt-1">
+          <v-col cols="12" md="3">
+            <h3 class="mb-3 mx-3">{{ $t('profile') }}</h3>
+            <v-card class="pa-2">
+              <v-col cols="12" class="d-flex justify-center align-center">
+                <v-img alt="student" src="https://cdn-icons-png.flaticon.com/512/1154/1154987.png" width=""
+                  height="150"></v-img>
+              </v-col>
+
+              <v-chip class="mx-4" color="primary">
+                {{ $t('profile') }}
+              </v-chip>
               <v-card-text>{{ $t('code') }} : {{ student.code }}</v-card-text>
               <v-card-text>{{ $t('headers.name') }} : {{ student.last_name + ' ' + student.first_name }}</v-card-text>
               <v-card-text>{{ $t('dob') }} : {{ formatDate(student.dob) }}</v-card-text>
@@ -76,147 +65,30 @@ onMounted(() => {
               <v-card-text>{{ $t('from') }} : {{ student.from }}</v-card-text>
               <v-card-text>{{ $t('headers.phone_number') }} : {{ student.phone }}</v-card-text>
               <v-card-text>{{ $t('other') }} : {{ student.other }}</v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row class="mx-2">
-        <v-col>
-          <v-row class="align-center mx-1">
-            <v-card-title
-              class="bg-primary rounded-pill w-25 text-center"
-              style="padding: 2px"
-              >{{ $t('pob') }}</v-card-title
-            >
-            <v-card-title
-              class="bg-primary rounded-pill w-75"
-              style="margin-left: -3px; font-size: 12px; padding: 3px"
-            >
-            </v-card-title>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card-text>{{ $t('village') }} : {{ student.village_birth }} </v-card-text>
-              <v-card-text>{{ $t('district') }} : {{ student.district_birth }}</v-card-text>
-            </v-col>
-            <v-col>
-              <v-card-text>{{ $t('commune') }} : {{ student.commune_birth }} </v-card-text>
-              <v-card-text>{{ $t('province') }} : {{ student.province_birth }}</v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col>
-          <v-row class="align-center mx-1">
-            <v-card-title
-              class="bg-primary rounded-pill w-25 text-center"
-              style="padding: 2px"
-              >{{ $t('add') }}</v-card-title
-            >
-            <v-card-title
-              class="bg-primary rounded-pill w-75"
-              style="margin-left: -3px; font-size: 12px; padding: 3px"
-            >
-            </v-card-title>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card-text>{{ $t('village') }} : {{ student.village_birth }} </v-card-text>
-              <v-card-text>{{ $t('district') }} : {{ student.district_birth }}</v-card-text>
-            </v-col>
-            <v-col>
-              <v-card-text>{{ $t('commune') }} : {{ student.commune_birth }} </v-card-text>
-              <v-card-text>{{ $t('province') }} : {{ student.province_birth }}</v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row class="mx-2">
-        <v-col col="12">
-          <v-row class="align-center mx-1">
-            <v-card-title
-              class="bg-primary rounded-pill w-25 text-center"
-              style="padding: 2px"
-              >{{ $t('father_infor') }}</v-card-title
-            >
-            <v-card-title
-              class="bg-primary rounded-pill w-75"
-              style="margin-left: -3px; font-size: 12px; padding: 3px"
-            >
-            </v-card-title>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card-text
-                >{{ $t('headers.name') }} : {{ student.d_last_name + ' ' + student.d_first_name }}</v-card-text
-              >
-              <v-card-text>{{ $t('job') }} : {{ student.d_job }}</v-card-text>
-              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.d_phone_number }}</v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col>
-          <v-row class="align-center mx-1">
-            <v-card-title
-              class="bg-primary rounded-pill w-25 text-center"
-              style="padding: 2px"
-              >{{ $t('mother_infor') }}</v-card-title
-            >
-            <v-card-title
-              class="bg-primary rounded-pill w-75"
-              style="margin-left: -3px; font-size: 12px; padding: 3px"
-            >
-            </v-card-title>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-card-text
-                >{{ $t('headers.name') }} : {{ student.m_last_name + ' ' + student.m_first_name }}</v-card-text
-              >
-              <v-card-text>{{ $t('job') }} : {{ student.m_job }}</v-card-text>
-              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.m_phone_number }}</v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row class="mx-2">
-        <v-col cols="12">
-          <v-row class="align-center mx-1">
-            <v-card-title
-              class="bg-primary rounded-pill w-25 text-center"
-              style="padding: 3px"
-              >{{ $t('guardian') }}</v-card-title
-            >
-            <v-card-title
-              class="bg-primary rounded-pill w-75"
-              style="margin-left: -3px; padding: 3px"
-            >
-            </v-card-title>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-card-text
-                >{{ $t('headers.name') }} : {{ student.g_last_name + ' ' + student.g_first_name }}</v-card-text
-              >
-              <v-card-text>{{ $t('detail') }} : {{ student.g_detail }}</v-card-text>
-            </v-col>
-            <v-col
-              cols="12"
-              md="2"
-            >
-              <v-card-text>{{ $t('headers.gender') }} : {{ student.g_gender }}</v-card-text>
-            </v-col>
-            <v-col
-              cols="12"
-              md="6"
-            >
-              <v-card-text>{{ $t('headers.phone_number') }} : {{ student.g_phone_number }}</v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="9">
+            <h3 class="mb-3 mx-3">{{ $t('study_history') }}</h3>
+            <div v-for="(academicClass, index) in academicClasses" :key="index" class="mb-3">
+              <v-card class="pa-2">
+                <v-card-text>
+                  <v-card-title>{{ $t('academic_year') }}: {{ academicClass.academic_year?.name }}</v-card-title>
+                  <div class="col">
+                    <v-card-title>{{ $t('room') }}: {{ academicClass.room?.room }}</v-card-title>
+                  </div>
+                  <div class="col">
+                    <v-card-title>{{ $t('time') }}: {{ academicClass.time ? academicClass.time.start_time + ' - ' +
+                      academicClass.time.end_time : 'N/A' }}</v-card-title>
+                  </div>
+                  <div class="col">
+                    <v-card-title>{{ $t('teacher') }}: {{ academicClass.teacher?.name }}</v-card-title>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
     </v-card>
   </div>
 </template>
