@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('users-create', [UserController::class, 'store']);
     Route::post('users-call-org-role', [UserController::class, 'callOrgRole']);
     Route::post('users-list', [UserController::class, 'list']);
+    Route::post('users-init', [UserController::class, 'init']);
     Route::post('users-show', [UserController::class, 'show']);
     Route::post('users-update', [UserController::class, 'update']);
     Route::post('users-delete', [UserController::class, 'delete']);

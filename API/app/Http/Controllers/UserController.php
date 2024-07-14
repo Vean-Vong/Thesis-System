@@ -189,4 +189,66 @@ class UserController extends Controller
 
         return response()->json($result);
     }
+
+    public function init()
+    {
+
+        // can('create users', 'edit user');
+
+        $result['status'] = 200;
+
+        try {
+
+            $roles = Role::select('id', 'name')->get();
+
+            // $exist_employee_id = User::select('employee_id')->whereNotNull('employee_id')->when(request('user_id'), function ($q) {
+            //     $q->where('id', '!=', request('user_id'));
+            // })->pluck('employee_id')->toArray();
+
+            // $employees = Employee::select('id', DB::raw("CONCAT(code, ' - ', latin_name) AS name"))
+            //     ->whereNotIn('id', $exist_employee_id)
+            //     ->get();
+
+            $result['data'] = [
+                'roles' => $roles,
+                // 'employees' => $employees
+            ];
+
+        } catch (Throwable $e) {
+            // errorLog($e->getMessage());
+            $result['status'] = 201;
+            $result['message'] = trans('Internal Server Error');
+        }
+
+        return response()->json($result);
+    }
+
+    public function disableEnable(Request $request)
+    {
+
+        can('user_access', '');
+
+        $result['status'] = 200;
+
+        try {
+
+            $user = User::find($request->id);
+
+            if($user == null) {
+                return NotFoundResourceException($request->id, 'user');
+            }
+
+            $user->is_disabled = $request->disable;
+
+            $user->save();
+
+            $result['message'] = $request->disable === 1 ? trans('Successfully disabled user') : trans('Successfully enabled user');
+        } catch (Throwable $e) {
+            errorLog($e->getMessage());
+            $result['status'] = 201;
+            $result['message'] = trans('Internal Server Error');
+        }
+
+        return response()->json($result);
+    }
 }
