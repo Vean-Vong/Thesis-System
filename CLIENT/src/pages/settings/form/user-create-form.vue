@@ -7,7 +7,7 @@ const form = reactive({
     username: null,
     email: null,
     employee_id: null,
-    role_ids: null,
+    role_id: null,
   },
   options: {
     roles: [],
@@ -70,7 +70,7 @@ const onCreate = async () => {
           />
         </VCol>
 
-        <VCol cols="12">
+        <!-- <VCol cols="12">
           <AppAutocomplete
             id="staff_id"
             v-model="form.data.employee_id"
@@ -80,12 +80,12 @@ const onCreate = async () => {
             :label="$t('Select Employee')"
             chip
           />
-        </VCol>
+        </VCol> -->
 
         <VCol cols="12">
           <AppSelect
             id="role_ids"
-            v-model="form.data.role_ids"
+            v-model="form.data.role_id"
             :items="form.options.roles"
             item-value="id"
             item-title="name"

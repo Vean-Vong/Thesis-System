@@ -56,6 +56,10 @@ const show = id => {
   router.push(`/academic-year/${id}`)
 }
 
+const check = id => {
+  router.push(`/academic-year/check?id=${id}`)
+}
+
 const onDelete = id => {
   confirmDialog.value = true
   role_id.value = id
@@ -194,6 +198,20 @@ onMounted(() => {
                         location="bottom"
                       >
                         {{$t('edit')}}
+                      </v-tooltip>
+                    </v-btn>
+                    <v-btn
+                      @click="check(row.id)"
+                      color="white"
+                      elevation="0"
+                      flat
+                    >
+                      <v-icon color="grey">mdi-note-check</v-icon>
+                      <v-tooltip
+                        activator="parent"
+                        location="bottom"
+                      >
+                        {{ $t('check') }}
                       </v-tooltip>
                     </v-btn>
                     <v-btn

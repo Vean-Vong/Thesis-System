@@ -71,7 +71,7 @@ const headers = [
   },
   {
     title: t("Role"),
-    key: "roles",
+    key: "roles[0].name",
     align: "center",
     sortable: false,
   },
@@ -150,11 +150,9 @@ const confirmDeleteCallback = () => {
     :current-page="meta?.current_page"
     :to="meta?.to"
     :can-edit="user.can('edit_users')"
-    :can-view="user.can('view_users')"
     :can-delete="user.can('delete_users')"
     :can-create="user.can('create_users')"
     @on-edit="editCallback"
-    @on-view="viewCallback"
     @on-update="updateCallback"
     @on-delete="deleteCallback"
     btnSubmit="CreateNew"

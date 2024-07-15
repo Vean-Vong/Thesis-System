@@ -7,7 +7,7 @@ const form = reactive({
     username: null,
     email: null,
     employee_id: null,
-    role_ids: null,
+    role_id: null,
   },
   options: {
     roles: [],
@@ -24,14 +24,15 @@ onMounted(async () => {
 
 const initForm = async () => {
   const query = router.currentRoute.value.query;
-
   await api.post("/users-show", { id: query.uuid }).then((res) => {
     form.data = res.data.data;
   });
 
-  await api.post("users-init", { user_id: query.uuid }).then((res) => {
+  await api.post("users-init").then((res) => {
     form.options = res.data.data;
   });
+
+  form.data.role_id = form.data.roles[0].id
 };
 
 const onUpdate = async () => {
@@ -78,7 +79,7 @@ const onUpdate = async () => {
             :rules="[(v) => !!v || $t('Email') + $t('required')]"
           />
         </VCol>
-
+<!-- 
         <VCol cols="12">
           <AppAutocomplete
             id="staff_id"
@@ -89,12 +90,12 @@ const onUpdate = async () => {
             :label="$t('Select Employee')"
             chip
           />
-        </VCol>
+        </VCol> -->
 
         <VCol cols="12">
           <AppSelect
-            id="role_ids"
-            v-model="form.data.role_ids"
+            id="role_id"
+            v-model="form.data.role_id"
             :items="form.options.roles"
             item-value="id"
             item-title="name"
