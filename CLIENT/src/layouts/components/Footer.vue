@@ -3,7 +3,7 @@
     <!-- 👉 Footer: left content -->
     <span class="d-flex align-center">
       &copy;
-      {{ new Date().getFullYear() }}
+      <!-- {{ new Date().getFullYear() }}
       {{ $t("Powered By") }}
       <a
         href="https://houseofcoders.dev/"
@@ -11,7 +11,8 @@
         rel="noopener noreferrer"
         class="text-primary ms-1"
         >{{ $t("Team Name") }}</a
-      >
+      > -->
+      {{ $t("student_credit") }}
     </span>
   </div>
 </template>

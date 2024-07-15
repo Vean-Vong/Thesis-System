@@ -207,7 +207,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      6
+                    
                     </td>
                   </tr>
                   <tr>
@@ -221,7 +221,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      6
+                    
                     </td>
                     <td
                       colspan="10"
@@ -234,8 +234,6 @@ onMounted(() => {
                       "
                     >
                       {{ model.academic_year?.name }}
-                      <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
-                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
                   </tr>
 
@@ -249,7 +247,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Teacher :
+                      Teacher : {{ model.teacher?.name }}
                     </td>
                     <td
                       colspan="6"
@@ -260,7 +258,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Room : {{ model.name }}
+                      Room : {{ model.room?.room }}
                     </td>
                   </tr>
                   <tr style="line-height: 40px">
@@ -273,8 +271,8 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Level &nbsp;&nbsp;&nbsp;:
-                    </td>
+                      Level &nbsp;&nbsp;&nbsp;: {{ model.level?.level }}
+                    </td> 
                     <td
                       colspan="6"
                       style="
@@ -284,7 +282,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Time &nbsp;:
+                      Time &nbsp;: {{ model.time?.time }}
                     </td>
                   </tr>
                   <tr style="font-family: 'Times New Roman', Times, serif;font-size: 17px;">

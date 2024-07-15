@@ -174,12 +174,18 @@ class AcademicClassController extends Controller
 
             $model = AcademicClass::with(['teacher' => function ($q) {
                 $q->select('id', 'name');
+            }, 'room' => function ($q) {
+                $q->select('id', 'room',);
+            }, 'time' => function ($q) {
+                $q->select('id', 'time',);
+            }, 'level' => function ($q) {
+                $q->select('id', 'level',);
             }, 'academicYear' => function ($q) {
                 $q->select('id', 'name',);
-            }])->select('id', 'name', 'type', 'teacher_id', 'academic_year_id',)->findOrFail($request->id);
+            }])->select('id', 'name', 'type', 'teacher_id', 'room_id','time_id', 'level_id', 'academic_year_id',)->findOrFail($request->id);
 
 
-            
+
             $result['model'] = $model;
 
         } catch (Throwable $e) {
