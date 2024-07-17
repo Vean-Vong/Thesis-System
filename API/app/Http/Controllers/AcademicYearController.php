@@ -163,11 +163,11 @@ class AcademicYearController extends Controller
             $data['englist']['pass']['M'] = $englist->where('students.gender', 1)->count();
             $data['englist']['pass']['F'] = $data['englist']['pass']['total'] - $data['englist']['pass']['M'];
 
-            // $englist = Exam::join('academic_classes', 'academic_classes.id', 'academic_class_id')
-            //     ->join('students', 'students.id', 'student_id')->where('academic_classes.type', 2)
-            //     ->where('academic_year_id', $req->term_id);
-            $data['englist']['drop']['total'] = 0;
-            $data['englist']['drop']['M'] = 0;
+            $englist = Study::join('academic_classes', 'academic_classes.id', 'academic_class_id')
+                ->join('students', 'students.id', 'student_id')->where('academic_classes.type', 2)
+                ->where('academic_year_id', $req->term_id);
+            $data['englist']['drop']['total'] = $englist->where('studies.status', '<>', 1)->count();
+            $data['englist']['drop']['M'] = $englist->where('students.gender', 1)->count();
             $data['englist']['drop']['F'] = $data['englist']['drop']['total'] - $data['englist']['drop']['M'];
 
             // $englist = Exam::join('academic_classes', 'academic_classes.id', 'academic_class_id')
@@ -207,11 +207,11 @@ class AcademicYearController extends Controller
             $data['computer']['pass']['M'] = $computer->where('students.gender', 1)->count();
             $data['computer']['pass']['F'] = $data['computer']['pass']['total'] - $data['computer']['pass']['M'];
 
-            // $computer = Exam::join('academic_classes', 'academic_classes.id', 'academic_class_id')
-            //     ->join('students', 'students.id', 'student_id')->where('academic_classes.type', 3)
-            //     ->where('academic_year_id', $req->term_id);
-            $data['computer']['drop']['total'] = 0;
-            $data['computer']['drop']['M'] = 0;
+            $computer = Study::join('academic_classes', 'academic_classes.id', 'academic_class_id')
+                ->join('students', 'students.id', 'student_id')->where('academic_classes.type', 3)
+                ->where('academic_year_id', $req->term_id);
+            $data['computer']['drop']['total'] = $computer->where('studies.status', '<>', 1)->count();
+            $data['computer']['drop']['M'] = $computer->where('students.gender', 1)->count();
             $data['computer']['drop']['F'] = $data['computer']['drop']['total'] - $data['computer']['drop']['M'];
 
             // $computer = Exam::join('academic_classes', 'academic_classes.id', 'academic_class_id')
