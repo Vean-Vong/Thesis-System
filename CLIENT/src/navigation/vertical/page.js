@@ -20,7 +20,7 @@ export default [
   },
   {
 
-    title: "time",
+    title: "time1",
     to: "time",
     icon: { icon: "mdi-clock-edit-outline", size: 15 },
     active: 'time',

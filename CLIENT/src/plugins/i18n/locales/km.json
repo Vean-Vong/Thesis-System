@@ -1,4 +1,9 @@
 {
+  "Students Register in This Year":"សិស្សចុះឈ្មោះនៅឆ្នាំនេះ",
+  "New Student this Term Female":"សិស្សស្រីក្នុងវគ្គសិក្សា",
+  "New Student this Term Male":"សិស្សប្រុសក្នុងវគ្គសិក្សា",
+  "New Student this Term":"សិស្សក្នុងវគ្គសិក្សា",
+  "Class in This Term":"ថ្នាក់ក្នុងវគ្គសិក្សា",
   "check": "ពិនិត្យមើលលទ្ធផលវគ្គសិក្សា",
   "study_history": "ប្រវិត្តិនៃការសិក្សា",
   "setting": "ការកំណត់",
@@ -8,7 +13,7 @@
   "academic_year_create": "បង្កើតវគ្គសិក្សា",
   "time_update": "កែប្រែម៉ោងសិក្សា",
   "time-create": "បង្កើតម៉ោងសិក្សា",
-  "time": "ម៉ោងសិក្សា",
+  "time1": "ម៉ោងសិក្សា",
   "level-update": "កែប្រែកម្រិតសិក្សា",
   "level-create": "កម្រិតសិក្សា",
   "level": "កម្រិតសិក្សា",

@@ -251,10 +251,10 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Teacher :{{ model.teacher?.name }}
+                      Teacher :  {{ model.teacher?.name }}
                     </td>
                     <td
-                      colspan="6"
+                      colspan="4"
                       style="
                         text-align: center;
                         font-weight: bold;
@@ -262,12 +262,12 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Room : {{ model.room?.room }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Room : {{ model.room?.room }}
                     </td>
                   </tr>
                   <tr style="line-height: 40px">
                     <td
-                      colspan="1"
+                      colspan="2"
                       style="
                         text-align: center;
                         font-weight: bold;
@@ -275,10 +275,10 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Level &nbsp;&nbsp;&nbsp;: {{ model.level?.level }}
+                    &nbsp;&nbsp; Level &nbsp;: {{ model.name }}
                     </td>
                     <td
-                      colspan="6"
+                      colspan="4"
                       style="
                         text-align: center;
                         font-weight: bold;
@@ -286,7 +286,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Time &nbsp;: {{ model.time?.time }}
+                    &nbsp;  Time &nbsp;: {{ model.time?.time }}
                     </td>
                   </tr>
                   <tr style="font-family: 'Times New Roman', Times, serif; font-size: 17px">

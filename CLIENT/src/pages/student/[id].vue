@@ -104,7 +104,7 @@ const submitHandler = async () => {
         formData.append(key, formDataLocal.value[key])
       }
     })
-
+    // console.log(formDataLocal.value.photo_path)
     api
       .post('students-update', formData)
       .then(() => {

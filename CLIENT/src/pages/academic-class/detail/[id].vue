@@ -62,6 +62,7 @@ const searchStudent = () => {
       perPage: perPage.value,
       page: currentPage.value,
       academic_year_id: model.value.academic_year.id,
+      academic_class_id: params.id,
     })
     .then(response => {
       data.value = response.data.data.data

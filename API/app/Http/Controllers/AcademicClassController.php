@@ -201,16 +201,17 @@ class AcademicClassController extends Controller
 
         try {
 
-            $exists_student_year = Student::orderByDesc('students.id')
+            $exists_student = Student::orderByDesc('students.id')
             ->leftJoin('studies', 'studies.student_id', 'students.id')
             ->join('academic_classes', 'academic_classes.id', 'studies.academic_class_id')
-            ->where('academic_classes.academic_year_id', $request->academic_year_id)
+            // ->where('academic_classes.academic_year_id', $request->academic_year_id)
             ->where('students.status', 1)
-            ->whereNotNull('studies.academic_class_id')
+            ->where('studies.academic_class_id', $request->academic_class_id)
+            // ->whereNotNull('studies.academic_class_id')
             ->whereNull('studies.deleted_at')
             ->pluck('students.id');
 
-            $result['data'] = Student::whereNotIn('id', $exists_student_year)
+            $result['data'] = Student::whereNotIn('id', $exists_student)
             ->filter([
                 'search' => $request->search,
             ])

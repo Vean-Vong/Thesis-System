@@ -1,9 +1,9 @@
 {
-  "name": "vuexy-vuejs-admin-template",
+  "name": "house-of-coders-build",
   "version": "8.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5051",
     "build": "vite build",
     "preview": "vite preview --port 5050",
     "lint": "eslint . -c .eslintrc.js --fix --ext .ts,.js,.vue,.tsx,.jsx",

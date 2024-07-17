@@ -4,12 +4,23 @@ import { useRouter } from 'vue-router'
 import api from '@/plugins/utilites'
 import VueApexCharts from 'vue3-apexcharts'
 import Id from '../academic-class/[id].vue';
+import { useI18n } from 'vue-i18n'
 const router = useRouter()
+const { t } = useI18n()
+const st_in_year = ref([])
+
 onMounted(() => {
   api.post('summary').then(response => {
-    statistics.value.forEach(element => {
-      element.stats = response.data[element.name]
-    })
+    
+    statistics.value[0].stats = response.data.academic_classes
+    statistics.value[1].stats = response.data.teachers
+    statistics.value[2].stats = response.data.students
+    statistics.value[3].stats = response.data.users
+    statistics.value[4].stats = response.data.classes_this_term
+    statistics.value[5].stats = response.data.new_students
+    statistics.value[6].stats = response.data.new_students_m
+    statistics.value[7].stats = response.data.new_students_f
+    series.value[0].data = response.data.st_in_year
   })
 })
 
@@ -18,7 +29,7 @@ const statistics = ref([
     title: 'Class Total',
     stats: 0,
     icon: 'mdi-account-group-outline',
-    color: 'primary',
+    color: '#3b28cc',
     name: 'academic_classes',
     to: '/academic-class',
     i18nKey: 'total_academic_classes',
@@ -27,7 +38,7 @@ const statistics = ref([
     title: 'Teacher Total',
     stats: 0,
     icon: 'mdi-account-tie',
-    color: 'info',
+    color: 'primary',
     name: 'teachers',
     to: '/teacher',
     i18nKey: 'teachers_total',
@@ -36,7 +47,7 @@ const statistics = ref([
     title: 'Student Total',
     stats: 0,
     icon: 'mdi-account-clock',
-    color: 'success',
+    color: '#2667ff',
     name: 'students',
     to: '/student',
     i18nKey: 'total_students',
@@ -45,10 +56,39 @@ const statistics = ref([
     title: 'User Total',
     stats: 0,
     icon: 'mdi-account-star',
-    color: 'warning',
+    color: '#3f8efc',
     name: 'users',
     to: 'settings/user-settings',
     i18nKey: 'total_users',
+  },{
+    title: 'Class in This Term',
+    stats: 0,
+    icon: 'mdi-account-group-outline',
+    color: '#3b28cc',
+    name: 'academic_classes',
+    to: '/academic-class',
+    i18nKey: 'Class in This Term',
+  },
+  {
+    title: 'New Student this Term',
+    stats: 0,
+    icon: 'mdi-account-tie',
+    color: 'primary',
+    i18nKey: 'New Student this Term',
+  },
+  {
+    title: 'New Student this Term Male',
+    stats: 0,
+    icon: 'mdi-account-clock',
+    color: '#2667ff',
+    i18nKey: 'New Student this Term Male',
+  },
+  {
+    title: 'New Student this Term Female',
+    stats: 0,
+    icon: 'mdi-account-star',
+    color: '#3f8efc',
+    i18nKey: 'New Student this Term Female',
   },
 ])
 
@@ -73,7 +113,7 @@ const chartOptions = ref({
   dataLabels: {
     enabled: true,
     formatter: function (val) {
-      return val + "%"
+      return val
     },
     offsetY: -20,
     style: {
@@ -111,18 +151,19 @@ const chartOptions = ref({
       show: false
     },
     axisTicks: {
-      show: false
+      show: true
     },
     labels: {
       show: false,
       formatter: function (val) {
-        return val + "%"
+        return val 
       }
     }
   },
   title: {
-    text: 'data of the student',
+    text: t('Students Register in This Year'),
     floating: true,
+    show: true,
     offsetY: 330,
     align: 'center',
     style: {
@@ -138,10 +179,10 @@ const go = to => {
 
 <template>
   <VCard>
-    <VCardItem>
+    <!-- <VCardItem>
       <VCardTitle class="text-xl text-primary">{{ $t('total_data_table') }}:</VCardTitle>
-    </VCardItem>
-    <VCardText>
+    </VCardItem> -->
+    <VCardText class="my-5">
       <VRow>
         <VCol
           v-for="item in statistics"
@@ -179,7 +220,7 @@ const go = to => {
         </VCol>
       </VRow>
 
-      <div class="">
+      <div class="mt-12">
         <VueApexCharts type="bar" height="350" :options="chartOptions" :series="series"></VueApexCharts>
       </div>
 

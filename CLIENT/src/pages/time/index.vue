@@ -65,7 +65,7 @@ onMounted(() => {
   <div>
     <v-row>
       <v-col cols="12" md="6" sm="12">
-        <VCard :title="$t('time')" class="mb-5">
+        <VCard :title="$t('time1')" class="mb-5">
           <VDivider />
           <VCard-text>
             <VRow justify="start">

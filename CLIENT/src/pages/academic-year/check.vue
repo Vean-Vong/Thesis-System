@@ -368,6 +368,7 @@ fetchData()
         <br />
       </div>
       <div class="chart-card">
+        <br />
         <h2 style="text-align: center">Computer Result Distribution</h2>
         <VueApexCharts
           type="bar"
@@ -377,7 +378,7 @@ fetchData()
           :series="chartSeries2"
         ></VueApexCharts>
         <h2 style="text-align: center">Computer Result {{ term.name }}</h2>
-        
+        <br/>
       </div>
     </div>
     <br />
