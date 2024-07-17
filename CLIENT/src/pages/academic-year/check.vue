@@ -220,13 +220,13 @@ fetchData()
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Beginning of term II
+            Beginning of Term
           </th>
           <th
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            End of term II
+            End of Term
           </th>
         </tr>
       </thead>

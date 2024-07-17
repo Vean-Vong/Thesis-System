@@ -184,8 +184,6 @@ class AcademicClassController extends Controller
                 $q->select('id', 'name',);
             }])->select('id', 'name', 'type', 'teacher_id', 'room_id','time_id', 'level_id', 'academic_year_id',)->findOrFail($request->id);
 
-
-
             $result['model'] = $model;
 
         } catch (Throwable $e) {
