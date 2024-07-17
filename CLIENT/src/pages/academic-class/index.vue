@@ -6,7 +6,7 @@ import User from '../../class/User'
 import { useAuthStore } from '@/plugins/auth.module'
 import { useRouter } from 'vue-router'
 const currentPage = ref(1)
-const headers = ['headers.name', 'teacher', 'room', 'time', 'headers.action']
+const headers = ['headers.name','type', 'teacher', 'room', 'time', 'headers.action']
 
 const form = reactive({
   filter: null,
@@ -233,6 +233,11 @@ onMounted(() => {
                   :key="row.id"
                 >
                   <td v-text="row.name" />
+                  <td>
+                    <span v-if="row.type==1">កាត់ដេ</span>
+                    <span v-if="row.type==2">អង់គ្លេស</span>
+                    <span v-if="row.type==3">កុំព្យូទ័រ</span>
+                  </td>
                   <td v-text="row.teacher.name" />
                   <td v-text="row.room.room" />
                   <td v-text="row.time?.time" />

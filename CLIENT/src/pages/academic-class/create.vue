@@ -93,7 +93,6 @@ onMounted(async () => {
                 <VTextField
                   v-model="form.name"
                   :label="$t('headers.name')"
-                  :rules="[v => !!v || 'ឈ្មោះ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol

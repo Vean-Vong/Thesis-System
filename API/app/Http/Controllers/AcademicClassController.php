@@ -33,7 +33,7 @@ class AcademicClassController extends Controller
 
             $academic_year_id = $request->academic_year_id ?? AcademicYear::whereIsActive(1)->first()->id ?? 1;
 
-            $academic_classes = AcademicClass::select('id', 'name', 'teacher_id', 'room_id', 'academic_year_id','level_id','time_id')
+            $academic_classes = AcademicClass::select('id', 'name','type', 'teacher_id', 'room_id', 'academic_year_id','level_id','time_id')
                 ->with(['teacher', 'room','level','time'])
                 ->filter([
                     'search' => $request->search,

@@ -25,11 +25,11 @@ class StoreAcademicClassRequest extends FormRequest
     public function rules()
     {
         return [
-
-            'name' => [
-                'required',
-                Rule::unique('academic_classes', 'name')->where('academic_year_id', request('academic_year_id'))
-            ],
+            'name' => 'nullable',
+            // 'name' => [
+            //     'required',
+            //     Rule::unique('academic_classes', 'name')->where('academic_year_id', request('academic_year_id'))
+            // ],
 
             'teacher_id' => [
                 'required',

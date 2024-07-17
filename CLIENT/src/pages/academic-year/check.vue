@@ -49,8 +49,6 @@ const chartOptions1 = computed(() => {
   dataLabels: {
     enabled: false,
   },
-}
-  
   // legend: {
   //   show: true,
   //   showForSingleSeries: true,
@@ -59,6 +57,8 @@ const chartOptions1 = computed(() => {
   //     fillColors: ['#00E396', '#775DD0'],
   //   },
   // },
+}
+  
 })
 
 const chartSeries1 = ref([
@@ -67,11 +67,11 @@ const chartSeries1 = ref([
     data: [
       {
         x: 'Passing ',
-        y: 10,
+        y: 0,
       },
       {
         x: 'Failing ',
-        y: 1,
+        y: 0,
       },
       {
         x: 'Drop-out',
@@ -79,15 +79,15 @@ const chartSeries1 = ref([
       },
       {
         x: 'Award Certificate',
-        y: 3,
+        y: 0,
       },
       {
         x: 'Beginning  ',
-        y: 10,
+        y: 0,
       },
       {
-        x: 'End of term II',
-        y: 10,
+        x: 'End of term',
+        y: 0,
       },
     ],
   },
@@ -104,7 +104,7 @@ const chartOptions2= computed(() => {
       columnWidth: '60%',
     },
   },
-  colors: ['#00E396'],
+  colors: ['#766af7'],
   dataLabels: {
     enabled: false,
   },
@@ -125,7 +125,7 @@ const chartSeries2 = ref([
     data: [
       {
         x: 'Passing ',
-        y: 91,
+        y: 0,
       },
       {
         x: 'Failing ',
@@ -133,20 +133,20 @@ const chartSeries2 = ref([
       },
       {
         x: 'Drop-out',
-        y: 6,
+        y: 0,
       },
       {
         x: 'Award Certificate',
-        y: 18,
+        y: 0,
       },
       {
         x: 'Beginning  ',
-        y: 97,
+        y: 0,
         
       },
       {
-        x: 'End of term II',
-        y: 91,
+        x: 'End of term',
+        y: 0,
       
       },
     ],
@@ -306,31 +306,31 @@ fetchData()
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total: {{ data.computer.pass.total }}
+            Total: {{ data.computer.fail.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total: {{ data.computer.pass.total }}
+            Total: {{ data.computer.drop.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total: {{ data.computer.pass.total }}
+            Total: {{ data.computer.awd.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total: {{ data.computer.pass.total }}
+            Total: {{ data.computer.beg.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total: {{ data.computer.pass.total }}
+            Total: {{ data.computer.end.total }}
           </td>
         </tr>
         <tr>
