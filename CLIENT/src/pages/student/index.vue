@@ -11,7 +11,6 @@ const headers = [
   'headers.phone_number',
   'headers.fatherName',
   'headers.motherName',
-  'headers.status',
   'headers.action',
 ]
 
@@ -138,7 +137,6 @@ onMounted(() => {
               <td v-text="row.phone" />
               <td v-text="row.d_last_name + ' ' + row.d_first_name" />
               <td v-text="row.m_last_name + ' ' + row.m_first_name" />
-              <td v-text="row.status" />
 
               <td>
                 <div class="menu-container">
