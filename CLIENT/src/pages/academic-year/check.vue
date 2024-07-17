@@ -2,9 +2,13 @@
 import { useRoute } from 'vue-router'
 import VueApexCharts from 'vue3-apexcharts'
 import api from '@/plugins/utilites'
+import { onMounted, ref, watch } from "vue";
 
 const route = useRoute()
 
+const term = ref({
+  name: '',
+})
 const data = ref({
   englist: {
     pass: {M: 0, F: 0, total: 0},
@@ -25,14 +29,152 @@ const data = ref({
 });
 const loading = ref(false)
 
+
+// onMounted( async () => {
+//   await fetchData()
+// })
+
+const chartOptions1 = computed(() => {
+  return {
+    chart: {
+    height: 350,
+    type: 'bar',
+  },
+  plotOptions: {
+    bar: {
+      columnWidth: '60%',
+    },
+  },
+  colors: ['#00E396'],
+  dataLabels: {
+    enabled: false,
+  },
+}
+  
+  // legend: {
+  //   show: true,
+  //   showForSingleSeries: true,
+  //   customLegendItems: ['Actual', 'Expected'],
+  //   markers: {
+  //     fillColors: ['#00E396', '#775DD0'],
+  //   },
+  // },
+})
+
+const chartSeries1 = ref([
+  {
+    name: 'Actual',
+    data: [
+      {
+        x: 'Passing ',
+        y: 10,
+      },
+      {
+        x: 'Failing ',
+        y: 1,
+      },
+      {
+        x: 'Drop-out',
+        y: 0,
+      },
+      {
+        x: 'Award Certificate',
+        y: 3,
+      },
+      {
+        x: 'Beginning  ',
+        y: 10,
+      },
+      {
+        x: 'End of term II',
+        y: 10,
+      },
+    ],
+  },
+])
+
+const chartOptions2= computed(() => {
+  return{
+  chart: {
+    height: 350,
+    type: 'bar',
+  },
+  plotOptions: {
+    bar: {
+      columnWidth: '60%',
+    },
+  },
+  colors: ['#00E396'],
+  dataLabels: {
+    enabled: false,
+  },
+  // legend: {
+  //   show: true,
+  //   showForSingleSeries: true,
+  //   customLegendItems: ['Actual', 'Expected'],
+  //   markers: {
+  //     fillColors: ['#00E396', '#775DD0'],
+  //   },
+  // },
+}
+})
+
+const chartSeries2 = ref([
+  {
+    name: 'Actual',
+    data: [
+      {
+        x: 'Passing ',
+        y: 91,
+      },
+      {
+        x: 'Failing ',
+        y: 0,
+      },
+      {
+        x: 'Drop-out',
+        y: 6,
+      },
+      {
+        x: 'Award Certificate',
+        y: 18,
+      },
+      {
+        x: 'Beginning  ',
+        y: 97,
+        
+      },
+      {
+        x: 'End of term II',
+        y: 91,
+      
+      },
+    ],
+  },
+])
+
 const fetchData = async () => {
-  loading.value = true
+  loading.value = true  
   await api.post(`academic-years-result`, {
-      term_id: route.query.id
-    })
+    term_id: route.query.id,
+  })
     .then(res => {
+      term.value = res.data.term
       data.value = res.data.data
-      console.log(data.value.englist.pass.total)
+
+      chartSeries1.value[0].data[0].y = data.value.englist.pass.total
+      chartSeries1.value[0].data[1].y = data.value.englist.fail.total
+      chartSeries1.value[0].data[2].y = data.value.englist.drop.total
+      chartSeries1.value[0].data[3].y = data.value.englist.awd.total
+      chartSeries1.value[0].data[4].y = data.value.englist.beg.total
+      chartSeries1.value[0].data[5].y = data.value.englist.end.total
+      
+      chartSeries2.value[0].data[0].y = data.value.computer.pass.total
+      chartSeries2.value[0].data[1].y = data.value.computer.fail.total
+      chartSeries2.value[0].data[2].y = data.value.computer.drop.total
+      chartSeries2.value[0].data[3].y = data.value.computer.awd.total
+      chartSeries2.value[0].data[4].y = data.value.computer.beg.total
+      chartSeries2.value[0].data[5].y = data.value.computer.end.total
     })
     .finally(() => {
       loading.value = false
@@ -41,173 +183,10 @@ const fetchData = async () => {
 
 fetchData()
 
-// onMounted( async () => {
-//   await fetchData()
-// })
-
-const chartOptions1 = {
-  chart: {
-    height: 350,
-    type: 'bar',
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: '60%',
-    },
-  },
-  colors: ['#00E396'],
-  dataLabels: {
-    enabled: false,
-  },
-  // legend: {
-  //   show: true,
-  //   showForSingleSeries: true,
-  //   customLegendItems: ['Actual', 'Expected'],
-  //   markers: {
-  //     fillColors: ['#00E396', '#775DD0'],
-  //   },
-  // },
-}
-
-
-const chartSeries1 = [
-  {
-    name: 'Actual',
-    data: [
-      {
-        x: 'Passing ',
-        y: data.value.englist.pass.total,
-      },
-      {
-        x: 'Failing ',
-        y: data.value.englist.fail.total,
-      },
-      {
-        x: 'Drop-out',
-        y: data.value.englist.drop.total,
-      },
-      {
-        x: 'Award Certificate',
-        y: data.value.englist.awd.total,
-      },
-      {
-        x: 'Beginning  ',
-        y: data.value.englist.beg.total,
-      },
-      {
-        x: 'End of term II',
-        y: data.value.englist.end.total,
-      },
-    ],
-  },
-]
-const chartOptions2 = {
-  chart: {
-    height: 350,
-    type: 'bar',
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: '60%',
-    },
-  },
-  colors: ['#00E396'],
-  dataLabels: {
-    enabled: false,
-  },
-  // legend: {
-  //   show: true,
-  //   showForSingleSeries: true,
-  //   customLegendItems: ['Actual', 'Expected'],
-  //   markers: {
-  //     fillColors: ['#00E396', '#775DD0'],
-  //   },
-  // },
-}
-
-const chartSeries2 = [
-  {
-    name: 'Actual',
-    data: [
-      {
-        x: 'Passing ',
-        y: 91,
-        goals: [
-          {
-            name: 'Expected',
-            value: 91,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
-      },
-      {
-        x: 'Failing ',
-        y: 0,
-        goals: [
-          {
-            name: 'Expected',
-            value: 0,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
-      },
-      {
-        x: 'Drop-out',
-        y: 6,
-        goals: [
-          {
-            name: 'Expected',
-            value: 6,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
-      },
-      {
-        x: 'Award Certificate',
-        y: 18,
-        goals: [
-          {
-            name: 'Expected',
-            value: 18,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
-      },
-      {
-        x: 'Beginning  ',
-        y: 97,
-        goals: [
-          {
-            name: 'Expected',
-            value: 97,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
-      },
-      {
-        x: 'End of term II',
-        y: 91,
-        goals: [
-          {
-            name: 'Expected',
-            value: 91,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
-      },
-    ],
-  },
-]
 </script>
 <template>
   <div>
-    <h1 style="text-align: center">Term Result II</h1>
+    <h1 style="text-align: center">Result {{ term.name }}</h1>
     <br />
     <table style="border: 1px solid black; padding: 5px; width: 100%; border-collapse: collapse; text-align: center">
       <thead>
@@ -380,24 +359,12 @@ const chartSeries2 = [
         <h2 style="text-align: center">English Result Distribution</h2>
         <VueApexCharts
           type="bar"
-          height="450"
+          height="400"
           style="width: 100%"
           :options="chartOptions1"
           :series="chartSeries1"
         ></VueApexCharts>
-        <h2 style="text-align: center">English Result Term II 2024</h2>
-        <br />
-        <ul style="list-style-type: square; display: flex; gap: 40px; justify-content: center; font-size: 18px">
-          <li>Passing Students</li>
-          <li>Failing Students</li>
-          <li>Drop-out Students</li>
-        </ul>
-        <br />
-        <ul style="list-style-type: square; display: flex; gap: 40px; justify-content: center; font-size: 18px">
-          <li>Award Certificate</li>
-          <li>Beginning of term II</li>
-          <li>End of term II</li>
-        </ul>
+        <h2 style="text-align: center">English Result  {{ term.name }}</h2>
         <br />
       </div>
       <div class="chart-card">
@@ -409,20 +376,8 @@ const chartSeries2 = [
           :options="chartOptions2"
           :series="chartSeries2"
         ></VueApexCharts>
-        <h2 style="text-align: center">Computer Result Term II 2024</h2>
-        <br />
-        <ul style="list-style-type: square; display: flex; gap: 40px; justify-content: center; font-size: 18px">
-          <li>Passing Students</li>
-          <li>Failing Students</li>
-          <li>Drop-out Students</li>
-        </ul>
-        <br />
-        <ul style="list-style-type: square; display: flex; gap: 40px; justify-content: center; font-size: 18px">
-          <li>Award Certificate</li>
-          <li>Beginning of term II</li>
-          <li>End of term II</li>
-        </ul>
-        <br />
+        <h2 style="text-align: center">Computer Result {{ term.name }}</h2>
+        
       </div>
     </div>
     <br />

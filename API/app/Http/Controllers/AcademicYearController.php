@@ -238,6 +238,7 @@ class AcademicYearController extends Controller
 
 
             $result['data'] = $data;
+            $result['term'] = AcademicYear::findOrFail($req->term_id);
 
         } catch (Throwable $e) {
             $result['status'] = 201;
