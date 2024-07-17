@@ -1,9 +1,49 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import VueApexCharts from 'vue3-apexcharts'
+import api from '@/plugins/utilites'
 
 const route = useRoute()
-console.log(route.query.id)
+
+const data = ref({
+  englist: {
+    pass: {M: 0, F: 0, total: 0},
+    fail: {M: 0, F: 0, total: 0},
+    drop: {M: 0, F: 0, total: 0},
+    awd: {M: 0, F: 0, total: 0},
+    beg: {M: 0, F: 0, total: 0},
+    end: {M: 0, F: 0, total: 0},
+  },
+  computer: {
+    pass: {M: 0, F: 0, total: 0},
+    fail: {M: 0, F: 0, total: 0},
+    drop: {M: 0, F: 0, total: 0},
+    awd: {M: 0, F: 0, total: 0},
+    beg: {M: 0, F: 0, total: 0},
+    end: {M: 0, F: 0, total: 0},
+  }
+});
+const loading = ref(false)
+
+const fetchData = async () => {
+  loading.value = true
+  await api.post(`academic-years-result`, {
+      term_id: route.query.id
+    })
+    .then(res => {
+      data.value = res.data.data
+      console.log(data.value.englist.pass.total)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+fetchData()
+
+// onMounted( async () => {
+//   await fetchData()
+// })
 
 const chartOptions1 = {
   chart: {
@@ -29,81 +69,34 @@ const chartOptions1 = {
   // },
 }
 
+
 const chartSeries1 = [
   {
     name: 'Actual',
     data: [
       {
         x: 'Passing ',
-        y: 234,
-        goals: [
-          {
-            name: 'Expected',
-            value: 234,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
+        y: data.value.englist.pass.total,
       },
       {
         x: 'Failing ',
-        y: 28,
-        goals: [
-          {
-            name: 'Expected',
-            value: 28,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
+        y: data.value.englist.fail.total,
       },
       {
         x: 'Drop-out',
-        y: 18,
-        goals: [
-          {
-            name: 'Expected',
-            value: 18,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
+        y: data.value.englist.drop.total,
       },
       {
         x: 'Award Certificate',
-        y: 43,
-        goals: [
-          {
-            name: 'Expected',
-            value: 43,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
+        y: data.value.englist.awd.total,
       },
       {
         x: 'Beginning  ',
-        y: 281,
-        goals: [
-          {
-            name: 'Expected',
-            value: 281,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
+        y: data.value.englist.beg.total,
       },
       {
         x: 'End of term II',
-        y: 262,
-        goals: [
-          {
-            name: 'Expected',
-            value: 262,
-            strokeHeight: 5,
-            strokeColor: '#775DD0',
-          },
-        ],
+        y: data.value.englist.end.total,
       },
     ],
   },
@@ -270,52 +263,52 @@ const chartSeries2 = [
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total : {{ data.englist.pass.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total : {{ data.englist.fail.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total : {{ data.englist.drop.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total : {{ data.englist.awd.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total : {{ data.englist.beg.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total : {{ data.englist.end.total }}
           </td>
         </tr>
         <tr>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F;</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.englist.pass.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.englist.pass.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.englist.fail.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.englist.fail.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.englist.drop.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.englist.drop.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.englist.awd.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.englist.awd.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.englist.beg.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.englist.beg.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.englist.end.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.englist.end.F }}</td>
         </tr>
         <tr>
           <td
@@ -328,52 +321,52 @@ const chartSeries2 = [
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total: {{ data.computer.pass.total }} 
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total: {{ data.computer.pass.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total: {{ data.computer.pass.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total: {{ data.computer.pass.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total: {{ data.computer.pass.total }}
           </td>
           <td
             colspan="2"
             style="border: 1px solid black; padding: 5px"
           >
-            Total
+            Total: {{ data.computer.pass.total }}
           </td>
         </tr>
         <tr>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F;</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
-          <td style="border: 1px solid black; padding: 5px">M:</td>
-          <td style="border: 1px solid black; padding: 5px">F:</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.computer.pass.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.computer.pass.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.computer.fail.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.computer.fail.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.computer.drop.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.computer.drop.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.computer.awd.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.computer.awd.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.computer.beg.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.computer.beg.F }}</td>
+          <td style="border: 1px solid black; padding: 5px">M: {{ data.computer.end.M }}</td>
+          <td style="border: 1px solid black; padding: 5px">F: {{ data.computer.end.F }}</td>
         </tr>
       </tbody>
     </table>
@@ -447,5 +440,5 @@ const chartSeries2 = [
     title: Check Student
     layout: default
     subject: Auth
-    active: 'academic-class'
+    active: 'academic-year'
   </route>

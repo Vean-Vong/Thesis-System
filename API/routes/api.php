@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('academic-years-show', [AcademicYearController::class, 'show']);
     Route::post('academic-years-update', [AcademicYearController::class, 'update']);
     Route::post('academic-years-delete', [AcademicYearController::class, 'delete']);
+    Route::post('academic-years-result', [AcademicYearController::class, 'result']);
 
     Route::post('academic-classes-create', [AcademicClassController::class, 'store']);
     Route::post('academic-classes-list', [AcademicClassController::class, 'list']);

@@ -127,8 +127,12 @@ onMounted(() => {
                   lg="4"
                   sm="12"
                 >
-                  <div class="text-h6 font-weight-bold">តារាងដាក់ពិន្ទុ​​ កាត់ដេរ</div>
+                  <div class="text-h6 font-weight-bold">
+                    តារាងដាក់ពិន្ទុ​​ កាត់ដេរ
+                    {{ $t('Room') }}: {{model.room?.room}} 
+                  </div>
                 </v-col>
+                
                 <v-col
                   cols="9"
                   md="2"
