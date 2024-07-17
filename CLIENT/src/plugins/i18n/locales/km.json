@@ -1,4 +1,9 @@
 {
+  "Students Register in This Year":"សិស្សចុះឈ្មោះនៅឆ្នាំនេះ",
+  "New Student this Term Female":"សិស្សស្រីក្នុងវគ្គសិក្សា",
+  "New Student this Term Male":"សិស្សប្រុសក្នុងវគ្គសិក្សា",
+  "New Student this Term":"សិស្សក្នុងវគ្គសិក្សា",
+  "Class in This Term":"ថ្នាក់ក្នុងវគ្គសិក្សា",
   "check": "ពិនិត្យមើលលទ្ធផលវគ្គសិក្សា",
   "study_history": "ប្រវិត្តិនៃការសិក្សា",
   "setting": "ការកំណត់",
