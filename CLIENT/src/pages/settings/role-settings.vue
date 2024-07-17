@@ -61,23 +61,23 @@ const headers = [
     align: 'center',
     sortable: false,
   },
-  {
-    title: t('Permissions Count'),
-    key: 'permissions_count',
-    align: 'center',
-    sortable: false,
-    minWidth: '200px',
-    maxWidth: '500px',
-  },
+  // {
+  //   title: t('Permissions Count'),
+  //   key: 'permissions_count',
+  //   align: 'center',
+  //   sortable: false,
+  //   minWidth: '200px',
+  //   maxWidth: '500px',
+  // },
 
-  {
-    title: t('Users Count'),
-    key: 'user_counts',
-    align: 'center',
-    sortable: false,
-    minWidth: '200px',
-    maxWidth: '500px',
-  },
+  // {
+  //   title: t('Users Count'),
+  //   key: 'user_counts',
+  //   align: 'center',
+  //   sortable: false,
+  //   minWidth: '200px',
+  //   maxWidth: '500px',
+  // },
   {
     title: t('Actions'),
     key: 'actions',
@@ -134,7 +134,7 @@ const confirmDeleteCallback = () => {
     :deleting="deleting"
   ></ConfirmDialog>
   <AppDataTable
-    cols="12"
+    cols="6"
     create-url="settings-form-role-create-form"
     :headers="headers"
     :items="items"
