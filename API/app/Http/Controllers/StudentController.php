@@ -42,6 +42,7 @@ class StudentController extends Controller
 
             Student::create($request->validated());
 
+            $result['test'] = $result['message'] = "រក្សាទុកបានសម្រេច";
             $result['message'] = "រក្សាទុកបានសម្រេច";
         } catch (Throwable $e) {
             $result['status'] = 201;

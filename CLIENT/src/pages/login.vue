@@ -51,7 +51,7 @@ const logo = ref(
       <div class="position-relative bg-background rounded-lg w-100 ma-8 me-0">
         <div class="d-flex align-center justify-center w-100 h-100 flex-column">
           <VNodeRenderer
-            style="width: 800px"
+            style="width: 400px"
             :nodes="themeConfig.app.app_login_image"
             class="mb-6"
           />
