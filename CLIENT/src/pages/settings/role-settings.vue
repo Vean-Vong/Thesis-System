@@ -134,7 +134,7 @@ const confirmDeleteCallback = () => {
     :deleting="deleting"
   ></ConfirmDialog>
   <AppDataTable
-    cols="6"
+    cols="12"
     create-url="settings-form-role-create-form"
     :headers="headers"
     :items="items"

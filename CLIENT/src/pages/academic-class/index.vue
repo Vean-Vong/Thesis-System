@@ -146,7 +146,7 @@ onMounted(() => {
                 md="2"
                 class="text-start"
               >
-                <VBtn
+                <!-- <VBtn
                   size="large"
                   variant="outlined"
                   prepend-icon="mdi-search"
@@ -154,8 +154,8 @@ onMounted(() => {
                   @click="q"
                 >
                   {{ $t('Search') }}
-                </VBtn></v-col
-              >
+                </VBtn> -->
+                </v-col>
               <v-col
                 cols="6"
                 md="3"
