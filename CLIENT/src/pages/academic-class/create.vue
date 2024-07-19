@@ -164,7 +164,7 @@ onMounted(async () => {
               <VCol
                 md="4"
                 cols="12"
-                v-if="form.type == 2"
+                v-if="form.type == 2 || form.type == 3"
               >
                 <VAutocomplete
                   :items="options.levels"
