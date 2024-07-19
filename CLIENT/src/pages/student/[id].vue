@@ -305,7 +305,7 @@ onMounted(() => {
                   <VSelect
                     v-model="formDataLocal.student_status"
                     :items="status"
-                    item-title="$t('name')"
+                    item-title="name"
                     item-value="id"
                     :label="$t('status')"
                   />
