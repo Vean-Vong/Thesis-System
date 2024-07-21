@@ -588,8 +588,8 @@ onMounted(() => {
                     "
                     colspan="10"
                   >
-                    <!-- {{ model.teacher?.name }} -->
-                    Smey Need You
+                    {{ model.teacher?.name }}
+                    <!-- Smey Need You -->
                   </td>
                   <td
                     style="text-align: center"
