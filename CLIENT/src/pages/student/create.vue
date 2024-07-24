@@ -104,7 +104,11 @@ const submitHandler = async () => {
     }
 
     api
-      .post('students-create', formData)
+      .post('students-create', formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
       .then(res => {
         router.push('/student')
       })

@@ -119,7 +119,11 @@ const submitHandler = async () => {
     }
 
     api
-      .post("teachers-update", formData)
+      .post("teachers-update", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
       .then(res => {
         router.push("/teacher")
       })

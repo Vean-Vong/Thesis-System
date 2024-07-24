@@ -113,7 +113,11 @@ const submitHandler = async () => {
       formData.append("address", formDataLocal.value.address)
     }
     api
-      .post("teachers-create", formData)
+      .post("teachers-create", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
       .then(res => {
         router.push("/teacher")
       })

@@ -81,7 +81,6 @@ class StudentController extends Controller
         try {
 
             $student = Student::findOrFail($request->id);
-
             if($student->update($request->validated())) {
                 $result['message'] = "កែប្រែបានសម្រេច";
             }
