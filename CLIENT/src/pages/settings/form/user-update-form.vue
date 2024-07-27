@@ -24,6 +24,7 @@ onMounted(async () => {
 
 const initForm = async () => {
   const query = router.currentRoute.value.query;
+  console.log(query.uuid)
   await api.post("/users-show", { id: query.uuid }).then((res) => {
     form.data = res.data.data;
   });

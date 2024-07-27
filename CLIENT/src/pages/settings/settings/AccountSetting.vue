@@ -2,14 +2,18 @@
 import { useAuthStore } from "@/plugins/auth.module";
 import api from "@/plugins/utilites";
 import avatar1 from "@images/avatars/avatar-1.png";
+import constant from "@/constants"
+
 const authStore = useAuthStore();
 
 const refInputEl = ref();
 const accountDataLocal = ref(authStore._user);
 const refForm = ref();
 const submitting = ref(false);
+
 onMounted(() => {
-  if (!accountDataLocal.value.avatarImg) accountDataLocal.value.avatarImg = avatar1;
+  if (accountDataLocal.value.photo_path) accountDataLocal.value.avatarImg = constant.storagePath + accountDataLocal.value.photo_path
+  else accountDataLocal.value.avatarImg = avatar1;
 });
 
 const changeAvatar = (file) => {
@@ -17,7 +21,8 @@ const changeAvatar = (file) => {
   const { files } = file.target;
   if (files && files.length) {
     fileReader.readAsDataURL(files[0]);
-    console.log(files[0]);
+    // console.log(files[0]);
+    accountDataLocal.value.photo_path = files[0]
     fileReader.onload = () => {
       if (typeof fileReader.result === "string")
         accountDataLocal.value.avatarImg = fileReader.result;
@@ -28,6 +33,7 @@ const changeAvatar = (file) => {
 // reset avatar image
 const resetAvatar = () => {
   accountDataLocal.value.avatarImg = avatar1;
+  accountDataLocal.value.photo_path = null
 };
 
 const submitHandler = async () => {
@@ -37,11 +43,16 @@ const submitHandler = async () => {
     formData.append("email", accountDataLocal.value.email);
     formData.append("id", accountDataLocal.value.id);
     if (accountDataLocal.value.avatarImg !== avatar1) {
-      formData.append("photo_path", accountDataLocal.value.avatarImg);
+      formData.append("photo_path", accountDataLocal.value.photo_path);
     }
+    console.log(accountDataLocal.value.photo_path)
     submitting.value = true;
     api
-      .post("update-profile", formData)
+      .post("update-profile", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
       .then((res) => {
         getProfileAcc();
       })
@@ -58,7 +69,7 @@ const getProfileAcc = () => {
     accountDataLocal.value.id = res.data.user?.id;
 
     if (res.data.user?.photo_path) {
-      accountDataLocal.value.avatarImg = res.data.user?.photo_path;
+      accountDataLocal.value.avatarImg = constant.storagePath + res.data.user?.photo_path;
     }
 
     nextTick(() => {
