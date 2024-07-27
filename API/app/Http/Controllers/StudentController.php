@@ -23,6 +23,7 @@ class StudentController extends Controller
             $query = Student::filter(['search' => $request->search])->latest()->paginate($request->perPage);
 
             $result['data'] = $query;
+            
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();

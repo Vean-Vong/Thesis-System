@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/plugins/utilites'
 import moment from 'moment'
+import constant from "@/constants"
 
 const route = useRoute()
 
@@ -50,8 +51,9 @@ onMounted(() => {
             <h3 class="mb-3 mx-3">{{ $t('profile') }}</h3>
             <v-card class="pa-2">
               <v-col cols="12" class="d-flex justify-center align-center">
-                <v-img alt="student" src="https://cdn-icons-png.flaticon.com/512/1154/1154987.png" width=""
-                  height="150"></v-img>
+                <v-img alt="student" 
+                 :src="student?.photo_path!=null?constant.storagePath+student.photo_path:'https://cdn-icons-png.flaticon.com/512/1154/1154987.png'" 
+                />
               </v-col>
 
               <v-chip class="mx-4" color="primary">
