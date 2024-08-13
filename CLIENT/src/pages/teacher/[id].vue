@@ -118,15 +118,11 @@ const submitHandler = async () => {
     }
 
     api
-<<<<<<< HEAD
-      .post('teachers-update', formData)
-=======
       .post("teachers-update", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           })
->>>>>>> 5dd01d8b4fd0ecfe72f0f891ffc037e1671408bb
       .then(res => {
         router.push('/teacher')
       })
@@ -346,18 +342,9 @@ onMounted(() => {
   </VRow>
 </template>
 <route lang="yaml">
-<<<<<<< HEAD
 meta:
   title: Edit-teachers-list
   layout: default
   subject: Auth
   active: 'teacher'
 </route>
-=======
-  meta:
-    title: Edit-teachers-list
-    layout: default
-    subject: Auth
-    active: 'teacher'
-  </route>
->>>>>>> 5dd01d8b4fd0ecfe72f0f891ffc037e1671408bb

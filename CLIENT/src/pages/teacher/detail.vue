@@ -69,18 +69,9 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
-<<<<<<< HEAD
 meta:
   title: Detail Teacher
   layout: default
   subject: Auth
   active: 'teacher'
 </route>
-=======
-  meta:
-    title: Detail Teacher
-    layout: default
-    subject: Auth
-    active: 'teacher'
-  </route>
->>>>>>> 5dd01d8b4fd0ecfe72f0f891ffc037e1671408bb
