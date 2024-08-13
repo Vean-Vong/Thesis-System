@@ -175,7 +175,7 @@ onMounted(() => {
               <td v-text="row.name" />
               <td v-text="row.sex_text" />
               <td v-text="row.phone" />
-              <td v-text="row.position_text" />
+              <td v-text="row.position" />
               <td>
                 <v-btn
                   @click="show(row.id)"

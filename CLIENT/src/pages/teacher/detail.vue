@@ -58,9 +58,9 @@ onMounted(() => {
               <v-card-text>Latin Name : {{ teacher.name_latin }}</v-card-text>
               <v-card-text>Day Of Birth : {{ teacher.dob }}</v-card-text>
               <v-card-text>Gender : {{ teacher.sex_text }}</v-card-text>
-              <v-card-text>Position :{{ teacher.position_text }}</v-card-text>
-              <v-card-text>From :{{ teacher.pob }}</v-card-text>
-              <v-card-text>Phone Number :{{ teacher.phone }}</v-card-text>
+              <v-card-text>Position : {{ teacher.position }}</v-card-text>
+              <v-card-text>From : {{ teacher.pob }}</v-card-text>
+              <v-card-text>Phone Number : {{ teacher.phone }}</v-card-text>
             </v-col>
           </v-row>
         </v-col>
@@ -69,9 +69,9 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
-  meta:
-    title: Detail Teacher
-    layout: default
-    subject: Auth
-    active: 'teacher'
-  </route>
+meta:
+  title: Detail Teacher
+  layout: default
+  subject: Auth
+  active: 'teacher'
+</route>
