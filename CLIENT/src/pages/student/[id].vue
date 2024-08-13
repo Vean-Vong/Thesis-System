@@ -98,15 +98,21 @@ const submitHandler = async () => {
   if (valid) {
     submitting.value = true
     let formData = new FormData()
-
+    console.log(formDataLocal.value.photo_path)
     Object.keys(formDataLocal.value).forEach(key => {
       if (formDataLocal.value[key] !== null && formDataLocal.value[key] !== undefined) {
-        formData.append(key, formDataLocal.value[key])
+        if(key != 'photo_path') 
+          formData.append(key, formDataLocal.value[key])
       }
     })
-    // console.log(formDataLocal.value.photo_path)
+    formData.append('photo_path', formDataLocal.value.photo_path)
+
     api
-      .post('students-update', formData)
+      .post('students-update', formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
       .then(() => {
         router.push('/student')
       })

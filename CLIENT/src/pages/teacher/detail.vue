@@ -2,6 +2,8 @@
 import { useRoute } from 'vue-router'
 import api from '@/plugins/utilites'
 import { onMounted } from 'vue'
+import constant from "@/constants"
+
 const route = useRoute()
 
 const teacher = ref({})
@@ -10,9 +12,7 @@ let getData = () => {
   console.table(route.query.id)
   if (route.query.id) {
     api.post(`teachers-show`, { id: route.query.id }).then(res => {
-      console.log(res.data.model)
       teacher.value = res.data?.model
-      console.table(teacher)
     })
   }
 }
@@ -42,7 +42,7 @@ onMounted(() => {
         >
           <v-img
             alt="student"
-            src="https://cdn.iconscout.com/icon/free/png-256/free-teacher-240-1128987.png"
+            :src="teacher?.photo_path!=null? constant.storagePath  + teacher.photo_path : 'https://cdn.iconscout.com/icon/free/png-256/free-teacher-240-1128987.png'"
             width="70%"
           >
           </v-img>
@@ -69,9 +69,18 @@ onMounted(() => {
   </div>
 </template>
 <route lang="yaml">
+<<<<<<< HEAD
 meta:
   title: Detail Teacher
   layout: default
   subject: Auth
   active: 'teacher'
 </route>
+=======
+  meta:
+    title: Detail Teacher
+    layout: default
+    subject: Auth
+    active: 'teacher'
+  </route>
+>>>>>>> 5dd01d8b4fd0ecfe72f0f891ffc037e1671408bb

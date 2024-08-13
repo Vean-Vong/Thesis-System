@@ -23,6 +23,7 @@ class StudentController extends Controller
             $query = Student::filter(['search' => $request->search])->latest()->paginate($request->perPage);
 
             $result['data'] = $query;
+            
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();
@@ -81,7 +82,6 @@ class StudentController extends Controller
         try {
 
             $student = Student::findOrFail($request->id);
-
             if($student->update($request->validated())) {
                 $result['message'] = "កែប្រែបានសម្រេច";
             }
