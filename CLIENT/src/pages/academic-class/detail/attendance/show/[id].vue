@@ -447,27 +447,27 @@ const monthDisplay = computed(() => {
                     <td
                       colspan="1"
                       rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                     >
                       ល.រ
                     </td>
                     <td
                       rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                       :colspan="data?.attendances[0]?.student?.days?.length > 28 ? '11' : '11'"
                     >
                       ឈ្មោះ
                     </td>
                     <td
                       rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                       colspan="3"
                     >
                       ភេទ
                     </td>
                     <td
                       rowspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                       v-for="date in data.total_day"
                       :key="date"
                     >
@@ -475,7 +475,7 @@ const monthDisplay = computed(() => {
                     </td>
                     <td
                       colspan="4"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                     >
                       Total
                     </td>
@@ -483,13 +483,13 @@ const monthDisplay = computed(() => {
                   <tr>
                     <td
                     colspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                     >
                       A
                     </td>
                     <td
                     colspan="2"
-                      style="border: 1px solid black; padding: 5px"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
                     >
                       P
                     </td>
