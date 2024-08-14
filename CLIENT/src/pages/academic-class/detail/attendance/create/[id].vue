@@ -275,7 +275,7 @@ onMounted(() => {
                 <thead>
                   <tr>
                     <th colspan="2">ល.រ</th>
-                    <th :colspan="form?.attendances[0]?.student?.days?.length > 28 ? '15' : '18'">ឈ្មោះ</th>
+                    <th :colspan="form?.attendances[0]?.student?.days?.length > 28 ? '15' : '17'">ឈ្មោះ</th>
                     <th colspan="4">ភេទ</th>
                     <th
                       v-for="date in form.total_day"
@@ -294,7 +294,7 @@ onMounted(() => {
                       {{ student.number }}
                     </td>
                     <td
-                      :colspan="student?.days?.length > 28 ? '15' : '18'"
+                      :colspan="student?.days?.length > 28 ? '15' : '17'"
                       class="text-left"
                     >
                       {{ index }}
