@@ -429,7 +429,7 @@ const monthDisplay = computed(() => {
                       font-family: 'Times New Roman', Times, serif;
                     "
                   >
-                    &nbsp;&nbsp; Level &nbsp;: {{ model.name }}
+                    &nbsp;&nbsp; Level &nbsp;: {{  model.level?.level }}
                   </td>
                   <td
                     colspan="4"

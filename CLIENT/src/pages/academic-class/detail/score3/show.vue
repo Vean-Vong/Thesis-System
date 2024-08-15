@@ -275,7 +275,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                    &nbsp;&nbsp; Level &nbsp;: {{ model.name }}
+                    &nbsp;&nbsp; Level &nbsp;: {{ model.level?.level }}
                     </td>
                     <td
                       colspan="4"
@@ -576,8 +576,8 @@ onMounted(() => {
                       "
                       colspan="10"
                     >
-                      <!-- {{ model.teacher?.name }} -->
-                      Smey Need You
+                      {{ model.teacher?.name }}
+                      <!-- Smey Need You -->
                     </td>
                     <td
                       style="text-align: center"

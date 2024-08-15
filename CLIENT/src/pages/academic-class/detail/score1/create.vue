@@ -135,7 +135,7 @@ onMounted(() => {
                     {{ $t('teacher') }}: {{model.teacher?.name}} 
                   </div>
                   <div class="text-h6 font-weight-bold">
-                    {{ $t('Room') }}: {{model.room?.room}} 
+                    {{ $t('Room') }}: {{model.room?.room}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $t('Time') }}: {{model.time?.time}} 
                   </div>
                 </v-col>
                 
