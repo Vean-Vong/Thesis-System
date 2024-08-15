@@ -108,7 +108,7 @@ onMounted(() => {
                     <v-card-title>{{ $t('room') }}: {{ academicClass.room?.room }}</v-card-title>
                   </div>
                   <div class="col">
-                    <v-card-title>{{ $t('time') }}: {{ academicClass.time.time }}</v-card-title>
+                    <v-card-title>{{ $t('time') }}: {{ academicClass.time?.time }}</v-card-title>
                   </div>
                   <div class="col">
                     <v-card-title>{{ $t('teacher') }}: {{ academicClass.teacher?.name }}</v-card-title>

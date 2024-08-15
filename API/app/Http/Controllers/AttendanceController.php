@@ -67,7 +67,7 @@ class AttendanceController extends Controller
 
                 foreach($data as $key => $item) {
                     $form['attendances'][$item['name']]['gender'] = $item['gender'];
-                    $form['attendances'][$item['name']]['number'] = $key;
+                    $form['attendances'][$item['name']]['number'] = $key+1;
                     $form['attendances'][$item['name']]['student_id'] = $item['student_id'];
                     for($i = 1; $i <= $total_day; $i ++) {
                         if(isset($item['absent'])) {
@@ -196,7 +196,7 @@ class AttendanceController extends Controller
 
                 foreach($data as $key => $item) {
                     $records['attendances'][$item['name']]['gender'] = $item['gender'];
-                    $records['attendances'][$item['name']]['number'] = $key;
+                    $records['attendances'][$item['name']]['number'] = $key + 1;
                     $records['attendances'][$item['name']]['student_id'] = $item['student_id'];
                     for($i = 1; $i <= $total_day; $i ++) {
                         if(isset($item['absent'])) {

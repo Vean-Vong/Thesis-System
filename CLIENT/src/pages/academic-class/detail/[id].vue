@@ -238,7 +238,10 @@ const onAddAttendance = () => {
 const listingAttendance = () => {
   router.push('/academic-class/detail/attendance/' + params.id + '_' + 'c')
 }
-
+const showStudent = id => {
+  router.push(`/student/detail?id=${id}`)
+  // console.log(id);
+}
 onMounted(() => {
   fetchData()
 })
@@ -402,6 +405,15 @@ onMounted(() => {
                           class="menu-list"
                           style="margin-left: -120px"
                         >
+                          <VListItem @click="showStudent(row.student?.id)">
+                            <VListItemContent
+                              class="menu-item"
+                              style="display: flex; gap: 4px"
+                            >
+                              <VIcon color="grey">mdi-eye</VIcon>
+                              <VListItemTitle>{{ $t('detail_student') }}</VListItemTitle>
+                            </VListItemContent>
+                          </VListItem>
                           <VListItem
                             v-if="row.is_new != 1"
                             @click="onNewStudent(row.id)"
