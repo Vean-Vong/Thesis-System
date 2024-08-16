@@ -23,7 +23,7 @@ const imgP = `
     max-width: none;
   }`
 const onPrint = () => {
-  d.print(document.getElementById('table'), [ imgP ])
+  d.print(document.getElementById('table'), [imgP])
 }
 const fetchData = () => {
   api
@@ -46,7 +46,7 @@ const fetchTable = () => {
       DataRankings(data) //ranking
     })
 }
-const currentYear = computed(() => new Date().getFullYear());
+const currentYear = computed(() => new Date().getFullYear())
 
 onMounted(() => {
   fetchData()
@@ -160,7 +160,8 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                    >ជំនួយស្ម័គ្រចិត្តដល់កុមារកម្ពុជា
+                    >
+                      ជំនួយស្ម័គ្រចិត្តដល់កុមារកម្ពុជា
                     </td>
                     <td colspan="3"></td>
                     <td colspan="8"></td>
@@ -190,7 +191,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                    Aide volontair aux enfants du Cambodage
+                      Aide volontair aux enfants du Cambodage
                     </td>
                     <td colspan="3"></td>
                     <td colspan="8"></td>
@@ -204,9 +205,7 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                    >
-                     
-                    </td>
+                    ></td>
                   </tr>
                   <tr>
                     <td
@@ -218,9 +217,7 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                    >
-                     
-                    </td>
+                    ></td>
                     <td
                       colspan="12"
                       style="
@@ -231,7 +228,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                    {{ model.academic_year?.name }}
+                      {{ model.academic_year?.name }}
                       <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
                       }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
                     </td>
@@ -247,7 +244,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Teacher :  {{ model.teacher?.name }}
+                      Teacher : {{ model.teacher?.name }}
                     </td>
                     <td
                       colspan="4"
@@ -258,7 +255,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Room : {{ model.room?.room }}
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Room : {{ model.room?.room }}
                     </td>
                   </tr>
                   <tr style="line-height: 40px">
@@ -271,7 +268,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                    &nbsp;&nbsp; Level &nbsp;: {{ model.level?.level }}
+                      &nbsp;&nbsp; Level &nbsp;: {{ model.level?.level }}
                     </td>
                     <td
                       colspan="4"
@@ -282,10 +279,10 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                    &nbsp;  Time &nbsp;: {{ model.time?.time }}
+                      &nbsp; Time &nbsp;: {{ model.time?.time }}
                     </td>
                   </tr>
-                  <tr style="font-family: 'Times New Roman', Times, serif;font-size: 17px;">
+                  <tr style="font-family: 'Times New Roman', Times, serif; font-size: 17px">
                     <th
                       rowspan="2"
                       style="border: 1px solid black; padding: 5px"
@@ -520,11 +517,11 @@ onMounted(() => {
                           </tr>
                           <tr>
                             <td>1. A+ =98-100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>8. E = 50-64</td>
+                            <td>8. E = 60-64</td>
                           </tr>
                           <tr>
                             <td>2. A =90-97</td>
-                            <td>9. F = 0-49</td>
+                            <td>9. F =0-59</td>
                           </tr>
                           <tr>
                             <td>3. B+ =85-89</td>
@@ -555,7 +552,7 @@ onMounted(() => {
                       "
                       colspan="3"
                     >
-                      Date ........./................/{{currentYear}}
+                      Date ........./................/{{ currentYear }}
                     </td>
                   </tr>
                   <tr>
@@ -580,7 +577,7 @@ onMounted(() => {
                       "
                       colspan="18"
                     >
-                      Date ......./.........................../{{currentYear}}
+                      Date ......./.........................../{{ currentYear }}
                     </td>
                   </tr>
                   <tr>
@@ -662,9 +659,8 @@ meta:
   active: 'academic-class'
 </route>
 <style>
-
 @media print {
-  img{
+  img {
     width: 100px;
     height: auto;
     max-width: none;
