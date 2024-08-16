@@ -65,10 +65,9 @@ class ExamController extends Controller
 
         $result['status'] = 200;
 
-        DB::beginTransaction();
-
         try {
 
+            DB::beginTransaction();
             foreach($request->exams as $exam) {
                 Exam::updateOrCreate(
                     [
@@ -91,15 +90,39 @@ class ExamController extends Controller
                         'attitude' => $exam['attitude'] ?? 0,
                         'final' => $exam['final'] ?? 0,
                         'total' => ($exam['att'] + $exam['quiz'] + $exam['hw'] + $exam['re'] + $exam['voc']+$exam['gr']+$exam['liu']+$exam['wr']+$exam['li']+$exam['sp']+$exam['mid']+ $exam['attitude']+$exam['final'] ) ?? 0,
-                        
                     ]
                 );
             }
-
             DB::commit();
 
-            $result['message'] = 'រក្សាទុកបានសម្រេច';
+            $exams = Study::leftJoin('exams', 'studies.student_id', 'exams.student_id')
+                ->join('students', 'studies.student_id', 'students.id')
+                ->select('studies.student_id', 'students.last_name', 'students.first_name','students.gender', 'studies.academic_class_id', 'exams.*')
+                ->where('exams.academic_class_id', $request->academic_class_id)
+                ->where('studies.academic_class_id', $request->academic_class_id)
+                ->whereNull('studies.deleted_at')
+                ->orderBy('students.last_name')
+                ->get();
 
+            $student_has_exams = $exams->pluck('student_id');
+
+            $students = Study::join('students', 'studies.student_id', 'students.id')
+                ->select('studies.student_id', 'students.last_name', 'students.first_name', 'students.gender')
+                ->where('studies.academic_class_id', $request->academic_class_id)
+                ->whereNotIn('studies.student_id', $student_has_exams)
+                ->whereNull('studies.deleted_at')
+                ->orderBy('students.last_name')
+                ->get();
+
+            $data = ScoreRanking(array_merge($students->toArray(), $exams->toArray()));
+
+            foreach($data as $exam) {
+                $ex = Exam::find($exam['id']);
+                $ex->rank = $exam['rank'];
+                $ex->save();
+            }
+
+            // $result['dara'] = $data;
 
         } catch(Throwable $e) {
             $result['status'] = 201;
