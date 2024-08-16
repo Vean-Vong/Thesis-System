@@ -83,3 +83,38 @@ if(!function_exists('NotFoundResourceException')) {
         ], 404);
     }
 }
+
+
+if(!function_exists('ScoreRanking')) {
+    function ScoreRanking($data) {
+
+        array_multisort(array_column($data, 'total'), SORT_DESC, $data);
+
+        $rank = 1;
+        foreach($data as $i => $d){
+            if($i>0 && $d['total'] === $data[$i-1]['total']){
+                $data[$i]['rank'] = $data[$i-1]['rank'];
+            }else{
+                $data[$i]['rank'] = $rank;
+            }
+            $rank++;
+        }
+
+        return $data;
+    }
+    // function ScoreRanking($rank_values): array {
+    //     $rank = 0;
+    //     $r_last = null;
+    //     foreach ($rank_values as $key => $arr) {
+    //         if ($arr['total'] != $r_last) {
+    //             if($arr['total'] > 0){ //if you want to set zero rank for values zero
+    //                 $rank++;
+    //             }
+    //             $r_last = $arr['total'];
+    //         }
+
+    //         $rank_values[$key]['rank'] = $arr['total'] > 0 ? $rank: 0; //if you want to set zero rank for values zero
+    //     }
+    //     return $rank_values;
+    // }
+}

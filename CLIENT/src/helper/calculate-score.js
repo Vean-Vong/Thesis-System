@@ -20,6 +20,7 @@ export const Result = total => {
   if (total >= 50) return 'Pass'
   return 'Fail'
 }
+
 export const Grade = score => {
   if (score >= 90) return 'A'
   if (score >= 80) return 'B'
