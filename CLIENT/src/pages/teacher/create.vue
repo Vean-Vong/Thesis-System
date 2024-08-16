@@ -1,10 +1,10 @@
 <script setup>
-import api from "@/plugins/utilites"
-import avatar1 from "@/assets/images/avatars/avatar-1.png"
-import { ref, computed } from "vue"
-import { useRouter } from "vue-router"
-import { useAuthStore } from "@/plugins/auth.module"
-import User from "../../class/User"
+import api from '@/plugins/utilites'
+import avatar1 from '@/assets/images/avatars/avatar-1.png'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/plugins/auth.module'
+import User from '../../class/User'
 
 const store = useAuthStore()
 
@@ -12,7 +12,7 @@ const user = computed(() => {
   const data = {
     user: store?._user,
   }
-  
+
   return new User(data)
 })
 
@@ -23,28 +23,28 @@ const router = useRouter()
 const sexs = ref([
   {
     id: 1,
-    name: "ប្រុស",
+    name: 'ប្រុស',
   },
   {
     id: 2,
-    name: "ស្រី",
+    name: 'ស្រី',
   },
 ])
 
-const positions = ref([
-  {
-    id: 1,
-    name: "គ្រូបង្រៀន",
-  },
-  {
-    id: 2,
-    name: "នាយករង",
-  },
-  {
-    id: 3,
-    name: "នាយក",
-  },
-])
+// // const positions = ref([
+//   {
+//     id: 1,
+//     name: "គ្រូបង្រៀន",
+//   },
+//   {
+//     id: 2,
+//     name: "នាយករង",
+//   },
+//   {
+//     id: 3,
+//     name: "នាយក",
+//   },
+// ])
 
 const form = {
   code: null,
@@ -72,8 +72,7 @@ const changeAvatar = file => {
     fileReader.readAsDataURL(files[0])
     formDataLocal.value.photo_path = files[0]
     fileReader.onload = () => {
-      if (typeof fileReader.result === "string")
-        additional_image.value = fileReader.result
+      if (typeof fileReader.result === 'string') additional_image.value = fileReader.result
     }
   }
 }
@@ -90,27 +89,27 @@ const submitHandler = async () => {
     submitting.value = true
     let formData = new FormData()
 
-    formData.append("code", formDataLocal.value.code)
-    formData.append("name", formDataLocal.value.name)
-    formData.append("sex", formDataLocal.value.sex)
-    formData.append("position", formDataLocal.value.sex)
+    formData.append('code', formDataLocal.value.code)
+    formData.append('name', formDataLocal.value.name)
+    formData.append('sex', formDataLocal.value.sex)
+    formData.append('position', formDataLocal.value.position || null)
     if (formDataLocal.value.photo_path) {
-      formData.append("photo_path", formDataLocal.value.photo_path)
+      formData.append('photo_path', formDataLocal.value.photo_path)
     }
     if (formDataLocal.value.name_latin) {
-      formData.append("name_latin", formDataLocal.value.name_latin)
+      formData.append('name_latin', formDataLocal.value.name_latin)
     }
     if (formDataLocal.value.dob) {
-      formData.append("dob", formDataLocal.value.dob)
+      formData.append('dob', formDataLocal.value.dob)
     }
     if (formDataLocal.value.pob) {
-      formData.append("pob", formDataLocal.value.pob)
+      formData.append('pob', formDataLocal.value.pob)
     }
     if (formDataLocal.value.phone) {
-      formData.append("phone", formDataLocal.value.phone)
+      formData.append('phone', formDataLocal.value.phone)
     }
     if (formDataLocal.value.address) {
-      formData.append("address", formDataLocal.value.address)
+      formData.append('address', formDataLocal.value.address)
     }
     api
       .post("teachers-create", formData, {
@@ -119,7 +118,7 @@ const submitHandler = async () => {
             },
           })
       .then(res => {
-        router.push("/teacher")
+        router.push('/teacher')
       })
       .finally(() => {
         submitting.value = false
@@ -130,7 +129,10 @@ const submitHandler = async () => {
 
 <template>
   <VRow>
-    <VCol cols="12" md="8">
+    <VCol
+      cols="12"
+      md="8"
+    >
       <VCard :title="$t('vcard.title_teacher')">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
@@ -162,7 +164,7 @@ const submitHandler = async () => {
                 accept=".jpeg,.png,.jpg,GIF"
                 hidden
                 @input="changeAvatar"
-              >
+              />
 
               <VBtn
                 type="reset"
@@ -178,9 +180,7 @@ const submitHandler = async () => {
               </VBtn>
             </div>
 
-            <p class="text-body-1 mb-0">
-              Allowed JPG, GIF or PNG. Max size of 800K
-            </p>
+            <p class="text-body-1 mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
           </div>
         </VCardText>
 
@@ -202,7 +202,7 @@ const submitHandler = async () => {
                 <VTextField
                   v-model="formDataLocal.code"
                   :label="$t('headers.id')"
-                  :rules="[(v) => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
+                  :rules="[v => !!v || 'អត្ថលេខ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <!-- <VCol md="6" cols="12"></VCol> -->
@@ -213,7 +213,7 @@ const submitHandler = async () => {
                 <VTextField
                   v-model="formDataLocal.name"
                   :label="$t('khmer_name')"
-                  :rules="[(v) => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
+                  :rules="[v => !!v || 'ឈ្មោះភាសាខ្មែរ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol
@@ -236,7 +236,7 @@ const submitHandler = async () => {
                   item-title="name"
                   item-value="id"
                   :label="$t('Sex')"
-                  :rules="[(v) => !!v || 'ភេទ តម្រូវឱ្យបំពេញ']"
+                  :rules="[v => !!v || 'ភេទ តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol
@@ -271,13 +271,10 @@ const submitHandler = async () => {
                 md="3"
                 cols="12"
               >
-                <VSelect
+                <VTextField
                   v-model="formDataLocal.position"
-                  :items="positions"
-                  item-title="name"
-                  item-value="id"
                   :label="$t('headers.occupation')"
-                  :rules="[(v) => !!v || 'មុខដំណែង តម្រូវឱ្យបំពេញ']"
+                  :rules="[v => !!v || 'មុខដំណែង តម្រូវឱ្យបំពេញ']"
                 />
               </VCol>
               <VCol cols="12">
@@ -291,14 +288,14 @@ const submitHandler = async () => {
               <!-- 👉 Form Actions -->
               <VCol
                 cols="12"
-                class="d-flex justify-end  gap-4"
+                class="d-flex justify-end gap-4"
               >
                 <VBtn
                   type="submit"
                   :loading="submitting"
                   color="success"
                 >
-                <VIcon class="me-2">mdi-content-save-all</VIcon>
+                  <VIcon class="me-2">mdi-content-save-all</VIcon>
                   {{ $t('Save changes') }}
                 </VBtn>
 
@@ -308,7 +305,7 @@ const submitHandler = async () => {
                   type="reset"
                   @click.prevent="resetForm"
                 >
-                {{ $t('reset') }}
+                  {{ $t('reset') }}
                 </VBtn>
               </VCol>
             </VRow>
@@ -319,9 +316,9 @@ const submitHandler = async () => {
   </VRow>
 </template>
 <route lang="yaml">
-  meta:
-    title: Teacher
-    layout: default
-    subject: Auth
-    active: 'teacher'
-  </route>
+meta:
+  title: Teacher
+  layout: default
+  subject: Auth
+  active: 'teacher'
+</route>

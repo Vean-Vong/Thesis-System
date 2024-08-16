@@ -129,7 +129,13 @@ onMounted(() => {
                 >
                   <div class="text-h6 font-weight-bold">
                     តារាងដាក់ពិន្ទុ​​ កាត់ដេរ
-                    {{ $t('Room') }}: {{model.room?.room}} 
+                    
+                  </div>
+                  <div class="text-h6 font-weight-bold" style="line-height: 40px;">
+                    {{ $t('teacher') }}: {{model.teacher?.name}} 
+                  </div>
+                  <div class="text-h6 font-weight-bold">
+                    {{ $t('Room') }}: {{model.room?.room}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $t('Time') }}: {{model.time?.time}} 
                   </div>
                 </v-col>
                 

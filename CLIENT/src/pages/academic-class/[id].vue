@@ -102,7 +102,7 @@ onMounted(() => {
                 md="4"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.class_type"
                   item-value="id"
                   item-title="name"
@@ -115,7 +115,7 @@ onMounted(() => {
                 md="3"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.academic_years"
                   item-value="id"
                   item-title="name"
@@ -128,7 +128,7 @@ onMounted(() => {
                 md="4"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.teachers"
                   item-value="id"
                   item-title="name"
@@ -141,7 +141,7 @@ onMounted(() => {
                 md="4"
                 cols="12"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.rooms"
                   item-value="id"
                   item-title="room"
@@ -153,9 +153,9 @@ onMounted(() => {
               <VCol
                 md="4"
                 cols="12"
-                v-if="form.type==2||form.type==3"
+                v-if="form.type == 2 || form.type == 3"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.times"
                   item-value="id"
                   item-title="time"
@@ -167,9 +167,9 @@ onMounted(() => {
               <VCol
                 md="4"
                 cols="12"
-                v-if="form.type==2"
+                v-if="form.type == 2 || form.type == 3"
               >
-                <v-autocomplete
+                <VAutocomplete
                   :items="options.levels"
                   item-value="id"
                   item-title="level"

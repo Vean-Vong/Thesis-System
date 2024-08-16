@@ -16,10 +16,37 @@ const data = ref({
   total_day: 31,
   attendances: [],
 })
-
+const imgP = `
+  table{
+    margin-top: -20px;
+    margin: 0;
+  }
+  img{
+    margin: 0;
+    width: 90px;
+    height: auto;
+    max-width: none;
+  }`
 const onPrint = () => {
-  d.print(document.getElementById('table'))
+  d.print(document.getElementById('table'), [imgP])
 }
+const khmerToEnglishMonthMap = {
+  "មករា": "January",
+  "កុម្ភៈ": "February",
+  "មីនា": "March",
+  "មេសា": "April",
+  "ឧសភា": "May",
+  "មិថុនា": "June",
+  "កក្កដា": "July",
+  "សីហា": "August",
+  "កញ្ញា": "September",
+  "តុលា": "October",
+  "វិច្ឆិកា": "November",
+  "ធ្នូ": "December",
+  "ឆមាស": "Semester"
+};
+
+const convertKhmerMonthToEnglish = (khmerMonth) => khmerToEnglishMonthMap[khmerMonth] || "Unknown Month";
 
 const refForm = ref()
 
@@ -137,14 +164,15 @@ const storeID = ref([
   },
 ])
 onMounted(() => {
-  ;[params_id.value, params_month.value, params_s.value] = params.id.split('_')
-  months.value.filter(e => {
-    if (e.id == params_month.value) {
-      exam_month.value = e
-    }
-  })
-  fetchData()
-})
+  [params_id.value, params_month.value, params_s.value] = params.id.split('_');
+  exam_month.value = months.value.find(e => e.id == params_month.value) || {};
+  fetchData();
+});
+
+const currentYear = computed(() => new Date().getFullYear());
+const monthDisplay = computed(() => {
+  return `${exam_month.value.id !== 0 ? ' ' : ''}${convertKhmerMonthToEnglish(exam_month.value.name)}${params_s.value ? ' Exam ' + params_s.value : ''}`;
+});
 </script>
 <template>
   <div>
@@ -261,7 +289,7 @@ onMounted(() => {
                 <tr>
                   <td>
                     <VRow>
-                      <VCol style="margin: 0 70%"
+                      <VCol style="margin: 0 85%"
                         ><v-img
                           src="/src/assets/images/logo.png"
                           :width="100"
@@ -297,8 +325,9 @@ onMounted(() => {
                       font-size: 16px;
                       font-family: 'Times New Roman', Times, serif;
                     "
-                  >
-                    Aide volontair aux
+                  > 
+                  
+                    ជំនួយស្ម័គ្រចិត្តដល់កុមារកម្ពុជា
                   </td>
                   <td colspan="17"></td>
                   <td colspan="17"></td>
@@ -328,43 +357,16 @@ onMounted(() => {
                       font-family: 'Times New Roman', Times, serif;
                     "
                   >
-                    enfants du Cambodage
+                  Aide volontair aux enfants du Cambodage
                   </td>
                   <td colspan="18"></td>
                   <td colspan="20"></td>
-                  <td
-                    colspan="1"
-                    valign="center"
-                    style="
-                      text-align: center;
-                      font-weight: bold;
-                      line-height: 30px;
-                      font-size: 16px;
-                      font-family: 'Times New Roman', Times, serif;
-                    "
-                  >
-                    6
-                  </td>
                 </tr>
                 <tr>
-                  <td
-                    colspan="8"
-                    style="
-                      text-align: center;
-                      font-weight: bold;
-                      line-height: 30px;
-                      font-size: 16px;
-                      font-family: 'Times New Roman', Times, serif;
-                    "
-                  >
-                    6
-                    <!-- {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name
-                      }}{{ params_s ? 'លើកទី' + params_s : '' }} -->
-                  </td>
 
                   <td colspan="12"></td>
                   <td
-                    colspan="12"
+                    colspan="23"
                     style="
                       text-align: center;
                       font-weight: bold;
@@ -373,9 +375,24 @@ onMounted(() => {
                       font-family: 'Times New Roman', Times, serif;
                     "
                   >
-                    Attendace
-                    {{ exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name }}{{ params_s ? 'លើកទី' + params_s : '' }}
+                    វត្តមាន
+                    {{exam_month.id != 0 ? 'ខែ' : '' }}{{ exam_month.name }}{{ params_s ? 'លើកទី' + params_s : '' }}
                   </td>
+                </tr>
+                <tr>
+                  <td colspan="12"></td>
+                  <td
+                    colspan="23"
+                    style="
+                      text-align: center;
+                      font-weight: bold;
+                      line-height: 40px;
+                      font-size: 16px;
+                      font-family: 'Times New Roman', Times, serif;
+                    "
+                  >
+                    Attendance
+                    {{ monthDisplay }}</td>
                 </tr>
                 <br />
                 <tr style="line-height: 30px">
@@ -412,7 +429,7 @@ onMounted(() => {
                       font-family: 'Times New Roman', Times, serif;
                     "
                   >
-                    &nbsp;&nbsp; Level &nbsp;: {{ model.name }}
+                    &nbsp;&nbsp; Level &nbsp;: {{  model.level?.level }}
                   </td>
                   <td
                     colspan="4"
@@ -426,54 +443,77 @@ onMounted(() => {
                     &nbsp; Time &nbsp;: {{ model.time?.time }}
                   </td>
                 </tr>
-                <tr>
-                  <!-- <th
-                    rowspan="2"
-                    colspan="1"
-                    style="border: 1px solid black; padding: 5px"
-                  >
-                    ល.រ
-                  </th> -->
-                  <th
-                    style="border: 1px solid black; padding: 5px"
-                    :colspan="data?.attendances[0]?.student?.days?.length > 28 ? '15' : '15'"
-                  >
-                    ឈ្មោះ
-                  </th>
-                  <th
-                    style="border: 1px solid black; padding: 5px"
-                    colspan="4"
-                  >
-                    ភេទ
-                  </th>
-                  <th
-                    style="border: 1px solid black; padding: 5px"
-                    v-for="date in data.total_day"
-                    :key="date"
-                  >
-                    {{ date.toString().length == '1' ? '0' + date : date }}
-                  </th>
-                </tr>
-              </thead>
+                  <tr>
+                    <td
+                      colspan="1"
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                    >
+                      ល.រ
+                    </td>
+                    <td
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                      :colspan="data?.attendances[0]?.student?.days?.length > 28 ? '11' : '11'"
+                    >
+                      ឈ្មោះ
+                    </td>
+                    <td
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                      colspan="3"
+                    >
+                      ភេទ
+                    </td>
+                    <td
+                      rowspan="2"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                      v-for="date in data.total_day"
+                      :key="date"
+                    >
+                      {{ date.toString().length == '1' ? '0' + date : date }}
+                    </td>
+                    <td
+                      colspan="4"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                    >
+                      Total
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                    colspan="2"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                    >
+                      A
+                    </td>
+                    <td
+                    colspan="2"
+                      style="border: 1px solid black; padding: 5px ;font-weight: bold;"
+                    >
+                      P
+                    </td>
+                  </tr>
+                </thead>                
               <tbody>
                 <tr
                   v-for="(student, index) in data.attendances"
                   :key="index"
                 >
-                  <!-- <td
+                  <td
                     class="text-center;"
                     style="border: 1px solid black; padding: 5px"
                   >
                     {{ student.number }}
-                  </td> -->
+                  </td>
                   <td
                     style="border: 1px solid black; padding: 5px; text-align: left; padding-left: 3px"
-                    :colspan="student?.days?.length > 28 ? '15' : '15'"
+                    :colspan="student?.days?.length > 28 ? '11' : '11'"
                   >
                     {{ index }}
                   </td>
                   <td
-                    colspan="4"
+                    colspan="3"
                     class="text-center"
                     style="border: 1px solid black; padding: 5px"
                   >
@@ -487,6 +527,20 @@ onMounted(() => {
                   >
                     {{ date.absent }}
                   </td>
+                  <td
+                    colspan="2"
+                    class="text-center"
+                    style="border: 1px solid black; padding: 5px"
+                  >
+                  0
+                  </td>
+                  <td
+                    colspan="2"
+                    class="text-center"
+                    style="border: 1px solid black; padding: 5px"
+                  >
+                    0
+                  </td>
                 </tr>
                 <br />
                 <tr>
@@ -499,7 +553,7 @@ onMounted(() => {
                     "
                     colspan="2"
                   >
-                    Date ........./................/2023
+                    Date ........./................/{{currentYear}}
                   </td>
                 </tr>
                 <tr>
@@ -525,7 +579,7 @@ onMounted(() => {
                     "
                     colspan="24"
                   >
-                    Date ......./.........................../2023
+                    Date ......./.........................../{{currentYear}}
                   </td>
                 </tr>
                 <tr>
@@ -606,7 +660,7 @@ onMounted(() => {
 </template>
 <route lang="yaml">
 meta:
-  title: attendance
+  title: Attendance
   layout: default
   subject: Auth
   active: 'academic-class'

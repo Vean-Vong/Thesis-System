@@ -47,7 +47,7 @@ const fetchTable = () => {
       DataRankings(data) //ranking
     })
 }
-
+const currentYear = computed(() => new Date().getFullYear());
 onMounted(() => {
   fetchData()
 })
@@ -162,7 +162,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      Aide volontair aux
+                    ជំនួយស្ម័គ្រចិត្តដល់កុមារកម្ពុជា
                     </td>
                     <td colspan="3"></td>
                     <td colspan="6"></td>
@@ -192,7 +192,7 @@ onMounted(() => {
                         font-family: 'Times New Roman', Times, serif;
                       "
                     >
-                      enfants du Cambodage
+                    Aide volontair aux enfants du Cambodage
                     </td>
                     <td colspan="3"></td>
                     <td colspan="6"></td>
@@ -228,7 +228,7 @@ onMounted(() => {
                       style="
                         text-align: center;
                         font-weight: bold;
-                        line-height: normal;
+                        line-height: 50px;
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
@@ -270,8 +270,7 @@ onMounted(() => {
                         font-size: 16px;
                         font-family: 'Times New Roman', Times, serif;
                       "
-                    >
-                    &nbsp;&nbsp; Level &nbsp;: {{ model.name }}
+                    >Level &nbsp;: {{ model.level?.level }} 
                     </td>
                     <td
                       colspan="4"
@@ -399,7 +398,7 @@ onMounted(() => {
                       "
                       colspan="3"
                     >
-                      Date ........./................/2023
+                      Date ........./................/{{currentYear}}
                     </td>
                   </tr>
                   <tr>
@@ -424,7 +423,7 @@ onMounted(() => {
                       "
                       colspan="15"
                     >
-                      Date ......./.........................../2023
+                      Date ......./.........................../{{currentYear}}
                     </td>
                   </tr>
                   <tr>

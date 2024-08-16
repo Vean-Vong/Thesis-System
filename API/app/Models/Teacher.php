@@ -15,7 +15,7 @@ class Teacher extends Model
 
     protected $appends = [
         'sex_text',
-        'position_text'
+        // 'position_text'
     ];
 
     protected $fillable = [
@@ -48,16 +48,16 @@ class Teacher extends Model
         return $this->sex == 1 ? 'ប្រុស' : 'ស្រី';
     }
 
-    public function getPositionTextAttribute()
-    {
-        if($this->position == 1) {
-            return 'គ្រូបង្រៀន';
-        } else if($this->position == 2) {
-            return 'នាយករង';
-        } else {
-            return 'នាយក';
-        }
-    }
+    // public function getPositionTextAttribute()
+    // {
+    //     if($this->position == 1) {
+    //         return 'គ្រូបង្រៀន';
+    //     } else if($this->position == 2) {
+    //         return 'នាយករង';
+    //     } else {
+    //         return 'នាយក';
+    //     }
+    // }
 
     public function setPhotoPathAttribute($value)
     {

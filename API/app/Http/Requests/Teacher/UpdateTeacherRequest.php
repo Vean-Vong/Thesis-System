@@ -47,7 +47,7 @@ class UpdateTeacherRequest extends FormRequest
 
             'position' => [
                 'required',
-                Rule::in([1, 2, 3])
+                'max:150'
             ],
 
             'dob' => [

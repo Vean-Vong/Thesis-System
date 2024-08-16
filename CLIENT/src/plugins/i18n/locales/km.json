@@ -1,4 +1,5 @@
 {
+  "detail_student": "ពត៌មានសិស្ស",
   "type": "ប្រភេទ",
   "Students Register in This Year": "សិស្សចុះឈ្មោះនៅឆ្នាំនេះ",
   "New Student this Term Female": "សិស្សស្រីក្នុងវគ្គសិក្សា",
@@ -63,7 +64,7 @@
   "back": "ថយក្រោយ",
   "NO": "លេខរៀង",
   "class": "ថ្នាក់រៀន",
-  "checked": "ពិនិត្យមើលថ្នាក់រៀន",
+  "checked": "ពិនិត្យមើល",
   "ongoing": "កំពុងប្រតិបត្តិការ",
   "in progress": "កំពុងដំណើរការ...",
   "edit": "កែប្រែ",
