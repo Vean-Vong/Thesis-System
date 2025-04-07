@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { VThemeProvider } from 'vuetify/components/VThemeProvider'
 import { AppContentLayoutNav } from '@layouts/enums'
 

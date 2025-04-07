@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import pages404 from '@images/pages/404.png'
@@ -38,7 +39,7 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 </template>
 
 <style lang="scss">
-@use "@core/scss/template/pages/misc.scss";
+@use '@core/scss/template/pages/misc.scss';
 </style>
 
 <route lang="yaml">

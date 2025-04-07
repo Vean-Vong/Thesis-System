@@ -1,22 +1,33 @@
+<!-- eslint-disable import/extensions -->
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useTheme } from 'vuetify'
+// eslint-disable-next-line import/no-unresolved
 import { staticPrimaryColor } from '@/plugins/vuetify/theme'
+// eslint-disable-next-line import/no-unresolved
 import { useThemeConfig } from '@core/composable/useThemeConfig'
-import {
-  RouteTransitions,
-  Skins,
-} from '@core/enums'
-import {
-  AppContentLayoutNav,
-  ContentWidth,
-  FooterType,
-  NavbarType,
-} from '@layouts/enums'
+// eslint-disable-next-line import/no-unresolved
+import { RouteTransitions, Skins } from '@core/enums'
+// eslint-disable-next-line import/no-unresolved
+import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
+// eslint-disable-next-line import/no-unresolved
 import { themeConfig } from '@themeConfig'
 
 const isNavDrawerOpen = ref(false)
-const { theme, skin, appRouteTransition, navbarType, footerType, isVerticalNavCollapsed, isVerticalNavSemiDark, appContentWidth, appContentLayoutNav, isAppRtl, isNavbarBlurEnabled, isLessThanOverlayNavBreakpoint } = useThemeConfig()
+const {
+  theme,
+  skin,
+  appRouteTransition,
+  navbarType,
+  footerType,
+  isVerticalNavCollapsed,
+  isVerticalNavSemiDark,
+  appContentWidth,
+  appContentLayoutNav,
+  isAppRtl,
+  isNavbarBlurEnabled,
+  isLessThanOverlayNavBreakpoint,
+} = useThemeConfig()
 
 // 👉 Primary Color
 const vuetifyTheme = useTheme()
@@ -24,31 +35,24 @@ const vuetifyTheme = useTheme()
 // const vuetifyThemesName = Object.keys(vuetifyTheme.themes.value)
 const initialThemeColors = JSON.parse(JSON.stringify(vuetifyTheme.current.value.colors))
 
-const colors = [
-  'primary',
-  'secondary',
-  'success',
-  'info',
-  'warning',
-  'error',
-]
+const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'error']
 
 const setPrimaryColor = color => {
   const currentThemeName = vuetifyTheme.name.value
 
   vuetifyTheme.themes.value[currentThemeName].colors.primary = color
-  localStorage.setItem(`${ themeConfig.app.title }-${ currentThemeName }ThemePrimaryColor`, color)
-  localStorage.setItem(`${ themeConfig.app.title }-initial-loader-color`, color)
+  localStorage.setItem(`${themeConfig.app.title}-${currentThemeName}ThemePrimaryColor`, color)
+  localStorage.setItem(`${themeConfig.app.title}-initial-loader-color`, color)
 }
 
-const getBoxColor = (color, index) => index ? color : staticPrimaryColor
+const getBoxColor = (color, index) => (index ? color : staticPrimaryColor)
 const { width: windowWidth } = useWindowSize()
 
 const headerValues = computed(() => {
   const entries = Object.entries(NavbarType)
   if (appContentLayoutNav.value === AppContentLayoutNav.Horizontal)
     return entries.filter(([_, val]) => val !== NavbarType.Hidden)
-  
+
   return entries
 })
 </script>
@@ -59,7 +63,7 @@ const headerValues = computed(() => {
       icon
       size="small"
       class="app-customizer-toggler rounded-s-lg rounded-0"
-      style="z-index: 1001;"
+      style="z-index: 1001"
       @click="isNavDrawerOpen = true"
     >
       <VIcon
@@ -80,9 +84,7 @@ const headerValues = computed(() => {
       <!-- 👉 Header -->
       <div class="customizer-heading d-flex align-center justify-space-between">
         <div>
-          <h6 class="text-h6">
-            THEME CUSTOMIZER
-          </h6>
+          <h6 class="text-h6">THEME CUSTOMIZER</h6>
           <span class="text-body-1">Customize & Preview in Real Time</span>
         </div>
         <IconBtn @click="isNavDrawerOpen = false">
@@ -105,9 +107,7 @@ const headerValues = computed(() => {
           :divider="false"
         >
           <!-- 👉 Skin -->
-          <h6 class="text-base font-weight-regular">
-            Skins
-          </h6>
+          <h6 class="text-base font-weight-regular">Skins</h6>
           <VRadioGroup
             v-model="skin"
             inline
@@ -121,9 +121,7 @@ const headerValues = computed(() => {
           </VRadioGroup>
 
           <!-- 👉 Theme -->
-          <h6 class="mt-3 text-base font-weight-regular">
-            Theme
-          </h6>
+          <h6 class="mt-3 text-base font-weight-regular">Theme</h6>
           <VRadioGroup
             v-model="theme"
             inline
@@ -138,22 +136,23 @@ const headerValues = computed(() => {
           </VRadioGroup>
 
           <!-- 👉 Primary color -->
-          <h6 class="mt-3 text-base font-weight-regular">
-            Primary Color
-          </h6>
+          <h6 class="mt-3 text-base font-weight-regular">Primary Color</h6>
           <div class="d-flex gap-x-4 mt-2">
             <div
               v-for="(color, index) in colors"
               :key="color"
-              style=" border-radius: 0.5rem; block-size: 2.5rem;inline-size: 2.5rem; transition: all 0.25s ease;"
+              style="border-radius: 0.5rem; block-size: 2.5rem; inline-size: 2.5rem; transition: all 0.25s ease"
               :style="{ backgroundColor: getBoxColor(initialThemeColors[color], index) }"
               class="cursor-pointer d-flex align-center justify-center"
-              :class="{ 'elevation-4': vuetifyTheme.current.value.colors.primary === getBoxColor(initialThemeColors[color], index) }"
+              :class="{
+                'elevation-4':
+                  vuetifyTheme.current.value.colors.primary === getBoxColor(initialThemeColors[color], index),
+              }"
               @click="setPrimaryColor(getBoxColor(initialThemeColors[color], index))"
             >
               <VFadeTransition>
                 <VIcon
-                  v-show="vuetifyTheme.current.value.colors.primary === (getBoxColor(initialThemeColors[color], index))"
+                  v-show="vuetifyTheme.current.value.colors.primary === getBoxColor(initialThemeColors[color], index)"
                   icon="tabler-check"
                   color="white"
                 />
@@ -166,9 +165,7 @@ const headerValues = computed(() => {
         <!-- SECTION LAYOUT -->
         <CustomizerSection title="LAYOUT">
           <!-- 👉 Content Width -->
-          <h6 class="text-base font-weight-regular">
-            Content width
-          </h6>
+          <h6 class="text-base font-weight-regular">Content width</h6>
           <VRadioGroup
             v-model="appContentWidth"
             inline
@@ -196,9 +193,7 @@ const headerValues = computed(() => {
             />
           </VRadioGroup>
           <!-- 👉 Footer Type -->
-          <h6 class="mt-3 text-base font-weight-regular">
-            Footer Type
-          </h6>
+          <h6 class="mt-3 text-base font-weight-regular">Footer Type</h6>
           <VRadioGroup
             v-model="footerType"
             inline
@@ -232,9 +227,7 @@ const headerValues = computed(() => {
         <!-- SECTION Menu -->
         <CustomizerSection title="MENU">
           <!-- 👉 Menu Type -->
-          <h6 class="text-base font-weight-regular">
-            Menu Type
-          </h6>
+          <h6 class="text-base font-weight-regular">Menu Type</h6>
           <VRadioGroup
             v-model="appContentLayoutNav"
             inline
@@ -270,7 +263,11 @@ const headerValues = computed(() => {
           <!-- 👉 Semi Dark Menu -->
           <div
             class="mt-4 align-center justify-space-between"
-            :class="vuetifyTheme.global.name.value === 'light' && appContentLayoutNav === AppContentLayoutNav.Vertical ? 'd-flex' : 'd-none'"
+            :class="
+              vuetifyTheme.global.name.value === 'light' && appContentLayoutNav === AppContentLayoutNav.Vertical
+                ? 'd-flex'
+                : 'd-none'
+            "
           >
             <VLabel
               for="customizer-menu-semi-dark"

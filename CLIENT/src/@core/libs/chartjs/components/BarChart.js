@@ -1,14 +1,6 @@
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
-import { defineComponent } from "vue";
-import { Bar } from "vue-chartjs";
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
+import { defineComponent } from 'vue'
+import { Bar } from 'vue-chartjs'
 
 ChartJS.register(
   Title,
@@ -17,14 +9,14 @@ ChartJS.register(
   // Legend,
   BarElement,
   CategoryScale,
-  LinearScale
-);
+  LinearScale,
+)
 export default defineComponent({
-  name: "BarChart",
+  name: 'BarChart',
   props: {
     chartId: {
       type: String,
-      default: "bar-chart",
+      default: 'bar-chart',
     },
     width: {
       type: Number,
@@ -35,7 +27,7 @@ export default defineComponent({
       default: 400,
     },
     cssClasses: {
-      default: "",
+      default: '',
       type: String,
     },
     styles: {
@@ -66,6 +58,6 @@ export default defineComponent({
         cssClasses: props.cssClasses,
         styles: props.styles,
         plugins: props.plugins,
-      });
+      })
   },
-});
+})

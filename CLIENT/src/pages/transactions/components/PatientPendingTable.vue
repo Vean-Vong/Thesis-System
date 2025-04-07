@@ -1,6 +1,6 @@
 <script setup>
-import router from "@/router";
-import { onUnmounted, onMounted } from "vue";
+import router from '@/router'
+import { onUnmounted, onMounted } from 'vue'
 
 const props = defineProps({
   headers: {
@@ -74,76 +74,79 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const emit = defineEmits(["onView", "onEdit", "onDelete", "onUpdate"]);
+const emit = defineEmits(['onView', 'onEdit', 'onDelete', 'onUpdate'])
 
-const itemsPerPage = ref(props.itemsPerPage);
+const itemsPerPage = ref(props.itemsPerPage)
 
-const search = ref("");
+const search = ref('')
 
 const itemsPerPageOption = ref([
-  { value: 15, title: "15" },
-  { value: 30, title: "30" },
-  { value: 50, title: "50" },
-  { value: 75, title: "75" },
-  { value: 100, title: "100" },
-]);
+  { value: 15, title: '15' },
+  { value: 30, title: '30' },
+  { value: 50, title: '50' },
+  { value: 75, title: '75' },
+  { value: 100, title: '100' },
+])
 
-const initDataTable = ref(true);
+const initDataTable = ref(true)
 
-const paginateTotalVisible = ref(10);
+const paginateTotalVisible = ref(10)
 
-const onScreenChange = (e) => {
+const onScreenChange = e => {
   if (e.currentTarget.innerWidth <= 600) {
-    paginateTotalVisible.value = 5;
+    paginateTotalVisible.value = 5
   } else {
-    paginateTotalVisible.value = 10;
+    paginateTotalVisible.value = 10
   }
-};
+}
 
 onMounted(() => {
-  window.addEventListener("resize", onScreenChange);
-});
+  window.addEventListener('resize', onScreenChange)
+})
 
 onUnmounted(() => {
-  window.removeEventListener("resize", onScreenChange);
-});
+  window.removeEventListener('resize', onScreenChange)
+})
 
-const viewCallback = (item) => {
-  emit("onView", item);
-};
+const viewCallback = item => {
+  emit('onView', item)
+}
 
-const editCallback = (item) => {
-  emit("onEdit", item);
-};
+const editCallback = item => {
+  emit('onEdit', item)
+}
 
-const deleteCallback = (item) => {
-  emit("onDelete", item);
-};
+const deleteCallback = item => {
+  emit('onDelete', item)
+}
 
 const loadItems = ({ page, itemsPerPage }) => {
   if (!initDataTable.value) {
-    emit("onUpdate", {
+    emit('onUpdate', {
       page: page,
       limit: itemsPerPage,
-    });
+    })
   }
-  initDataTable.value = false;
-};
+  initDataTable.value = false
+}
 
 const handleClick = (click, row) => {
-  viewCallback(row.item.id);
-};
+  viewCallback(row.item.id)
+}
 
 const handleCreate = () => {
-  router.push({ name: props.createUrl });
-};
+  router.push({ name: props.createUrl })
+}
 </script>
 
 <template>
   <VRow>
-    <VCol cols="12" :md="cols">
+    <VCol
+      cols="12"
+      :md="cols"
+    >
       <VCard>
         <v-card-title class="mt-2">
           <p class="text-primary px-6 font-weight-bold fontKSR text-lg-subtitle-1">
@@ -160,8 +163,12 @@ const handleCreate = () => {
               class="mr-2"
               style="width: auto"
             >
-              <v-icon left class="mr-2">tabler-arrow-left</v-icon>
-              {{ $t("Back") }}
+              <v-icon
+                left
+                class="mr-2"
+                >tabler-arrow-left</v-icon
+              >
+              {{ $t('Back') }}
             </v-btn>
             <slot name="forFilter" />
             <div>
@@ -193,7 +200,7 @@ const handleCreate = () => {
               {{ props.itemsPerPage * (props.currentPage - 1) + index + 1 }}
             </template>
             <template #item.sex="{ item }">
-              <p>{{ item.props.title.sex == 1 ? "Male" : "Female" }}</p>
+              <p>{{ item.props.title.sex == 1 ? 'Male' : 'Female' }}</p>
             </template>
             <template #item.color="{ item }">
               <div>
@@ -210,19 +217,37 @@ const handleCreate = () => {
             </template>
             <template #item.actions="{ item }">
               <div class="d-flex gap-1 justify-center">
-                <IconBtn v-if="props.canView" @click="viewCallback(item.id)">
-                  <VIcon icon="tabler-eye" color="primary" />
+                <IconBtn
+                  v-if="props.canView"
+                  @click="viewCallback(item.id)"
+                >
+                  <VIcon
+                    icon="tabler-eye"
+                    color="primary"
+                  />
                 </IconBtn>
-                <IconBtn v-if="props.canEdit" @click="editCallback(item.id)">
-                  <VIcon icon="tabler-edit-circle" color="warning" />
+                <IconBtn
+                  v-if="props.canEdit"
+                  @click="editCallback(item.id)"
+                >
+                  <VIcon
+                    icon="tabler-edit-circle"
+                    color="warning"
+                  />
                 </IconBtn>
-                <IconBtn v-if="props.canDelete" @click="deleteCallback(item.id)">
-                  <VIcon icon="mdi-delete-outline" color="error" />
+                <IconBtn
+                  v-if="props.canDelete"
+                  @click="deleteCallback(item.id)"
+                >
+                  <VIcon
+                    icon="mdi-delete-outline"
+                    color="error"
+                  />
                 </IconBtn>
               </div>
             </template>
             <template #no-data>
-              <p>{{ $t("No data avialable") }}</p>
+              <p>{{ $t('No data avialable') }}</p>
             </template>
           </VDataTableServer>
         </v-card-text>

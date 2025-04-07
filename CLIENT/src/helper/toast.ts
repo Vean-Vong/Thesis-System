@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'
 
 const Toast = Swal.mixin({
   toast: true,
@@ -6,9 +6,9 @@ const Toast = Swal.mixin({
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
-  didOpen: (toast) => {
+  didOpen: toast => {
     toast.addEventListener('mouseenter', Swal.stopTimer)
     toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
+  },
 })
-export default Toast;
+export default Toast

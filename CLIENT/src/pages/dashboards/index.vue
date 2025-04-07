@@ -1,56 +1,62 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
-import VueApexCharts from 'vue3-apexcharts'
-import Id from '../academic-class/[id].vue';
 import { useI18n } from 'vue-i18n'
 const router = useRouter()
 const { t } = useI18n()
-const st_in_year = ref([])
+const price = ref(0) // Store price
 
+onMounted(async () => {
+  try {
+    const response = await api.post('summary')
+    console.log(response.data) // Debugging line
+    price.value = response.data.price // Assign price
+  } catch (error) {
+    console.error('Error fetching price:', error)
+  }
+})
 onMounted(() => {
   api.post('summary').then(response => {
-    
-    statistics.value[0].stats = response.data.academic_classes
-    statistics.value[1].stats = response.data.teachers
-    statistics.value[2].stats = response.data.students
+    statistics.value[0].stats = response.data.sales
+    statistics.value[1].stats = response.data.employees
+    statistics.value[2].stats = response.data.customers
     statistics.value[3].stats = response.data.users
-    statistics.value[4].stats = response.data.classes_this_term
-    statistics.value[5].stats = response.data.new_students
-    statistics.value[6].stats = response.data.new_students_m
-    statistics.value[7].stats = response.data.new_students_f
-    series.value[0].data = response.data.st_in_year
+    statistics.value[4].stats = response.data.products
+    statistics.value[5].stats = response.data.rental
+    statistics.value[6].stats = response.data.productStock
+    statistics.value[7].stats = response.data.filter
   })
 })
 
 const statistics = ref([
   {
-    title: 'Class Total',
+    title: 'Sale Total',
     stats: 0,
-    icon: 'mdi-account-group-outline',
+    icon: 'mdi-cart-outline',
     color: '#3b28cc',
-    name: 'academic_classes',
-    to: '/academic-class',
-    i18nKey: 'total_academic_classes',
+    name: 'sales',
+    to: '/sales',
+    i18nKey: 'Sale',
   },
   {
-    title: 'Teacher Total',
+    title: 'Employee Total',
     stats: 0,
     icon: 'mdi-account-tie',
     color: 'primary',
-    name: 'teachers',
-    to: '/teacher',
-    i18nKey: 'teachers_total',
+    name: 'employees',
+    to: '/employees',
+    i18nKey: 'Employee',
   },
   {
-    title: 'Student Total',
+    title: 'Customer Total',
     stats: 0,
-    icon: 'mdi-account-clock',
+    icon: 'mdi-account-group',
     color: '#2667ff',
-    name: 'students',
-    to: '/student',
-    i18nKey: 'total_students',
+    name: 'customers',
+    to: '/customers',
+    i18nKey: 'Customer',
   },
   {
     title: 'User Total',
@@ -60,55 +66,64 @@ const statistics = ref([
     name: 'users',
     to: 'settings/user-settings',
     i18nKey: 'total_users',
-  },{
-    title: 'Class in This Term',
+  },
+  {
+    title: 'Product',
     stats: 0,
-    icon: 'mdi-account-group-outline',
+    icon: 'mdi-package-variant',
     color: '#3b28cc',
-    name: 'academic_classes',
-    to: '/academic-class',
-    i18nKey: 'Class in This Term',
+    name: 'product',
+    to: '/products',
+    i18nKey: 'Product',
   },
   {
-    title: 'New Student this Term',
+    title: 'Rental Total',
     stats: 0,
-    icon: 'mdi-account-tie',
+    icon: 'mdi-cart-arrow-down',
     color: 'primary',
-    i18nKey: 'New Student this Term',
+    name: 'rental',
+    to: '/rental',
+    i18nKey: 'Rental',
   },
   {
-    title: 'New Student this Term Male',
+    title: 'Product in Stock',
     stats: 0,
-    icon: 'mdi-account-clock',
+    icon: 'mdi-warehouse',
     color: '#2667ff',
-    i18nKey: 'New Student this Term Male',
+    name: 'productStock',
+    to: '/product-stock',
+    i18nKey: 'Product in Stock',
   },
   {
-    title: 'New Student this Term Female',
-    stats: 0,
-    icon: 'mdi-account-star',
+    title: 'Filters Stock',
+    stats: price.value,
+    icon: 'mdi-filter-menu',
     color: '#3f8efc',
-    i18nKey: 'New Student this Term Female',
+    name: 'filter',
+    to: '/filter-stock',
+    i18nKey: 'Filter in Stock',
   },
 ])
 
-const series = ref([{
-  name: 'Inflation',
-  data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-}])
+const series = ref([
+  {
+    name: 'Inflation',
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  },
+])
 
 const chartOptions = ref({
   chart: {
     height: 350,
-    type: 'bar'
+    type: 'bar',
   },
   plotOptions: {
     bar: {
       borderRadius: 10,
       dataLabels: {
-        position: 'top' // top, center, bottom
-      }
-    }
+        position: 'top', // top, center, bottom
+      },
+    },
   },
   dataLabels: {
     enabled: true,
@@ -118,17 +133,17 @@ const chartOptions = ref({
     offsetY: -20,
     style: {
       fontSize: '12px',
-      colors: ["#304758"]
-    }
+      colors: ['#304758'],
+    },
   },
   xaxis: {
-    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     position: 'top',
     axisBorder: {
-      show: false
+      show: false,
     },
     axisTicks: {
-      show: false
+      show: false,
     },
     crosshairs: {
       fill: {
@@ -138,38 +153,38 @@ const chartOptions = ref({
           colorTo: '#BED1E6',
           stops: [0, 100],
           opacityFrom: 0.4,
-          opacityTo: 0.5
-        }
-      }
+          opacityTo: 0.5,
+        },
+      },
     },
     tooltip: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
   yaxis: {
     axisBorder: {
-      show: false
+      show: false,
     },
     axisTicks: {
-      show: true
+      show: true,
     },
     labels: {
       show: false,
       formatter: function (val) {
-        return val 
-      }
-    }
+        return val
+      },
+    },
   },
   title: {
-    text: t('Students Register in This Year'),
+    text: t('Sales in This Year'),
     floating: true,
     show: true,
     offsetY: 330,
     align: 'center',
     style: {
-      color: '#444'
-    }
-  }
+      color: '#444',
+    },
+  },
 })
 
 const go = to => {
@@ -179,10 +194,12 @@ const go = to => {
 
 <template>
   <VCard>
-    <!-- <VCardItem>
-      <VCardTitle class="text-xl text-primary">{{ $t('total_data_table') }}:</VCardTitle>
-    </VCardItem> -->
-    <VCardText class="my-5">
+    <VCardItem>
+      <VCardTitle class="text-xl text-primary">
+        {{ $t('total_data_table') }}
+      </VCardTitle>
+    </VCardItem>
+    <VCardText class="my-1">
       <VRow>
         <VCol
           v-for="item in statistics"
@@ -193,7 +210,7 @@ const go = to => {
           lg="3"
         >
           <VCard
-            :class="stat-card"
+            :class="stat - card"
             :color="item.color"
             class="d-flex align-center mb-4 py-5 rounded-2"
             dark
@@ -211,9 +228,15 @@ const go = to => {
                 :icon="item.icon"
               />
             </VAvatar>
-            <v-divider vertical class="text-white" :thickness="1"></v-divider>
+            <VDivider
+              vertical
+              class="text-white"
+              :thickness="1"
+            />
             <div class="d-flex flex-column mx-4">
-              <div class="">{{ $t(item.i18nKey) }}</div>
+              <div class="">
+                {{ $t(item.i18nKey) }}
+              </div>
             </div>
             <span class="text-2xl font-weight-medium text-white ms-auto mx-5">{{ item.stats }}</span>
           </VCard>
@@ -221,9 +244,13 @@ const go = to => {
       </VRow>
 
       <div class="mt-12">
-        <VueApexCharts type="bar" height="350" :options="chartOptions" :series="series"></VueApexCharts>
+        <VueApexCharts
+          type="bar"
+          height="350"
+          :options="chartOptions"
+          :series="series"
+        />
       </div>
-
     </VCardText>
   </VCard>
 </template>
@@ -232,8 +259,8 @@ const go = to => {
 import VueApexCharts from 'vue3-apexcharts'
 export default {
   components: {
-    VueApexCharts
-  }
+    VueApexCharts,
+  },
 }
 </script>
 
@@ -242,14 +269,14 @@ export default {
   cursor: pointer;
 }
 .stat-card {
-  background: linear-gradient(to bottom right, #42a5f5, #0d47a1); /* Gradient background */
+  background: linear-gradient(to bottom right, #42a5f5, #0d47a1); 
 }
 </style>
 
 <route lang="yaml">
-  meta:
-    title: Dashboard
-    layout: default
-    subject: Auth
-    active: 'dashboard'
+meta:
+  title: Dashboard
+  layout: default
+  subject: Auth
+  active: 'dashboard'
 </route>

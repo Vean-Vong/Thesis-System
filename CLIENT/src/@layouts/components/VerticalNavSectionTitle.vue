@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useLayouts } from '@layouts'
 import { config } from '@layouts/config'

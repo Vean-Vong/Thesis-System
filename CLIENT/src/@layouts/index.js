@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { useDynamicVhCssProperty } from './composable/useDynamicVhCssProperty'
 import { config } from './config'
 import { ContentWidth } from './enums'

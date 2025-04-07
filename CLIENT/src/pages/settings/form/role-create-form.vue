@@ -1,5 +1,8 @@
+<!-- eslint-disable import/extensions -->
 <script setup>
+// eslint-disable-next-line import/no-unresolved
 import api from '@/plugins/utilites'
+// eslint-disable-next-line import/no-unresolved
 import router from '@/router'
 
 const form = ref({

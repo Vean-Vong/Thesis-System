@@ -1,21 +1,21 @@
-import { setupLayouts } from "virtual:generated-layouts";
-import { createRouter, createWebHistory } from "vue-router";
-import routes from "~pages";
-import { isUserLoggedIn } from "./utils";
+import { setupLayouts } from 'virtual:generated-layouts'
+import { createRouter, createWebHistory } from 'vue-router'
+import routes from '~pages'
+import { isUserLoggedIn } from './utils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [...setupLayouts(routes)],
-});
+})
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-router.beforeEach((to) => {
-  const isLoggedIn = isUserLoggedIn();
+router.beforeEach(to => {
+  const isLoggedIn = isUserLoggedIn()
 
-  document.title = to.meta.title + " - AVEC";
-  
+  document.title = to.meta.title + ' - AVEC'
+
   if (isLoggedIn) {
-    if (to.name == "login" || to.path == "/") {
+    if (to.name == 'login' || to.path == '/') {
       // if (canNavigate(to)) {
       //   if (to.meta.redirectIfLoggedIn) return "/";
       // } else {
@@ -26,13 +26,13 @@ router.beforeEach((to) => {
       //       query: { to: to.name !== "index" ? to.fullPath : undefined },
       //     };
       // }
-      return { name: "dashboards" };
+      return { name: 'dashboards' }
     }
   } else {
-    if (to.name != "login") {
-      return { name: "login" };
+    if (to.name != 'login') {
+      return { name: 'login' }
     }
   }
-});
+})
 
-export default router;
+export default router

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /**
  * Return if user is logged in
  * This is completely up to you and how you want to store the token in your frontend application

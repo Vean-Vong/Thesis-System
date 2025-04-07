@@ -1,6 +1,6 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
-export const useLoadingStore = defineStore("loading", {
+export const useLoadingStore = defineStore('loading', {
   state: () => ({
     loading: false,
   }),
@@ -8,7 +8,7 @@ export const useLoadingStore = defineStore("loading", {
   actions: {
     setLoading(value) {
       if (value) {
-        this.loading = value;
+        this.loading = value
       }
     },
   },
@@ -18,4 +18,4 @@ export const useLoadingStore = defineStore("loading", {
   },
 
   // persist: true,
-});
+})

@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 
@@ -14,7 +15,10 @@ const {
   state: currentThemeName,
   next: getNextThemeName,
   index: currentThemeIndex,
-} = useCycleList(props.themes.map(t => t.name), { initialValue: theme.value })
+} = useCycleList(
+  props.themes.map(t => t.name),
+  { initialValue: theme.value },
+)
 
 const changeTheme = () => {
   theme.value = getNextThemeName()

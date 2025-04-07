@@ -1,16 +1,16 @@
+<!-- eslint-disable import/extensions -->
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import AppDataTable from '@/components/AppDataTable.vue'
 import api from '@/plugins/utilites'
 import router from '@/router'
-import { onMounted } from 'vue'
 import { useAuthStore } from '@/plugins/auth.module'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 const user = useAuthStore().user
 const { t } = useI18n()
 const items = ref([])
-const loading = ref(false)
-
 const search = ref(null)
+const loading = ref(false)
 const delete_item = ref(null)
 const deleting = ref(false)
 const dialog = ref(false)
@@ -24,26 +24,43 @@ const meta = ref({
   total: 0,
 })
 
+const formatDate = date => {
+  if (!date) return ''
+  // eslint-disable-next-line newline-before-return
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
 const initData = () => {
   loading.value = true
   api
-    .post('/employees-list', {
+    .get('/employees', {
       page: meta?.current_page,
       limit: meta?.per_page,
       search: search.value,
     })
     .then(res => {
-      items.value = res.data.data.data
+      items.value = res.data.data.data.map(item => ({
+        ...item,
+        date_of_birth: formatDate(item.date_of_birth),
+        hire_date: formatDate(item.hire_date),
+      }))
       meta.value = res.data.data.meta
     })
     .finally(() => {
       loading.value = false
     })
 }
-
 onMounted(() => {
   initData()
 })
+
+const onSearch = () => {
+  initData()
+}
 
 const headers = [
   {
@@ -51,38 +68,17 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
-    minWidth: '10px',
-    maxWidth: '20px',
   },
   {
-    title: t('Code'),
-    key: 'code',
-    align: 'center',
-    sortable: false,
-    minWidth: '20px',
-    maxWidth: '40px',
-  },
-  {
-    title: t('Khmer Name'),
-    key: 'khmer_name',
+    title: t('headers.name'),
+    key: 'name',
     align: 'center',
     sortable: false,
   },
+
   {
-    title: t('latin_name'),
-    key: 'latin_name',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Sex'),
-    key: 'sex_text',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Phone'),
-    key: 'phone',
+    title: t('Gender'),
+    key: 'gender',
     align: 'center',
     sortable: false,
   },
@@ -93,6 +89,37 @@ const headers = [
     sortable: false,
   },
   {
+    title: t('Email'),
+    key: 'email',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Phone'),
+    key: 'phone',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Address'),
+    key: 'address',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Date of Birth'),
+    key: 'date_of_birth',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Hire Date'),
+    key: 'hire_date',
+    align: 'center',
+    sortable: false,
+  },
+
+  {
     title: t('Actions'),
     key: 'actions',
     align: 'center',
@@ -101,29 +128,21 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'employees-show', query: { id: item } })
-}
-
-const deleteCallback = item => {
-  dialog.value = true
-  delete_item.value = item
+  router.push({ name: 'settings-form-role-detail-form', query: { id: item } })
 }
 
 const editCallback = item => {
-  router.push({
-    name: 'employees-edit',
-    query: { uuid: item },
-  })
+  router.push({ name: 'employees-edit', query: { id: item } })
 }
 
-const updateCallback = item => {
-  meta.current_page = item.page
-  meta.per_page = item.limit
-  initData()
-}
-
-const onSearch = () => {
-  initData()
+// const updateCallback = item => {
+//   meta.current_page = item.page
+//   meta.per_page = item.limit
+//   initData()
+// }
+const deleteCallback = item => {
+  dialog.value = true
+  delete_item.value = item
 }
 
 const cancelCallback = () => {
@@ -134,9 +153,9 @@ const cancelCallback = () => {
 const confirmDeleteCallback = () => {
   deleting.value = true
   api
-    .post('employees-delete', { id: delete_item.value })
+    .delete(`/employees/${delete_item.value}`)
     .then(res => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         initData()
       }
     })
@@ -156,6 +175,7 @@ const confirmDeleteCallback = () => {
     @on-confirm-delete="confirmDeleteCallback"
   />
   <AppDataTable
+    cols="12"
     create-url="employees-create"
     :headers="headers"
     :items="items"
@@ -164,17 +184,14 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit employees')"
-    :can-view="user.can('view employees')"
-    :can-delete="user.can('delete employees')"
-    :can-create="user.can('create employees')"
+    :can-edit="user.can('edit_roles')"
+    :can-delete="user.can('delete_roles')"
+    :can-create="user.can('create_roles')"
     btn-submit="CreateNew"
-    :table-title="$t('List of Employee')"
-    cols="12"
+    :table-title="$t('List of Employees')"
     :loading="loading"
     @on-edit="editCallback"
-    @on-view="viewCallback"
-    @on-update="updateCallback"
+    @on-create="createCallback"
     @on-delete="deleteCallback"
   >
     <template #forFilter>

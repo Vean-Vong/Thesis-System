@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { createVuetify } from 'vuetify'
 import { VBtn } from 'vuetify/components/VBtn'
 import defaults from './defaults'

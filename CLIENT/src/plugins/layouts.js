@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { createLayouts } from '@layouts'
 import '@layouts/styles/index.scss'
 import { layoutConfig } from '@themeConfig'

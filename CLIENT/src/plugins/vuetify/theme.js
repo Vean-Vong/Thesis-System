@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { resolveVuetifyTheme } from '@core/utils/vuetify'
 import { themeConfig } from '@themeConfig'
 

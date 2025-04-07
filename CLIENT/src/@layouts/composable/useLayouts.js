@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { AppContentLayoutNav, NavbarType } from '../enums'
 import { config } from '@layouts/config'
 import { injectionKeyIsVerticalNavHovered } from '@layouts'
@@ -64,8 +65,7 @@ export const useLayouts = () => {
 
       // If Navbar type is hidden while switching to horizontal nav => Reset it to sticky
       if (val === AppContentLayoutNav.Horizontal) {
-        if (navbarType.value === NavbarType.Hidden)
-          navbarType.value = NavbarType.Sticky
+        if (navbarType.value === NavbarType.Hidden) navbarType.value = NavbarType.Sticky
         isVerticalNavCollapsed.value = false
       }
     },
@@ -86,15 +86,16 @@ export const useLayouts = () => {
 
   const _layoutClasses = computed(() => (windowWidth, windowScrollY) => {
     const route = useRoute()
-    
+
     return [
       `layout-nav-type-${appContentLayoutNav.value}`,
       `layout-navbar-${navbarType.value}`,
       `layout-footer-${footerType.value}`,
       {
-        'layout-vertical-nav-collapsed': isVerticalNavCollapsed.value
-                    && appContentLayoutNav.value === 'vertical'
-                    && !isLessThanOverlayNavBreakpoint.value(windowWidth),
+        'layout-vertical-nav-collapsed':
+          isVerticalNavCollapsed.value &&
+          appContentLayoutNav.value === 'vertical' &&
+          !isLessThanOverlayNavBreakpoint.value(windowWidth),
       },
       { [`horizontal-nav-${horizontalNavType.value}`]: appContentLayoutNav.value === 'horizontal' },
       `layout-content-width-${appContentWidth.value}`,
@@ -121,15 +122,13 @@ export const useLayouts = () => {
         */
     const lgAndUpNav = ref(appContentLayoutNav.value)
 
-
     /*
           There might be case where we manually switch from vertical to horizontal nav and vice versa in `lgAndUp` screen
           So when user comes back from `mdAndDown` to `lgAndUp` we can set updated nav type
           For this we need to update the `lgAndUpNav` value if screen is `lgAndUp`
         */
     watch(appContentLayoutNav, value => {
-      if (!isLessThanOverlayNavBreakpoint.value(windowWidth))
-        lgAndUpNav.value = value
+      if (!isLessThanOverlayNavBreakpoint.value(windowWidth)) lgAndUpNav.value = value
     })
 
     /*
@@ -137,14 +136,15 @@ export const useLayouts = () => {
           If it's `mdAndDown` => We will use vertical nav no matter what previous nav type was
           Or if it's `lgAndUp` we need to switch back to `lgAndUp` nav type. For this we will tracker property `lgAndUpNav`
         */
-    watch(() => isLessThanOverlayNavBreakpoint.value(windowWidth), val => {
-      if (!val)
-        appContentLayoutNav.value = lgAndUpNav.value
-      else
-        appContentLayoutNav.value = AppContentLayoutNav.Vertical
-    }, { immediate: true })
+    watch(
+      () => isLessThanOverlayNavBreakpoint.value(windowWidth),
+      val => {
+        if (!val) appContentLayoutNav.value = lgAndUpNav.value
+        else appContentLayoutNav.value = AppContentLayoutNav.Vertical
+      },
+      { immediate: true },
+    )
   }
-
 
   /*
       This function will return true if current state is mini. Mini state means vertical nav is:
@@ -158,8 +158,13 @@ export const useLayouts = () => {
     */
   const isVerticalNavMini = (windowWidth, isVerticalNavHovered = null) => {
     const isVerticalNavHoveredLocal = isVerticalNavHovered || inject(injectionKeyIsVerticalNavHovered) || ref(false)
-    
-    return computed(() => isVerticalNavCollapsed.value && !isVerticalNavHoveredLocal.value && !isLessThanOverlayNavBreakpoint.value(unref(windowWidth)))
+
+    return computed(
+      () =>
+        isVerticalNavCollapsed.value &&
+        !isVerticalNavHoveredLocal.value &&
+        !isLessThanOverlayNavBreakpoint.value(unref(windowWidth)),
+    )
   }
 
   const dynamicI18nProps = computed(() => (key, tag = 'span') => {
@@ -170,7 +175,7 @@ export const useLayouts = () => {
         scope: 'global',
       }
     }
-    
+
     return {}
   })
 

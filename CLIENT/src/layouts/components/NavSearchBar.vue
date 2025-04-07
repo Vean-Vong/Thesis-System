@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import Shepherd from 'shepherd.js'
 import axios from '@axios'
@@ -163,7 +164,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
   <div
     class="d-flex align-center cursor-pointer"
     v-bind="$attrs"
-    style="user-select: none;"
+    style="user-select: none"
     @click="isAppSearchBarVisible = !isAppSearchBarVisible"
   >
     <!-- 👉 Search Trigger button -->
@@ -218,7 +219,7 @@ const LazyAppBarSearch = defineAsyncComponent(() => import('@core/components/App
 </template>
 
 <style lang="scss" scoped>
-@use "@styles/variables/_vuetify.scss";
+@use '@styles/variables/_vuetify.scss';
 
 .meta-key {
   border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));

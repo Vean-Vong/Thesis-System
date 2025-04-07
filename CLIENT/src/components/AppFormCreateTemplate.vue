@@ -1,6 +1,9 @@
 <template>
   <VRow>
-    <VCol cols="12" :md="cols">
+    <VCol
+      cols="12"
+      :md="cols"
+    >
       <v-card>
         <v-card-title class="mt-2">
           <p class="text-primary px-6 font-weight-bold fontKSR text-lg-subtitle-1">
@@ -29,12 +32,12 @@
 </template>
 
 <script setup>
-import router from "@/router";
+import router from '@/router'
 
 const props = defineProps({
   title: {
     type: String,
-    default: "Create New",
+    default: 'Create New',
   },
   cols: {
     type: [Number, String],
@@ -47,15 +50,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(['submit'])
 
 const onSubmit = () => {
-  emit("submit");
-};
+  emit('submit')
+}
 
 const onGoBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 </script>

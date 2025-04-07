@@ -5,19 +5,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\AcademicYearController;
-use App\Http\Controllers\AcademicClassController;
 use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ExamController;
-use App\Http\Controllers\LevelController;
-use App\Http\Controllers\RoomController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\TimeController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FilterController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RentalController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\StockController;
+use App\Models\Employee;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,67 +62,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('users-delete', [UserController::class, 'delete']);
     Route::post('users-reset-pw', [UserController::class, 'resetPassword']);
 
-    Route::post('schools-create', [SchoolController::class, 'store']);
-    Route::post('schools-list', [SchoolController::class, 'list']);
-    Route::post('schools-show', [SchoolController::class, 'show']);
-    Route::post('schools-update', [SchoolController::class, 'update']);
 
-    Route::post('academic-years-create', [AcademicYearController::class, 'store']);
-    Route::post('academic-years-list', [AcademicYearController::class, 'list']);
-    Route::post('academic-years-show', [AcademicYearController::class, 'show']);
-    Route::post('academic-years-update', [AcademicYearController::class, 'update']);
-    Route::post('academic-years-delete', [AcademicYearController::class, 'delete']);
-    Route::post('academic-years-result', [AcademicYearController::class, 'result']);
-
-    Route::post('academic-classes-create', [AcademicClassController::class, 'store']);
-    Route::post('academic-classes-list', [AcademicClassController::class, 'list']);
-    Route::post('academic-classes-show', [AcademicClassController::class, 'show']);
-    Route::post('academic-classes-update', [AcademicClassController::class, 'update']);
-    Route::post('academic-classes-delete', [AcademicClassController::class, 'delete']);
-    Route::post('academic-classes-option', [AcademicClassController::class, 'option']);
-    Route::post('academic-classes-detail', [AcademicClassController::class, 'detail']);
-    Route::post('academic-classes-search-student', [AcademicClassController::class, 'searchStudent']);
-    Route::post('academic-classes-add-student', [AcademicClassController::class, 'addStudent']);
-    Route::post('academic-classes-list-student', [AcademicClassController::class, 'listStudent']);
-    Route::post('academic-classes-remove-student', [AcademicClassController::class, 'removeStudent']);
-    Route::post('academic-classes-move-student', [AcademicClassController::class, 'moveStudent']);
-    Route::post('academic-classes-make-as-stop-student', [AcademicClassController::class, 'makeAsStopStudent']);
-    Route::post('academic-classes-make-as-new-student', [AcademicClassController::class, 'makeAsNewStudent']);
-    Route::post('academic-classes-month', [AcademicClassController::class, 'getMonth']);
-    Route::post('academic-classes-list-study-history', [AcademicClassController::class, 'listStudyHistory']);
-
-    Route::post('teachers-create', [TeacherController::class, 'store']);
-    Route::post('teachers-list', [TeacherController::class, 'list']);
-    Route::post('teachers-show', [TeacherController::class, 'show']);
-    Route::post('teachers-update', [TeacherController::class, 'update']);
-    Route::post('teachers-delete', [TeacherController::class, 'delete']);
-
-    Route::post('students-create', [StudentController::class, 'store']);
-    Route::post('students-list', [StudentController::class, 'list']);
-    Route::post('students-show', [StudentController::class, 'show']);
-    Route::post('students-update', [StudentController::class, 'update']);
-    Route::post('students-delete', [StudentController::class, 'delete']);
-
-    Route::post('exam-form', [ExamController::class, 'form']);
-    Route::post('exam-save', [ExamController::class, 'save']);
-    Route::post('exam-show', [ExamController::class, 'show']);
-
-    Route::post('attendances-form', [AttendanceController::class, 'form']);
-    Route::post('attendances-save', [AttendanceController::class, 'save']);
-    Route::post('attendances-show', [AttendanceController::class, 'show']);
-
-    Route::post('level-create', [LevelController::class, 'store']);
-    Route::post('level-list', [LevelController::class, 'list']);
-    Route::post('level-show', [LevelController::class, 'show']);
-    Route::post('level-update', [LevelController::class, 'update']);
-
-    Route::post('time-create', [TimeController::class, 'store']);
-    Route::post('time-list', [TimeController::class, 'list']);
-    Route::post('time-show', [TimeController::class, 'show']);
-    Route::post('time-update', [TimeController::class, 'update']);
-
-    Route::post('room-create', [RoomController::class, 'store']);
-    Route::post('room-list', [RoomController::class, 'list']);
-    Route::post('room-show', [RoomController::class, 'show']);
-    Route::post('room-update', [RoomController::class, 'update']);
+    Route::apiResource('employees', EmployeeController::class);
+    Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('sales', SaleController::class);
+    Route::apiResource('products', ProductController::class);
+    Route::apiResource('stock', StockController::class);
+    Route::apiResource('rentals', RentalController::class);
+    Route::apiResource('filters', FilterController::class);
+    Route::apiResource('services', ServiceController::class);
 });

@@ -1,20 +1,17 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
-import { PerfectScrollbar } from "vue3-perfect-scrollbar";
-import { VNodeRenderer } from "./VNodeRenderer";
-import { injectionKeyIsVerticalNavHovered, useLayouts } from "@layouts";
-import { useRoute } from "vue-router";
-import {
-  VerticalNavGroup,
-  VerticalNavLink,
-  VerticalNavSectionTitle,
-} from "@layouts/components";
-import { config } from "@layouts/config";
-import { reactive } from "vue";
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { VNodeRenderer } from './VNodeRenderer'
+import { injectionKeyIsVerticalNavHovered, useLayouts } from '@layouts'
+import { useRoute } from 'vue-router'
+import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle } from '@layouts/components'
+import { config } from '@layouts/config'
+import { reactive } from 'vue'
 const props = defineProps({
   tag: {
     type: [String, null],
     required: false,
-    default: "aside",
+    default: 'aside',
   },
   navItems: {
     type: null,
@@ -28,51 +25,51 @@ const props = defineProps({
     type: Function,
     required: true,
   },
-});
+})
 
-const refNav = ref();
-const { width: windowWidth } = useWindowSize();
-const isHovered = useElementHover(refNav);
+const refNav = ref()
+const { width: windowWidth } = useWindowSize()
+const isHovered = useElementHover(refNav)
 
-provide(injectionKeyIsVerticalNavHovered, isHovered);
+provide(injectionKeyIsVerticalNavHovered, isHovered)
 
 const {
   isVerticalNavCollapsed: isCollapsed,
   isLessThanOverlayNavBreakpoint,
   isVerticalNavMini,
   isAppRtl,
-} = useLayouts();
+} = useLayouts()
 
-const hideTitleAndIcon = isVerticalNavMini(windowWidth, isHovered);
+const hideTitleAndIcon = isVerticalNavMini(windowWidth, isHovered)
 
-const resolveNavItemComponent = (item) => {
-  if ("heading" in item) return VerticalNavSectionTitle;
-  if ("children" in item) return VerticalNavGroup;
+const resolveNavItemComponent = item => {
+  if ('heading' in item) return VerticalNavSectionTitle
+  if ('children' in item) return VerticalNavGroup
 
-  return VerticalNavLink;
-};
+  return VerticalNavLink
+}
 
-const route = useRoute();
+const route = useRoute()
 
 watch(
   () => route.name,
   () => {
-    props.toggleIsOverlayNavActive(false);
-  }
-);
+    props.toggleIsOverlayNavActive(false)
+  },
+)
 
-const isVerticalNavScrolled = ref(false);
-const updateIsVerticalNavScrolled = (val) => (isVerticalNavScrolled.value = val);
+const isVerticalNavScrolled = ref(false)
+const updateIsVerticalNavScrolled = val => (isVerticalNavScrolled.value = val)
 
-const handleNavScroll = (evt) => {
-  isVerticalNavScrolled.value = evt.target.scrollTop > 0;
-};
+const handleNavScroll = evt => {
+  isVerticalNavScrolled.value = evt.target.scrollTop > 0
+}
 
 const isStyle = reactive({
-  width:'140px'
+  width: '140px',
 })
 const isStyleCollapse = reactive({
-  width:'40px'
+  width: '40px',
 })
 </script>
 
@@ -93,13 +90,22 @@ const isStyleCollapse = reactive({
     <!-- 👉 Header -->
     <div class="nav-header">
       <slot name="nav-header">
-        <RouterLink to="/" class="app-logo d-flex align-center gap-x-3 app-title-wrapper">
-          <VNodeRenderer :nodes="config.app.logo" style="transition: all 0.2s ease;" class="logo-width mx-6 py-5 py-lg-4 ma-lg-0" :class="[
-            {
-              'mx-lg-0':isCollapsed,
-              'mx-lg-7':!isCollapsed
-            }
-            ]" :style="[!isCollapsed ? isStyle : isStyleCollapse]" />
+        <RouterLink
+          to="/"
+          class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
+        >
+          <VNodeRenderer
+            :nodes="config.app.logo"
+            style="transition: all 0.2s ease"
+            class="logo-width mx-6 py-5 py-lg-4 ma-lg-0"
+            :class="[
+              {
+                'mx-lg-0': isCollapsed,
+                'mx-lg-7': !isCollapsed,
+              },
+            ]"
+            :style="[!isCollapsed ? isStyle : isStyleCollapse]"
+          />
 
           <!--
             <Transition name="vertical-nav-app-title">
@@ -143,7 +149,10 @@ const isStyleCollapse = reactive({
     <slot name="before-nav-items">
       <div class="vertical-nav-items-shadow" />
     </slot>
-    <slot name="nav-items" :update-is-vertical-nav-scrolled="updateIsVerticalNavScrolled">
+    <slot
+      name="nav-items"
+      :update-is-vertical-nav-scrolled="updateIsVerticalNavScrolled"
+    >
       <PerfectScrollbar
         :key="isAppRtl"
         tag="ul"
@@ -165,8 +174,8 @@ const isStyleCollapse = reactive({
 </template>
 
 <style lang="scss">
-@use "@configured-variables" as variables;
-@use "@layouts/styles/mixins";
+@use '@configured-variables' as variables;
+@use '@layouts/styles/mixins';
 
 // 👉 Vertical Nav
 .layout-vertical-nav {
@@ -178,8 +187,7 @@ const isStyleCollapse = reactive({
   inline-size: variables.$layout-vertical-nav-width;
   inset-block-start: 0;
   inset-inline-start: 0;
-  transition: transform 0.25s ease-in-out, inline-size 0.25s ease-in-out,
-    box-shadow 0.25s ease-in-out;
+  transition: transform 0.25s ease-in-out, inline-size 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   will-change: transform, inline-size;
 
   .nav-header {
@@ -189,7 +197,7 @@ const isStyleCollapse = reactive({
     .header-action {
       cursor: pointer;
     }
-    .logo-width{
+    .logo-width {
       margin: 0;
     }
   }
@@ -197,7 +205,6 @@ const isStyleCollapse = reactive({
   .app-title-wrapper {
     margin-inline-end: auto;
   }
-  
 
   .nav-items {
     block-size: 100%;
@@ -222,7 +229,6 @@ const isStyleCollapse = reactive({
       inline-size: variables.$layout-vertical-nav-collapsed-width;
     }
   }
-  
 
   // 👉 Overlay nav
   &.overlay-nav {
@@ -235,5 +241,4 @@ const isStyleCollapse = reactive({
     }
   }
 }
-
 </style>

@@ -1,295 +1,214 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
-import api from "@/plugins/utilites";
-import router from "@/router";
-const submitting = ref(false);
-const refForm = ref();
-const dialog = ref(false);
+import { reactive, ref, onMounted } from 'vue'
+// eslint-disable-next-line import/extensions
+import api from '@/plugins/utilites'
+// eslint-disable-next-line import/extensions
+import router from '@/router'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
 const form = reactive({
   data: {
-    id_card_no: null,
-    khmer_name: null,
-    latin_name: null,
-    sex: null,
-    dob: null,
-    phone: null,
-    religion: "ព្រះពុទ្ធ",
-    nationality: "ខ្មែរ",
-    pob_address: null,
-    status: null,
-    home_no: null,
-    street_no: null,
-    group_no: null,
-    position_id: null,
-    join_date: null,
-    facebook: null,
+    name: null,
+    gender: null,
+    position: null,
     email: null,
+    phone: null,
     address: null,
+    date_of_birth: null,
+    hire_date: null,
   },
-  options: {
-    positions: [],
-    statuses: [
-      {
-        id: 1,
-        name: "Active / Working",
-      },
-      {
-        id: 0,
-        name: "Inactive / Leave",
-      },
-    ],
-    sexs: [
-      {
-        id: "1",
-        name: "Female",
-      },
-      {
-        id: "2",
-        name: "Male",
-      },
-    ],
-  },
-  additional: {
-    address: null,
-  },
-});
+})
 
-onMounted(async () => {
-  const query = await router.currentRoute.value.query;
-  await api.post("/employees-show", { id: query.uuid }).then((res) => {
-    form.data = res.data.data;
-  });
+const submitting = ref(false)
+const refForm = ref()
 
-  if (form.data.address) await getAddressFull(form.data.address);
+const fetchEmployee = async () => {
+  try {
+    const res = await api.get(`/employees/${route.query.id}`)
+    form.data = res.data.data
+  } catch (error) {
+    console.error('Failed to fetch employee:', error)
+  }
+}
 
-  await api.post("/employees-init").then((res) => {
-    form.options.positions = res.data.data.positions;
-  });
-});
+onMounted(fetchEmployee)
 
 const onUpdate = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
-    submitting.value = true;
+    submitting.value = true
     api
-      .post("/employees-update", form.data)
-      .then((res) => {
-        if (res.status == 200) router.back();
+      .put(`/employees/${route.query.id}`, form.data)
+      .then(res => {
+        if (res.status === 200) router.back()
+      })
+      .catch(error => {
+        console.error('Error updating employee:', error)
       })
       .finally(() => {
-        submitting.value = false;
-      });
+        submitting.value = false
+      })
   }
-};
+}
 
-const getaddress = (newAddress) => {
-  form.data.address = newAddress.village_id;
-  form.additional.address = newAddress.address;
-};
-
-const resetAddress = () => {
-  form.data.address = null;
-  form.additional.address = null;
-};
-
-const getAddressFull = (it) => {
-  api.post("get-address-full", { village_id: it }).then((res) => {
-    if (res.status == 200) {
-      form.additional.address = res.data.data.address;
-    }
-  });
-};
+const rules = {
+  required: v => !!v || 'This field is required',
+  email: v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+  dob: v => !!v || 'Date of Birth is required',
+  hire_date: v => !!v || 'Hire Date is required',
+}
 </script>
 
 <template>
-  <LocationFormDialog
-    v-model="dialog"
-    :dialog="dialog"
-    :formText="form.data.pob_address"
-    @get-address="getaddress"
-  >
-  </LocationFormDialog>
-  <AppFormUpdateTemplate
-    cols="12"
-    @submit="onUpdate"
+  <AppFormCreateTemplate
+    cols="9"
     :title="$t('Update Employee')"
     :submitting="submitting"
+    @submit="onUpdate"
   >
-    <VForm ref="refForm" lazy-validation>
-      <VRow>
-        <VCol cols="12" md="12" offset-lg>
-          <VRow>
-            <VCol cols="12">
-              <VRow>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="id_card_no"
-                    v-model="form.data.id_card_no"
-                    :label="$t('id_card_no')"
-                  />
-                </VCol>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="khmer_name"
-                    v-model="form.data.khmer_name"
-                    :label="$t('khmer_name')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('khmer_name') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="latin_name"
-                    v-model="form.data.latin_name"
-                    :label="$t('latin_name')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('latin_name') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="dob"
-                    v-model="form.data.dob"
-                    :label="$t('dob')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('dob') + $t('required')]"
-                    type="date"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppSelect
-                    id="sex"
-                    v-model="form.data.sex"
-                    :label="$t('Sex')"
-                    :items="form.options.sexs"
-                    item-title="name"
-                    item-value="id"
-                    required="true"
-                    :rules="[(v) => !!v || $t('Sex') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppTextField
-                    id="phone"
-                    v-model="form.data.phone"
-                    :label="$t('Phone')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('Phone') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppTextField
-                    id="religion"
-                    v-model="form.data.religion"
-                    :label="$t('religion')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('religion') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="1">
-                  <AppTextField
-                    id="nationality"
-                    v-model="form.data.nationality"
-                    :label="$t('nationality')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('nationality') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="5">
-                  <AppTextField
-                    id="pob_address"
-                    v-model="form.data.pob_address"
-                    :label="$t('pob_address')"
-                    required="true"
-                    :rules="[(v) => !!v || $t('pob_address') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppSelect
-                    id="status"
-                    v-model="form.data.status"
-                    :label="$t('status')"
-                    :items="form.options.statuses"
-                    item-title="name"
-                    item-value="id"
-                    required="true"
-                    :rules="[(v) => !!v || $t('status') + $t('required')]"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppTextField
-                    id="home_no"
-                    v-model="form.data.home_no"
-                    :label="$t('home_no')"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppTextField
-                    id="street_no"
-                    v-model="form.data.street_no"
-                    :label="$t('street_no')"
-                  />
-                </VCol>
-                <VCol cols="12" md="1">
-                  <AppTextField
-                    id="group_no"
-                    v-model="form.data.group_no"
-                    :label="$t('group_no')"
-                  />
-                </VCol>
-                <VCol cols="12" md="2">
-                  <AppSelect
-                    :items="form.options.positions"
-                    id="position_id"
-                    item-title="latin_name"
-                    item-value="id"
-                    v-model="form.data.position_id"
-                    :label="$t('Position')"
-                  />
-                </VCol>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="join_date"
-                    v-model="form.data.join_date"
-                    :label="$t('join_date')"
-                    type="date"
-                  />
-                </VCol>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="facebook"
-                    v-model="form.data.facebook"
-                    :label="$t('facebook')"
-                  />
-                </VCol>
-                <VCol cols="12" md="3">
-                  <AppTextField
-                    id="email"
-                    v-model="form.data.email"
-                    :label="$t('Email')"
-                  />
-                </VCol>
-                <VCol cols="12" md="6" class="d-flex align-end gap-5">
-                  <AppTextField
-                    id="address"
-                    v-model="form.additional.address"
-                    :label="$t('Address Setting')"
-                    readonly
-                    @click="dialog = !dialog"
-                  />
-                </VCol>
-              </VRow>
-            </VCol>
-          </VRow>
+    <VForm
+      ref="refForm"
+      @submit.prevent="onUpdate"
+    >
+      <VRow dense>
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VTextField
+            v-model="form.data.name"
+            :label="$t('Name')"
+            :rules="[rules.required]"
+            outlined
+            required
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VSelect
+            v-model="form.data.gender"
+            :label="$t('Gender')"
+            :rules="[rules.required]"
+            :items="['Male', 'Female', 'Other']"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VSelect
+            v-model="form.data.position"
+            :label="$t('Position')"
+            :rules="[rules.required]"
+            :items="['Manager', 'Supervisor', 'Staff', 'Accounting']"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.email"
+            :label="$t('Email')"
+            :rules="[rules.required, rules.email]"
+            type="email"
+            outlined
+            required
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.phone"
+            :label="$t('Phone')"
+            :rules="[rules.required]"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VSelect
+            v-model="form.data.address"
+            :label="$t('Address')"
+            :rules="[rules.required]"
+            :items="[
+              'Battambang',
+              'Siem Reap',
+              'Kampong Thom',
+              'Phnom Penh',
+              'Kampong Cham',
+              'Kampong Chhnang',
+              'Kampong Speu',
+              'Kampot',
+              'Kandal',
+              'Koh Kong',
+              'Kratie',
+              'Mondulkiri',
+              'Oddar Meanchey',
+              'Pailin',
+              'Preah Sihanouk',
+              'Preah Vihear',
+              'Prey Veng',
+              'Pursat',
+              'Ratanakiri',
+              'Stung Treng',
+              'Svay Rieng',
+              'Takéo',
+              'Tbong Khmum',
+            ]"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.date_of_birth"
+            :rules="[rules.required]"
+            :label="$t('Date of Birth')"
+            type="date"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.hire_date"
+            :rules="[rules.required]"
+            :label="$t('Hire Date')"
+            type="date"
+            outlined
+          />
         </VCol>
       </VRow>
     </VForm>
-  </AppFormUpdateTemplate>
+  </AppFormCreateTemplate>
 </template>
 
 <route lang="yaml">
 meta:
-  title: Employee Update
+  title: Employee Edit
   layout: default
   subject: Auth
-  active: "employee"
+  active: 'employee'
 </route>

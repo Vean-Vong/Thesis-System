@@ -1,28 +1,28 @@
-import { hexToRgb } from "@layouts/utils";
+import { hexToRgb } from '@layouts/utils'
 
 // 👉 Colors variables
-const colorVariables = (themeColors) => {
-  const themeSecondaryTextColor = `rgba(${hexToRgb(
-    themeColors.colors["on-surface"]
-  )},${themeColors.variables["medium-emphasis-opacity"]})`;
-  const themeDisabledTextColor = `rgba(${hexToRgb(
-    themeColors.colors["on-surface"]
-  )},${themeColors.variables["disabled-opacity"]})`;
-  const themeBorderColor = `rgba(${hexToRgb(
-    String(themeColors.variables["border-color"])
-  )},${themeColors.variables["border-opacity"]})`;
+const colorVariables = themeColors => {
+  const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${
+    themeColors.variables['medium-emphasis-opacity']
+  })`
+  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${
+    themeColors.variables['disabled-opacity']
+  })`
+  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${
+    themeColors.variables['border-opacity']
+  })`
 
   return {
     labelColor: themeDisabledTextColor,
     borderColor: themeBorderColor,
     legendColor: themeSecondaryTextColor,
-  };
-};
+  }
+}
 
 // SECTION config
 // 👉 Latest Bar Chart Config
-export const getLatestBarChartConfig = (themeColors) => {
-  const { borderColor, labelColor } = colorVariables(themeColors);
+export const getLatestBarChartConfig = themeColors => {
+  const { borderColor, labelColor } = colorVariables(themeColors)
 
   return {
     responsive: true,
@@ -54,15 +54,15 @@ export const getLatestBarChartConfig = (themeColors) => {
     plugins: {
       legend: { display: false },
     },
-  };
-};
+  }
+}
 
 // 👉 Horizontal Bar Chart Config
-export const getHorizontalBarChartConfig = (themeColors) => {
-  const { borderColor, labelColor, legendColor } = colorVariables(themeColors);
+export const getHorizontalBarChartConfig = themeColors => {
+  const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
 
   return {
-    indexAxis: "y",
+    indexAxis: 'y',
     responsive: true,
     maintainAspectRatio: false,
     animation: { duration: 500 },
@@ -98,69 +98,69 @@ export const getHorizontalBarChartConfig = (themeColors) => {
     },
     plugins: {
       legend: {
-        align: "end",
-        position: "top",
+        align: 'end',
+        position: 'top',
         labels: { color: legendColor },
       },
     },
-  };
-};
+  }
+}
 
 // new line Chart js config
-export const LineChartJs = (themeColors) => {
-  const { borderColor, labelColor, legendColor } = colorVariables(themeColors);
-  
-    return {
-      type: 'line',
-      responsive: true,
-      interaction: {
-        mode: 'index',
-        intersect: false,
+export const LineChartJs = themeColors => {
+  const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
+
+  return {
+    type: 'line',
+    responsive: true,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart - Multi Axis',
       },
-      stacked: false,
-      plugins: {
-        title: {
-          display: true,
-          text: 'Chart.js Line Chart - Multi Axis'
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: labelColor },
-          grid: {
-            borderColor,
-            drawBorder: false,
-            color: borderColor,
-          },
-        },
-        y: {
-          type: 'linear',
-          display: true,
-          position: 'left',
-          ticks:{
-            stepSize: 100,
-            color: labelColor,
-          }
+    },
+    scales: {
+      x: {
+        ticks: { color: labelColor },
+        grid: {
+          borderColor,
+          drawBorder: false,
+          color: borderColor,
         },
       },
-      plugins: {
-        legend: {
-          align: "end",
-          position: "top",
-          labels: {
-            padding: 25,
-            boxWidth: 10,
-            color: legendColor,
-            usePointStyle: true,
-          },
+      y: {
+        type: 'linear',
+        display: true,
+        position: 'left',
+        ticks: {
+          stepSize: 100,
+          color: labelColor,
         },
       },
-    }
-};
+    },
+    plugins: {
+      legend: {
+        align: 'end',
+        position: 'top',
+        labels: {
+          padding: 25,
+          boxWidth: 10,
+          color: legendColor,
+          usePointStyle: true,
+        },
+      },
+    },
+  }
+}
 
 // 👉 Line Chart Config
-export const getLineChartConfig = (themeColors) => {
-  const { borderColor, labelColor, legendColor } = colorVariables(themeColors);
+export const getLineChartConfig = themeColors => {
+  const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
   return {
     type: 'line',
     responsive: true,
@@ -190,8 +190,8 @@ export const getLineChartConfig = (themeColors) => {
     },
     plugins: {
       legend: {
-        align: "center",
-        position: "bottom",
+        align: 'center',
+        position: 'bottom',
         labels: {
           padding: 25,
           boxWidth: 10,
@@ -200,12 +200,12 @@ export const getLineChartConfig = (themeColors) => {
         },
       },
     },
-  };
-};
+  }
+}
 
 // 👉 Radar Chart Config
-export const getRadarChartConfig = (themeColors) => {
-  const { borderColor, labelColor, legendColor } = colorVariables(themeColors);
+export const getRadarChartConfig = themeColors => {
+  const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
 
   return {
     responsive: true,
@@ -228,19 +228,19 @@ export const getRadarChartConfig = (themeColors) => {
     },
     plugins: {
       legend: {
-        position: "top",
+        position: 'top',
         labels: {
           padding: 25,
           color: legendColor,
         },
       },
     },
-  };
-};
+  }
+}
 
 // 👉 Polar Chart Config
-export const getPolarChartConfig = (themeColors) => {
-  const { legendColor } = colorVariables(themeColors);
+export const getPolarChartConfig = themeColors => {
+  const { legendColor } = colorVariables(themeColors)
 
   return {
     responsive: true,
@@ -260,7 +260,7 @@ export const getPolarChartConfig = (themeColors) => {
     },
     plugins: {
       legend: {
-        position: "left",
+        position: 'left',
         labels: {
           padding: 25,
           boxWidth: 9,
@@ -269,12 +269,12 @@ export const getPolarChartConfig = (themeColors) => {
         },
       },
     },
-  };
-};
+  }
+}
 
 // 👉 Bubble Chart Config
-export const getBubbleChartConfig = (themeColors) => {
-  const { borderColor, labelColor } = colorVariables(themeColors);
+export const getBubbleChartConfig = themeColors => {
+  const { borderColor, labelColor } = colorVariables(themeColors)
 
   return {
     responsive: true,
@@ -310,8 +310,8 @@ export const getBubbleChartConfig = (themeColors) => {
     plugins: {
       legend: { display: false },
     },
-  };
-};
+  }
+}
 
 // 👉 Doughnut Chart Config
 export const getDoughnutChartConfig = () => {
@@ -325,12 +325,12 @@ export const getDoughnutChartConfig = () => {
         display: false,
       },
     },
-  };
-};
+  }
+}
 
 // 👉 Scatter Chart Config
-export const getScatterChartConfig = (themeColors) => {
-  const { borderColor, labelColor, legendColor } = colorVariables(themeColors);
+export const getScatterChartConfig = themeColors => {
+  const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
 
   return {
     responsive: true,
@@ -371,8 +371,8 @@ export const getScatterChartConfig = (themeColors) => {
     },
     plugins: {
       legend: {
-        align: "start",
-        position: "top",
+        align: 'start',
+        position: 'top',
         labels: {
           padding: 25,
           boxWidth: 9,
@@ -381,12 +381,12 @@ export const getScatterChartConfig = (themeColors) => {
         },
       },
     },
-  };
-};
+  }
+}
 
 // 👉 Line Area Chart Config
-export const getLineAreaChartConfig = (themeColors) => {
-  const { borderColor, labelColor, legendColor } = colorVariables(themeColors);
+export const getLineAreaChartConfig = themeColors => {
+  const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
 
   return {
     responsive: true,
@@ -398,7 +398,7 @@ export const getLineAreaChartConfig = (themeColors) => {
       x: {
         grid: {
           borderColor,
-          color: "transparent",
+          color: 'transparent',
         },
         ticks: { color: labelColor },
       },
@@ -407,7 +407,7 @@ export const getLineAreaChartConfig = (themeColors) => {
         max: 400,
         grid: {
           borderColor,
-          color: "transparent",
+          color: 'transparent',
         },
         ticks: {
           stepSize: 100,
@@ -417,8 +417,8 @@ export const getLineAreaChartConfig = (themeColors) => {
     },
     plugins: {
       legend: {
-        align: "start",
-        position: "top",
+        align: 'start',
+        position: 'top',
         labels: {
           padding: 25,
           boxWidth: 9,
@@ -427,29 +427,29 @@ export const getLineAreaChartConfig = (themeColors) => {
         },
       },
     },
-  };
-};
-export const getPieChartJs = (themeColors) => {
+  }
+}
+export const getPieChartJs = themeColors => {
   const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
 
   return {
     type: 'pie',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+      labels: {
+        padding: {
+          top: 25,
         },
-        labels:{
-          padding:{
-            top: 25
-          }
-        },
-        title: {
-          display: true,
-        }
-    }
+      },
+      title: {
+        display: true,
+      },
+    },
   }
-};
+}
 
 // !SECTION

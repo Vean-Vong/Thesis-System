@@ -1,6 +1,9 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
-import api from "@/plugins/utilites";
-import router from "@/router";
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import api from '@/plugins/utilites'
+// eslint-disable-next-line import/extensions
+import router from '@/router'
 
 const form = reactive({
   data: {
@@ -13,41 +16,44 @@ const form = reactive({
     roles: [],
     employees: [],
   },
-});
+})
 
-const refForm = ref();
-const submitting = ref(false);
+const refForm = ref()
+const submitting = ref(false)
 
 onMounted(() => {
-  api.post("/users-init").then((res) => {
-    form.options = res.data.data;
-  });
-});
+  api.post('/users-init').then(res => {
+    form.options = res.data.data
+  })
+})
 
 const onCreate = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
-    submitting.value = true;
+    submitting.value = true
     api
-      .post("/users-create", form.data)
-      .then((res) => {
-        if (res.status == 200) router.back();
+      .post('/users-create', form.data)
+      .then(res => {
+        if (res.status == 200) router.back()
       })
       .finally(() => {
-        submitting.value = false;
-      });
+        submitting.value = false
+      })
   }
-};
+}
 </script>
 
 <template>
   <AppFormCreateTemplate
     cols="6"
-    @submit="onCreate"
     :title="$t('Create New User')"
     :submitting="submitting"
+    @submit="onCreate"
   >
-    <VForm ref="refForm" lazy-validation>
+    <VForm
+      ref="refForm"
+      lazy-validation
+    >
       <VRow>
         <VCol cols="12">
           <AppTextField
@@ -55,7 +61,7 @@ const onCreate = async () => {
             v-model="form.data.username"
             :label="$t('User Name')"
             required="true"
-            :rules="[(v) => !!v || $t('User Name') + $t('required')]"
+            :rules="[v => !!v || $t('User Name') + $t('required')]"
           />
         </VCol>
 
@@ -66,21 +72,9 @@ const onCreate = async () => {
             v-model="form.data.email"
             :label="$t('Email')"
             required="true"
-            :rules="[(v) => !!v || $t('Email') + $t('required')]"
+            :rules="[v => !!v || $t('Email') + $t('required')]"
           />
         </VCol>
-
-        <!-- <VCol cols="12">
-          <AppAutocomplete
-            id="staff_id"
-            v-model="form.data.employee_id"
-            :items="form.options.employees"
-            item-value="id"
-            item-title="name"
-            :label="$t('Select Employee')"
-            chip
-          />
-        </VCol> -->
 
         <VCol cols="12">
           <AppSelect
@@ -92,7 +86,7 @@ const onCreate = async () => {
             :label="$t('Role')"
             chip
             required="true"
-            :rules="[(v) => !!v || $t('Role') + $t('required')]"
+            :rules="[v => !!v || $t('Role') + $t('required')]"
           />
         </VCol>
       </VRow>
@@ -105,5 +99,5 @@ meta:
   title: User Create
   layout: default
   subject: Auth
-  active: "user"
+  active: 'user'
 </route>

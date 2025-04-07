@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { HorizontalNav } from '@layouts/components'
 

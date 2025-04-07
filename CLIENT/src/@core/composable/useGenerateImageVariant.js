@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { useTheme } from 'vuetify'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 

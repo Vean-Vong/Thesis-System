@@ -1,16 +1,16 @@
 <script setup>
-import { PerfectScrollbar } from "vue3-perfect-scrollbar";
-import { VForm } from "vuetify/components/VForm";
-import { useCalendarStore } from "./useCalendarStore";
-import avatar1 from "@images/avatars/avatar-1.png";
-import avatar2 from "@images/avatars/avatar-2.png";
-import avatar3 from "@images/avatars/avatar-3.png";
-import avatar5 from "@images/avatars/avatar-5.png";
-import avatar6 from "@images/avatars/avatar-6.png";
-import avatar7 from "@images/avatars/avatar-7.png";
-import { requiredValidator, urlValidator } from "@validators";
-import api from "@/plugins/utilites";
-import { useAuthStore } from "@/plugins/auth.module";
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { VForm } from 'vuetify/components/VForm'
+import { useCalendarStore } from './useCalendarStore'
+import avatar1 from '@images/avatars/avatar-1.png'
+import avatar2 from '@images/avatars/avatar-2.png'
+import avatar3 from '@images/avatars/avatar-3.png'
+import avatar5 from '@images/avatars/avatar-5.png'
+import avatar6 from '@images/avatars/avatar-6.png'
+import avatar7 from '@images/avatars/avatar-7.png'
+import { requiredValidator, urlValidator } from '@validators'
+import api from '@/plugins/utilites'
+import { useAuthStore } from '@/plugins/auth.module'
 
 const props = defineProps({
   isDrawerOpen: {
@@ -21,102 +21,97 @@ const props = defineProps({
     type: null,
     required: true,
   },
-});
+})
 
-const emit = defineEmits([
-  "update:isDrawerOpen",
-  "addEvent",
-  "updateEvent",
-  "removeEvent",
-]);
+const emit = defineEmits(['update:isDrawerOpen', 'addEvent', 'updateEvent', 'removeEvent'])
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 
-const store = useCalendarStore();
-const refForm = ref();
+const store = useCalendarStore()
+const refForm = ref()
 
 // 👉 Event
-const event = ref(JSON.parse(JSON.stringify(props.event)));
+const event = ref(JSON.parse(JSON.stringify(props.event)))
 
 const resetEvent = () => {
-  event.value = JSON.parse(JSON.stringify(props.event));
+  event.value = JSON.parse(JSON.stringify(props.event))
   nextTick(() => {
-    refForm.value?.resetValidation();
-  });
-};
+    refForm.value?.resetValidation()
+  })
+}
 
-watch(() => props.isDrawerOpen, resetEvent);
+watch(() => props.isDrawerOpen, resetEvent)
 
 const removeEvent = () => {
-  emit("removeEvent", event.value.id);
+  emit('removeEvent', event.value.id)
 
   // Close drawer
-  emit("update:isDrawerOpen", false);
-};
+  emit('update:isDrawerOpen', false)
+}
 
 const handleSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       // If id exist on id => Update event
-      if ("id" in event.value) emit("updateEvent", event.value);
+      if ('id' in event.value) emit('updateEvent', event.value)
       // Else => add new event
-      else emit("addEvent", event.value);
+      else emit('addEvent', event.value)
 
       // Close drawer
-      emit("update:isDrawerOpen", false);
+      emit('update:isDrawerOpen', false)
     }
-  });
-};
+  })
+}
 
-const staffOptions = ref([]);
+const staffOptions = ref([])
 
 onMounted(() => {
   api
-    .post("/employees-all")
-    .then((res) => {
-      staffOptions.value = res.data.data;
+    .post('/employees-all')
+    .then(res => {
+      staffOptions.value = res.data.data
     })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+    .catch(err => {
+      console.log(err)
+    })
+})
 
 // 👉 Form
 const onCancel = () => {
   // Close drawer
-  emit("update:isDrawerOpen", false);
+  emit('update:isDrawerOpen', false)
   nextTick(() => {
-    refForm.value?.reset();
-    resetEvent();
-    refForm.value?.resetValidation();
-  });
-};
+    refForm.value?.reset()
+    resetEvent()
+    refForm.value?.resetValidation()
+  })
+}
 
 const startDateTimePickerConfig = computed(() => {
   const config = {
     enableTime: !event.value.allDay,
-    dateFormat: `Y-m-d${event.value.allDay ? "" : " H:i"}`,
-  };
+    dateFormat: `Y-m-d${event.value.allDay ? '' : ' H:i'}`,
+  }
 
-  if (event.value.end) config.maxDate = event.value.end;
+  if (event.value.end) config.maxDate = event.value.end
 
-  return config;
-});
+  return config
+})
 
 const endDateTimePickerConfig = computed(() => {
   const config = {
     enableTime: !event.value.allDay,
-    dateFormat: `Y-m-d${event.value.allDay ? "" : " H:i"}`,
-  };
+    dateFormat: `Y-m-d${event.value.allDay ? '' : ' H:i'}`,
+  }
 
-  if (event.value.start) config.minDate = event.value.start;
+  if (event.value.start) config.minDate = event.value.start
 
-  return config;
-});
+  return config
+})
 
-const dialogModelValueUpdate = (val) => {
-  emit("update:isDrawerOpen", val);
-};
+const dialogModelValueUpdate = val => {
+  emit('update:isDrawerOpen', val)
+}
 </script>
 
 <template>
@@ -134,8 +129,14 @@ const dialogModelValueUpdate = (val) => {
       @cancel="$emit('update:isDrawerOpen', false)"
     >
       <template #beforeClose>
-        <IconBtn v-show="event.id" @click="removeEvent">
-          <VIcon size="18" icon="tabler-trash" />
+        <IconBtn
+          v-show="event.id"
+          @click="removeEvent"
+        >
+          <VIcon
+            size="18"
+            icon="tabler-trash"
+          />
         </IconBtn>
       </template>
     </AppDrawerHeaderSection>
@@ -144,7 +145,10 @@ const dialogModelValueUpdate = (val) => {
       <VCard flat>
         <VCardText>
           <!-- SECTION Form -->
-          <VForm ref="refForm" @submit.prevent="handleSubmit">
+          <VForm
+            ref="refForm"
+            @submit.prevent="handleSubmit"
+          >
             <VRow>
               <!-- 👉 Title -->
               <VCol cols="12">
@@ -162,8 +166,8 @@ const dialogModelValueUpdate = (val) => {
                   label="Meeting Type"
                   :rules="[requiredValidator]"
                   :items="store.availableCalendars"
-                  :item-title="(item) => item.name"
-                  :item-value="(item) => item.id"
+                  :item-title="item => item.name"
+                  :item-value="item => item.id"
                 >
                   <template #selection="{ item }">
                     <div
@@ -207,7 +211,10 @@ const dialogModelValueUpdate = (val) => {
 
               <!-- 👉 All day -->
               <VCol cols="12">
-                <VSwitch v-model="event.allDay" label="All day" />
+                <VSwitch
+                  v-model="event.allDay"
+                  label="All day"
+                />
               </VCol>
 
               <!-- 👉 Event URL -->
@@ -224,16 +231,14 @@ const dialogModelValueUpdate = (val) => {
 
               <VCol
                 cols="12"
-                v-if="
-                  authStore._user.permissions.includes('add staff to events')
-                "
+                v-if="authStore._user.permissions.includes('add staff to events')"
               >
                 <AppSelect
                   v-model="event.staffs"
                   label="Staff"
                   :items="staffOptions"
-                  :item-title="(item) => item.khmer_name"
-                  :item-value="(item) => item.id"
+                  :item-title="item => item.khmer_name"
+                  :item-value="item => item.id"
                   chips
                   multiple
                   eager
@@ -242,18 +247,33 @@ const dialogModelValueUpdate = (val) => {
 
               <!-- 👉 Location -->
               <VCol cols="12">
-                <AppTextField v-model="event.location" label="Location" />
+                <AppTextField
+                  v-model="event.location"
+                  label="Location"
+                />
               </VCol>
 
               <!-- 👉 Description -->
               <VCol cols="12">
-                <AppTextarea v-model="event.description" label="Description" />
+                <AppTextarea
+                  v-model="event.description"
+                  label="Description"
+                />
               </VCol>
 
               <!-- 👉 Form buttons -->
               <VCol cols="12">
-                <VBtn type="submit" class="me-3"> Submit </VBtn>
-                <VBtn variant="tonal" color="secondary" @click="onCancel">
+                <VBtn
+                  type="submit"
+                  class="me-3"
+                >
+                  Submit
+                </VBtn>
+                <VBtn
+                  variant="tonal"
+                  color="secondary"
+                  @click="onCancel"
+                >
                   Cancel
                 </VBtn>
               </VCol>

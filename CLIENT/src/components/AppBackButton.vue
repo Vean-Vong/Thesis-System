@@ -7,22 +7,27 @@ import router from '@/router';
     class="mr-2"
     style="width: auto"
   >
-    <v-icon left class="mr-2">tabler-arrow-left</v-icon>
+    <v-icon
+      left
+      class="mr-2"
+      >tabler-arrow-left</v-icon
+    >
     {{ $t(title) }}
   </v-btn>
 </template>
 
 <script setup>
-import router from "@/router";
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import router from '@/router'
 
 const props = defineProps({
   title: {
     type: String,
-    default: "Back",
+    default: 'Back',
   },
-});
+})
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 </script>

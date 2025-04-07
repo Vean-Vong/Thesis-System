@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { avatarText } from '@core/utils/formatters'
@@ -19,21 +20,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'read',
-  'unread',
-  'remove',
-  'click:notification',
-])
+const emit = defineEmits(['read', 'unread', 'remove', 'click:notification'])
 
 const isAllMarkRead = computed(() => props.notifications.some(item => item.isSeen === false))
 
 const markAllReadOrUnread = () => {
   const allNotificationsIds = props.notifications.map(item => item.id)
-  if (!isAllMarkRead.value)
-    emit('unread', allNotificationsIds)
-  else
-    emit('read', allNotificationsIds)
+  if (!isAllMarkRead.value) emit('unread', allNotificationsIds)
+  else emit('read', allNotificationsIds)
 }
 
 const totalUnseenNotifications = computed(() => {
@@ -66,16 +60,14 @@ const totalUnseenNotifications = computed(() => {
       <VCard class="d-flex flex-column">
         <!-- 👉 Header -->
         <VCardItem class="notification-section">
-          <VCardTitle class="text-lg">
-            Notifications
-          </VCardTitle>
+          <VCardTitle class="text-lg"> Notifications </VCardTitle>
 
           <template #append>
             <IconBtn
               v-show="props.notifications.length"
               @click="markAllReadOrUnread"
             >
-              <VIcon :icon="!isAllMarkRead ? 'tabler-mail' : 'tabler-mail-opened' " />
+              <VIcon :icon="!isAllMarkRead ? 'tabler-mail' : 'tabler-mail-opened'" />
 
               <VTooltip
                 activator="parent"
@@ -92,7 +84,7 @@ const totalUnseenNotifications = computed(() => {
         <!-- 👉 Notifications list -->
         <PerfectScrollbar
           :options="{ wheelPropagation: false }"
-          style="max-block-size: 23.75rem;"
+          style="max-block-size: 23.75rem"
         >
           <VList class="notification-list rounded-0 py-0">
             <template
@@ -116,7 +108,7 @@ const totalUnseenNotifications = computed(() => {
                       :color="notification.color && notification.icon ? notification.color : undefined"
                       :image="notification.img || undefined"
                       :icon="notification.icon || undefined"
-                      :variant="notification.img ? undefined : 'tonal' "
+                      :variant="notification.img ? undefined : 'tonal'"
                     >
                       <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
                     </VAvatar>
@@ -137,7 +129,7 @@ const totalUnseenNotifications = computed(() => {
                       @click.stop="$emit(notification.isSeen ? 'unread' : 'read', [notification.id])"
                     />
 
-                    <div style="block-size: 28px; inline-size: 28px;">
+                    <div style="block-size: 28px; inline-size: 28px">
                       <IconBtn
                         size="small"
                         class="visible-in-hover"
@@ -157,7 +149,7 @@ const totalUnseenNotifications = computed(() => {
             <VListItem
               v-show="!props.notifications.length"
               class="text-center text-medium-emphasis"
-              style="block-size: 56px;"
+              style="block-size: 56px"
             >
               <VListItemTitle>No Notification Found!</VListItemTitle>
             </VListItem>
@@ -171,9 +163,7 @@ const totalUnseenNotifications = computed(() => {
           v-show="props.notifications.length"
           class="notification-footer"
         >
-          <VBtn block>
-            View All Notifications
-          </VBtn>
+          <VBtn block> View All Notifications </VBtn>
         </VCardActions>
       </VCard>
     </VMenu>

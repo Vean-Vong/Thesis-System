@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import NavBarI18n from '@core/components/I18n.vue'
 import { useThemeConfig } from '@core/composable/useThemeConfig'

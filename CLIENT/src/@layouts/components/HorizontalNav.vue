@@ -2,6 +2,7 @@
 import {
   HorizontalNavGroup,
   HorizontalNavLink,
+  // eslint-disable-next-line import/no-unresolved
 } from '@layouts/components'
 
 const props = defineProps({
@@ -12,9 +13,8 @@ const props = defineProps({
 })
 
 const resolveNavItemComponent = item => {
-  if ('children' in item)
-    return HorizontalNavGroup
-  
+  if ('children' in item) return HorizontalNavGroup
+
   return HorizontalNavLink
 }
 </script>

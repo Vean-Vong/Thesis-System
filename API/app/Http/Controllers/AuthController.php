@@ -42,12 +42,12 @@ class AuthController extends Controller
         return response()->json($result);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         $result = ['status' => 200];
         try {
 
-            Auth::user()->currentAccessToken()->delete();
+            $request->user()->currentAccessToken()->delete();
 
             $result['message'] = "Successfully Logout.";
         } catch (Throwable $e) {
@@ -99,7 +99,7 @@ class AuthController extends Controller
 
         try {
 
-            $user = Auth::user();
+            $user = User::find(Auth::id());
 
             if (!$user || !Hash::check($request->old_password, $user->password)) {
                 $result['message'] = "លេខសម្ងាត់ចាស់មិនត្រឹមត្រូវទេ";

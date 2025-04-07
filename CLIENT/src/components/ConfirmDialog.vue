@@ -1,18 +1,23 @@
 <template>
-  <VDialog :width="500" v-model="dialog">
+  <VDialog
+    :width="500"
+    v-model="dialog"
+  >
     <VCard>
-      <VCardTitle class="mx-2 my-4 text-center text-h4 font-weight-bold">{{
-        $t("Warning")
-      }}</VCardTitle>
+      <VCardTitle class="mx-2 my-4 text-center text-h4 font-weight-bold">{{ $t('Warning') }}</VCardTitle>
       <VDivider />
-      <VCardText> {{ $t("Do you want to delete?") }} </VCardText>
+      <VCardText> {{ $t('Do you want to delete?') }} </VCardText>
       <VCardActions>
         <VSpacer></VSpacer>
-        <VBtn variant="tonal" color="dark" @click="cancelCallBack">
+        <VBtn
+          variant="tonal"
+          color="dark"
+          @click="cancelCallBack"
+        >
           <template #prepend>
             <VIcon icon="mdi-cancel"></VIcon>
           </template>
-          {{ $t("Cancel") }}
+          {{ $t('Cancel') }}
         </VBtn>
         <VBtn
           variant="elevated"
@@ -24,7 +29,7 @@
           <template #prepend>
             <VIcon icon="mdi-trash"></VIcon>
           </template>
-          {{ $t("Confirm") }}
+          {{ $t('Confirm') }}
         </VBtn>
       </VCardActions>
     </VCard>
@@ -42,34 +47,34 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: "Are You Sure",
+    default: 'Are You Sure',
   },
   message: {
     type: String,
-    default: "Do you want to delete",
+    default: 'Do you want to delete',
   },
   cancelText: {
     type: String,
-    default: "Cancel",
+    default: 'Cancel',
   },
   confirmText: {
     type: String,
-    default: "Confirm",
+    default: 'Confirm',
   },
   deleting: {
     type: Boolean,
     default: false,
   },
-});
-const dialog = ref(props.dialog);
+})
+const dialog = ref(props.dialog)
 
-const emit = defineEmits(["onConfirmDelete", "onCancel"]);
+const emit = defineEmits(['onConfirmDelete', 'onCancel'])
 
-const confirmDeleteCallback = (item) => {
-  emit("onConfirmDelete", item);
-};
+const confirmDeleteCallback = item => {
+  emit('onConfirmDelete', item)
+}
 
 const cancelCallBack = () => {
-  emit("onCancel");
-};
+  emit('onCancel')
+}
 </script>

@@ -18,8 +18,8 @@ export default {
     // set v-badge default color to primary
     color: 'primary',
   },
-  VCard:{
-    variant:'flat'
+  VCard: {
+    variant: 'flat',
   },
   VBtn: {
     // set v-btn default color to primary
@@ -42,8 +42,8 @@ export default {
       density: 'compact',
     },
   },
-  VListItem:{
-    activeColor:'white'
+  VListItem: {
+    activeColor: 'white',
   },
   VPagination: {
     activeColor: 'error',
@@ -129,8 +129,8 @@ export default {
   },
   VAutocomplete: {
     variant: 'outlined',
-    // color: 'primary',
-    density: 'compact',    
+    color: 'primary',
+    density: 'compact',
     hideDetails: 'auto',
     menuProps: {
       contentClass: 'app-autocomplete__content v-autocomplete__content',
@@ -180,12 +180,12 @@ export default {
     },
   },
   VDataTableServer: {
-    VListItem:{
-      active:false,
-      activeColor:'white'
+    VListItem: {
+      active: false,
+      activeColor: 'white',
     },
-    VBtn:{
-      color:'info'
+    VBtn: {
+      color: 'info',
     },
     VPagination: {
       activeColor: 'on-primary',

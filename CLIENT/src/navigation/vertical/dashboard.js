@@ -1,8 +1,8 @@
 export default [
   {
-    title: "Dashboards",
-    icon: { icon: "tabler-home" },
-    to: "dashboards",
-    permission: "public",
+    title: 'Dashboards',
+    icon: { icon: 'tabler-home', size: 23 },
+    to: 'dashboards',
+    permission: 'public',
   },
-];
+]

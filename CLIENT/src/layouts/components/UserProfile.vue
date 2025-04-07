@@ -1,19 +1,36 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
-import { useAuthStore } from "@/plugins/auth.module";
-import avatar1 from "@images/avatars/avatar-1.png";
-const user = useAuthStore().user;
+import { useAuthStore } from '@/plugins/auth.module'
+import avatar1 from '@images/avatars/avatar-1.png'
+const user = useAuthStore().user
 const onLogout = () => {
-  useAuthStore().logout();
-};
+  useAuthStore().logout()
+}
 </script>
 
 <template>
-  <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
-    <VAvatar class="cursor-pointer" color="primary" variant="tonal">
+  <VBadge
+    dot
+    location="bottom right"
+    offset-x="3"
+    offset-y="3"
+    bordered
+    color="success"
+  >
+    <VAvatar
+      class="cursor-pointer"
+      color="primary"
+      variant="tonal"
+    >
       <VImg :src="avatar1" />
 
       <!-- SECTION Menu -->
-      <VMenu activator="parent" width="230" location="bottom end" offset="14px">
+      <VMenu
+        activator="parent"
+        width="230"
+        location="bottom end"
+        offset="14px"
+      >
         <VList>
           <!-- 👉 User Avatar & Name -->
           <VListItem>
@@ -26,7 +43,10 @@ const onLogout = () => {
                   offset-y="3"
                   color="success"
                 >
-                  <VAvatar color="primary" variant="tonal">
+                  <VAvatar
+                    color="primary"
+                    variant="tonal"
+                  >
                     <VImg :src="avatar1" />
                   </VAvatar>
                 </VBadge>
@@ -42,12 +62,19 @@ const onLogout = () => {
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem link to="/settings/account-settings">
+          <VListItem
+            link
+            to="/settings/account-settings"
+          >
             <template #prepend>
-              <VIcon class="me-2" icon="mdi-cog" size="22" />
+              <VIcon
+                class="me-2"
+                icon="mdi-cog"
+                size="22"
+              />
             </template>
 
-            <VListItemTitle>{{ $t("Preference Settings") }}</VListItemTitle>
+            <VListItemTitle>{{ $t('Preference Settings') }}</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->
@@ -56,10 +83,14 @@ const onLogout = () => {
           <!-- 👉 Logout -->
           <VListItem @click.prevent="onLogout">
             <template #prepend>
-              <VIcon class="me-2" icon="tabler-logout" size="22" />
+              <VIcon
+                class="me-2"
+                icon="tabler-logout"
+                size="22"
+              />
             </template>
 
-            <VListItemTitle>{{ $t("Logout") }}</VListItemTitle>
+            <VListItemTitle>{{ $t('Logout') }}</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>

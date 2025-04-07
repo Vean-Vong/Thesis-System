@@ -6,9 +6,12 @@
     class="mr-2"
     style="width: auto"
   >
-    <v-icon v-if="showIcon" left class="mr-2">{{
-      icon ? icon : "tabler-table-plus"
-    }}</v-icon>
+    <v-icon
+      v-if="showIcon"
+      left
+      class="mr-2"
+      >{{ icon ? icon : 'tabler-table-plus' }}</v-icon
+    >
     {{ $t(title) }}
   </v-btn>
 </template>
@@ -17,7 +20,7 @@
 const props = defineProps({
   title: {
     type: String,
-    default: "Save changes",
+    default: 'Save changes',
   },
   icon: {
     type: String,
@@ -26,5 +29,5 @@ const props = defineProps({
     type: [Boolean, Number],
     default: true,
   },
-});
+})
 </script>

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { RouteTransitions, Skins } from '@core/enums'
 
 export const defineThemeConfig = userConfig => {

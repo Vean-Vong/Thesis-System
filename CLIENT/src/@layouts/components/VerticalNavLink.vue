@@ -1,20 +1,21 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
-import { useLayouts } from "@layouts";
-import { config } from "@layouts/config";
-import { can } from "@layouts/plugins/casl";
-import { getComputedNavLinkToProp, isNavLinkActive } from "@layouts/utils";
+import { useLayouts } from '@layouts'
+import { config } from '@layouts/config'
+import { can } from '@layouts/plugins/casl'
+import { getComputedNavLinkToProp, isNavLinkActive } from '@layouts/utils'
 
-const route = useRoute();
+const route = useRoute()
 
 const props = defineProps({
   item: {
     type: null,
     required: true,
   },
-});
-const { width: windowWidth } = useWindowSize();
-const { isVerticalNavMini, dynamicI18nProps } = useLayouts();
-const hideTitleAndBadge = isVerticalNavMini(windowWidth);
+})
+const { width: windowWidth } = useWindowSize()
+const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
+const hideTitleAndBadge = isVerticalNavMini(windowWidth)
 </script>
 
 <template>
@@ -28,8 +29,7 @@ const hideTitleAndBadge = isVerticalNavMini(windowWidth);
       :is="item.to ? 'RouterLink' : 'a'"
       v-bind="getComputedNavLinkToProp(item)"
       :class="{
-        'router-link-active router-link-exact-active':
-          route?.meta?.active === item.active,
+        'router-link-active router-link-exact-active': route?.meta?.active === item.active,
       }"
     >
       <Component

@@ -1,3 +1,4 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import avatar3 from '@images/avatars/avatar-3.png'
 import avatar4 from '@images/avatars/avatar-4.png'
@@ -50,16 +51,14 @@ const notifications = ref([
 
 const removeNotification = notificationId => {
   notifications.value.forEach((item, index) => {
-    if (notificationId === item.id)
-      notifications.value.splice(index, 1)
+    if (notificationId === item.id) notifications.value.splice(index, 1)
   })
 }
 
 const markRead = notificationId => {
   notifications.value.forEach(item => {
     notificationId.forEach(id => {
-      if (id === item.id)
-        item.isSeen = true
+      if (id === item.id) item.isSeen = true
     })
   })
 }
@@ -67,15 +66,13 @@ const markRead = notificationId => {
 const markUnRead = notificationId => {
   notifications.value.forEach(item => {
     notificationId.forEach(id => {
-      if (id === item.id)
-        item.isSeen = false
+      if (id === item.id) item.isSeen = false
     })
   })
 }
 
 const handleNotificationClick = notification => {
-  if (!notification.isSeen)
-    markRead([notification.id])
+  if (!notification.isSeen) markRead([notification.id])
 }
 </script>
 

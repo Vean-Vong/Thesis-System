@@ -11,7 +11,7 @@ const scrollToTop = () => {
 
 <template>
   <VScaleTransition
-    style="transform-origin: center;"
+    style="transform-origin: center"
     class="scroll-to-top d-print-none"
   >
     <VBtn

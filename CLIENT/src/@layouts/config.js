@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { breakpointsVuetify } from '@vueuse/core'
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
 
@@ -5,7 +6,6 @@ export const config = {
   app: {
     title: 'title',
     logo: h('img', { src: '/src/assets/logo.svg' }),
-    // logo: () => h('img', { src: 'assets/colored-logo.png' }, null),
     contentWidth: ref(ContentWidth.Boxed),
     contentLayoutNav: ref(AppContentLayoutNav.Vertical),
     overlayNavFromBreakpoint: breakpointsVuetify.md,

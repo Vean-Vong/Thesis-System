@@ -1,3 +1,5 @@
+<!-- eslint-disable import/extensions -->
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import AppDataTable from '@/components/AppDataTable.vue'
 import api from '@/plugins/utilites'
@@ -61,23 +63,23 @@ const headers = [
     align: 'center',
     sortable: false,
   },
-  // {
-  //   title: t('Permissions Count'),
-  //   key: 'permissions_count',
-  //   align: 'center',
-  //   sortable: false,
-  //   minWidth: '200px',
-  //   maxWidth: '500px',
-  // },
+  {
+    title: t('Permissions Count'),
+    key: 'permissions_count',
+    align: 'center',
+    sortable: false,
+    minWidth: '200px',
+    maxWidth: '500px',
+  },
 
-  // {
-  //   title: t('Users Count'),
-  //   key: 'user_counts',
-  //   align: 'center',
-  //   sortable: false,
-  //   minWidth: '200px',
-  //   maxWidth: '500px',
-  // },
+  {
+    title: t('Users Count'),
+    key: 'user_counts',
+    align: 'center',
+    sortable: false,
+    minWidth: '200px',
+    maxWidth: '500px',
+  },
   {
     title: t('Actions'),
     key: 'actions',

@@ -1,10 +1,6 @@
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import {
-  VList,
-  VListItem,
-  VListSubheader,
-} from 'vuetify/components/VList'
+import { VList, VListItem, VListSubheader } from 'vuetify/components/VList'
 
 const props = defineProps({
   isDialogVisible: {
@@ -29,17 +25,12 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'update:isDialogVisible',
-  'update:searchQuery',
-  'itemSelected',
-])
+const emit = defineEmits(['update:isDialogVisible', 'update:searchQuery', 'itemSelected'])
 
 const { ctrl_k, meta_k } = useMagicKeys({
   passive: false,
   onEventFired(e) {
-    if (e.ctrlKey && e.key === 'k' && e.type === 'keydown')
-      e.preventDefault()
+    if (e.ctrlKey && e.key === 'k' && e.type === 'keydown') e.preventDefault()
   },
 })
 
@@ -55,10 +46,7 @@ watch(props, () => {
   searchResults.value = structuredClone(toRaw(props.searchResults))
   searchQuery.value = structuredClone(toRaw(props.searchQuery))
 })
-watch([
-  ctrl_k,
-  meta_k,
-], () => {
+watch([ctrl_k, meta_k], () => {
   isLocalDialogVisible.value = true
   emit('update:isDialogVisible', true)
 })
@@ -70,8 +58,7 @@ const clearSearchAndCloseDialog = () => {
 }
 
 watchEffect(() => {
-  if (!searchQuery.value.length)
-    searchResults.value = []
+  if (!searchQuery.value.length) searchResults.value = []
 })
 
 const getFocusOnSearchList = e => {
@@ -90,17 +77,12 @@ const dialogModelValueUpdate = val => {
 }
 
 const resolveCategories = val => {
-  if (val === 'dashboards')
-    return 'Dashboards'
-  if (val === 'appsPages')
-    return 'Apps & Pages'
-  if (val === 'userInterface')
-    return 'User Interface'
-  if (val === 'formsTables')
-    return 'Forms Tables'
-  if (val === 'chartsMisc')
-    return 'Charts Misc'
-  
+  if (val === 'dashboards') return 'Dashboards'
+  if (val === 'appsPages') return 'Apps & Pages'
+  if (val === 'userInterface') return 'User Interface'
+  if (val === 'formsTables') return 'Forms Tables'
+  if (val === 'chartsMisc') return 'Charts Misc'
+
   return 'Misc'
 }
 </script>
@@ -122,7 +104,7 @@ const resolveCategories = val => {
     >
       <VCardText
         class="pt-1"
-        style="min-block-size: 65px;"
+        style="min-block-size: 65px"
       >
         <!-- 👉 Search Input -->
         <VTextField
@@ -143,7 +125,7 @@ const resolveCategories = val => {
                 size="22"
                 icon="tabler-search"
                 class="mt-1"
-                style="opacity: 1;"
+                style="opacity: 1"
               />
             </div>
           </template>
@@ -283,7 +265,9 @@ const resolveCategories = val => {
         >
           <slot name="noData">
             <VCardText class="h-100">
-              <div class="app-bar-search-suggestions d-flex flex-column align-center justify-center text-high-emphasis h-100">
+              <div
+                class="app-bar-search-suggestions d-flex flex-column align-center justify-center text-high-emphasis h-100"
+              >
                 <VIcon
                   size="75"
                   icon="tabler-file-x"

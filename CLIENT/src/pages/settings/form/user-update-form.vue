@@ -1,6 +1,8 @@
+<!-- eslint-disable import/no-unresolved -->
+<!-- eslint-disable import/extensions -->
 <script setup>
-import api from "@/plugins/utilites";
-import router from "@/router";
+import api from '@/plugins/utilites'
+import router from '@/router'
 
 const form = reactive({
   data: {
@@ -13,43 +15,43 @@ const form = reactive({
     roles: [],
     employees: [],
   },
-});
+})
 
-const submitting = ref(false);
-const refForm = ref();
+const submitting = ref(false)
+const refForm = ref()
 
 onMounted(async () => {
-  await initForm();
-});
+  await initForm()
+})
 
 const initForm = async () => {
-  const query = router.currentRoute.value.query;
+  const query = router.currentRoute.value.query
   console.log(query.uuid)
-  await api.post("/users-show", { id: query.uuid }).then((res) => {
-    form.data = res.data.data;
-  });
+  await api.post('/users-show', { id: query.uuid }).then(res => {
+    form.data = res.data.data
+  })
 
-  await api.post("users-init").then((res) => {
-    form.options = res.data.data;
-  });
+  await api.post('users-init').then(res => {
+    form.options = res.data.data
+  })
 
   form.data.role_id = form.data.roles[0].id
-};
+}
 
 const onUpdate = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
-    submitting.value = true;
+    submitting.value = true
     api
-      .post("/users-update", form.data)
-      .then((res) => {
-        if (res.status == 200) router.back();
+      .post('/users-update', form.data)
+      .then(res => {
+        if (res.status == 200) router.back()
       })
       .finally(() => {
-        submitting.value = false;
-      });
+        submitting.value = false
+      })
   }
-};
+}
 </script>
 
 <template>
@@ -58,7 +60,10 @@ const onUpdate = async () => {
     :title="$t('Update User')"
     :submitting="submitting"
   >
-    <VForm ref="refForm" lazy-validation>
+    <VForm
+      ref="refForm"
+      lazy-validation
+    >
       <VRow>
         <VCol cols="12">
           <AppTextField
@@ -66,7 +71,7 @@ const onUpdate = async () => {
             v-model="form.data.username"
             :label="$t('User Name')"
             required="true"
-            :rules="[(v) => !!v || $t('User Name') + $t('required')]"
+            :rules="[v => !!v || $t('User Name') + $t('required')]"
           />
         </VCol>
 
@@ -77,10 +82,10 @@ const onUpdate = async () => {
             v-model="form.data.email"
             :label="$t('Email')"
             required="true"
-            :rules="[(v) => !!v || $t('Email') + $t('required')]"
+            :rules="[v => !!v || $t('Email') + $t('required')]"
           />
         </VCol>
-<!-- 
+        <!-- 
         <VCol cols="12">
           <AppAutocomplete
             id="staff_id"
@@ -103,7 +108,7 @@ const onUpdate = async () => {
             :label="$t('Role')"
             chip
             required="true"
-            :rules="[(v) => !!v || $t('Role') + $t('required')]"
+            :rules="[v => !!v || $t('Role') + $t('required')]"
           />
         </VCol>
       </VRow>
@@ -116,5 +121,5 @@ meta:
   title: User Update
   layout: default
   subject: Auth
-  active: "user"
+  active: 'user'
 </route>

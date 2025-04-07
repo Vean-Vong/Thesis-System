@@ -1,11 +1,10 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
 import { useLayouts } from '@layouts'
-import {
-  HorizontalNavLink,
-  HorizontalNavPopper,
-} from '@layouts/components'
+import { HorizontalNavLink, HorizontalNavPopper } from '@layouts/components'
 import { config } from '@layouts/config'
 import { canViewNavMenuGroup } from '@layouts/plugins/casl'
+// eslint-disable-next-line import/no-unresolved
 import { isNavGroupActive } from '@layouts/utils'
 
 const props = defineProps({
@@ -32,11 +31,15 @@ const router = useRouter()
 const { dynamicI18nProps, isAppRtl } = useLayouts()
 const isGroupActive = ref(false)
 
-watch(() => route.path, () => {
-  const isActive = isNavGroupActive(props.item.children, router)
+watch(
+  () => route.path,
+  () => {
+    const isActive = isNavGroupActive(props.item.children, router)
 
-  isGroupActive.value = isActive
-}, { immediate: true })
+    isGroupActive.value = isActive
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -46,12 +49,14 @@ watch(() => route.path, () => {
     class="nav-group"
     tag="li"
     content-container-tag="ul"
-    :class="[{
-      'active': isGroupActive,
-      'children-at-end': childrenAtEnd,
-      'sub-item': isSubItem,
-      'disabled': item.disable,
-    }]"
+    :class="[
+      {
+        active: isGroupActive,
+        'children-at-end': childrenAtEnd,
+        'sub-item': isSubItem,
+        disabled: item.disable,
+      },
+    ]"
     :popper-inline-end="childrenAtEnd"
   >
     <div class="nav-group-label">
@@ -95,14 +100,13 @@ watch(() => route.path, () => {
       align-items: center;
       cursor: pointer;
     }
+  }
+  .popper-content {
+    z-index: 1;
 
-    .popper-content {
-      z-index: 1;
-
-      > div {
-        overflow-x: hidden;
-        overflow-y: auto;
-      }
+    > div {
+      overflow-x: hidden;
+      overflow-y: auto;
     }
   }
 }
