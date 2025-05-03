@@ -23,15 +23,7 @@ const meta = ref({
   to: 1,
   total: 0,
 })
-const formatDate = date => {
-  if (!date) return ''
-  // eslint-disable-next-line newline-before-return
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
+
 const initData = () => {
   loading.value = true
   api
@@ -45,7 +37,6 @@ const initData = () => {
         ...sale,
         price: `$${sale.price.toLocaleString()}`, // Add $ symbol
         discount: `${sale.discount}%`, // Add % symbol
-        date: formatDate(sale.date),
       }))
       meta.value = res.data.data.meta
     })
@@ -187,9 +178,10 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('sale_edit')"
+    :can-view="user.can('sale_list')" 
+    :can-delete="user.can('sale_delete')"
+    :can-create="user.can('sale_create')"
     :table-title="$t('List of Sales')"
     btn-submit="CreateNew"
     :loading="loading"
@@ -235,4 +227,3 @@ meta:
   subject: Auth
   active: 'sale'
 </route>
-

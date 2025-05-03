@@ -5,21 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rental extends Model
+class Report extends Model
 {
     use HasFactory;
 
-    protected $table = 'rentals';
-
+    protected $table = 'reports';
 
     protected $fillable = [
-        'model',
-        'price',
-        'discount',
+        'customer_name',
+        'invoice_number',
+        'unit',
+        'cash_on_hand',
+        'cash_on_bank',
         'date',
-        'duration',
-        'warranty',
-        'seller',
-        'contract_type',
+        'remark',
     ];
 }

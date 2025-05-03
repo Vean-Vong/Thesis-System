@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('model');
-            $table->string('color');
+            $table->string('colors');
             $table->string('filtration_stage');
             $table->string('cold_water_tank_capacity');
             $table->string('hot_water_tank_capacity');

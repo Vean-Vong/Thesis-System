@@ -37,8 +37,9 @@ class ProductController extends Controller
 
         try {
             $validated = $request->validate([
+                'image' => 'nullable|image|max:2048',
                 'model' => 'required|string|max:255',
-                'color' => 'required|string|max:255',
+                'colors' => 'required|string|max:255',
                 'filtration_stage' =>  'required|string|max:255',
                 'cold_water_tank_capacity' => 'required|string|max:255',
                 'hot_water_tank_capacity' => 'required|string|max:255',
@@ -97,8 +98,9 @@ class ProductController extends Controller
 
         try {
             $validated = $request->validate([
+                'image' => 'nullable|image|max:2048',
                 'model' => 'required|string|max:255',
-                'color' => 'required|string|max:255',
+                'colors' => 'required|string|max:255',
                 'filtration_stage' => 'required|string|max:255',
                 'cold_water_tank_capacity' => 'required|string|max:255',
                 'hot_water_tank_capacity' => 'required|string|max:255',
@@ -107,21 +109,21 @@ class ProductController extends Controller
                 'cold_power_consumption' => 'required|string|max:255',
                 'hot_power_consumption' => 'required|string|max:255',
                 'quantity' => 'required|integer|min:0',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             // Handle image upload if provided
             if ($request->hasFile('image')) {
-                // If the product has an existing image, delete it
+                // Delete old image if it exists
                 if ($product->image) {
                     Storage::delete('public/' . $product->image);
                 }
 
-                // Store the new image
+                // Store new image
                 $imagePath = $request->file('image')->store('product_images', 'public');
                 $validated['image'] = $imagePath;
             }
 
+            // Update the product with new data
             $product->update($validated);
             $result['data'] = $product;
             $result['message'] = 'Product updated successfully!';
@@ -136,6 +138,7 @@ class ProductController extends Controller
 
         return response()->json($result);
     }
+
 
     /**
      * Remove the specified resource from storage.

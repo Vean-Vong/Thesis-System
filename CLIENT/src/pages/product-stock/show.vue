@@ -1,5 +1,7 @@
 <template>
-    <AppFormDetailTemplate cols="10" md="10" :title="$t('Detail Role')">
-
-    </AppFormDetailTemplate>
+  <AppFormDetailTemplate
+    cols="10"
+    md="10"
+    :title="$t('Detail Role')"
+  />
 </template>

@@ -103,9 +103,9 @@ const rules = {
         >
           <VSelect
             v-model="form.data.price"
-            :label="$t('Price')"
+            :label="$t('Rental Price')"
             :rules="[rules.required]"
-            :items="['$720', '$490', '$540', '$190', '$790']"
+            :items="['$28', '$27', '$25', '$23', '$17']"
             outlined
           />
         </VCol>
@@ -118,7 +118,7 @@ const rules = {
             v-model="form.data.discount"
             :label="$t('Discount')"
             :rules="[rules.required]"
-            :items="['10%', '20%']"
+            :items="['Free first month', 'None']"
             outlined
           />
         </VCol>
@@ -170,14 +170,7 @@ const rules = {
             v-model="form.data.seller"
             :label="$t('Seller')"
             :rules="[rules.required]"
-            :items="[
-              'Mr. John Doe',
-              'Mr. Jane Doe',
-              'Mr. John Smith',
-              'Mr. Jane Smith',
-              'Mr. John Doe',
-              'Mr. Jane Doe',
-            ]"
+            :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin', 'Phoung Chansophol']"
             outlined
           />
         </VCol>

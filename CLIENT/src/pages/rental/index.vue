@@ -26,12 +26,12 @@ const meta = ref({
 
 const formatDate = date => {
   if (!date) return ''
+  const d = new Date(date)
+  const day = d.getDate()
+  const month = d.toLocaleString('en-US', { month: 'long' })
+  const year = d.getFullYear()
   // eslint-disable-next-line newline-before-return
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  return `${day} ${month}, ${year}`
 }
 
 const initData = () => {
@@ -185,7 +185,7 @@ const confirmDeleteCallback = () => {
     :can-edit="user.can('edit_roles')"
     :can-delete="user.can('delete_roles')"
     :can-create="user.can('create_roles')"
-    :table-title="$t('List of rentals')"
+    :table-title="$t('List of Rentals')"
     btn-submit="CreateNew"
     :loading="loading"
     @on-edit="editCallback"

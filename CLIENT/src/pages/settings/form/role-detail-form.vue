@@ -1,5 +1,7 @@
 <script setup>
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import router from '@/router'
 
 const { t } = useI18n()

@@ -1,33 +1,33 @@
 <script setup>
-import api from "@/plugins/utilites";
-import router from "@/router";
+import api from '@/plugins/utilites'
+import router from '@/router'
 
-const form = ref({});
-const submitting = ref(false);
-const refForm = ref();
+const form = ref({})
+const submitting = ref(false)
+const refForm = ref()
 
 onMounted(async () => {
-  const query = await router.currentRoute.value.query;
+  const query = await router.currentRoute.value.query
 
-  api.post("/positions-show", { id: query.uuid }).then((res) => {
-    form.value = res.data.data;
-  });
-});
+  api.post('/positions-show', { id: query.uuid }).then(res => {
+    form.value = res.data.data
+  })
+})
 
 const onUpdate = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
-    submitting.value = true;
+    submitting.value = true
     api
-      .post("/positions-update", form.value)
-      .then((res) => {
-        if (res.status == 200) router.back();
+      .post('/positions-update', form.value)
+      .then(res => {
+        if (res.status == 200) router.back()
       })
       .finally(() => {
-        submitting.value = false;
-      });
+        submitting.value = false
+      })
   }
-};
+}
 </script>
 
 <template>
@@ -36,7 +36,10 @@ const onUpdate = async () => {
     :title="$t('Update Position')"
     :submitting="submitting"
   >
-    <VForm ref="refForm" lazy-validation>
+    <VForm
+      ref="refForm"
+      lazy-validation
+    >
       <VRow>
         <VCol cols="12">
           <AppTextField
@@ -44,7 +47,7 @@ const onUpdate = async () => {
             v-model="form.khmer_name"
             :label="$t('Khmer Name')"
             required="true"
-            :rules="[(v) => !!v || $t('Khmer Name') + $t('required')]"
+            :rules="[v => !!v || $t('Khmer Name') + $t('required')]"
           />
         </VCol>
 
@@ -62,7 +65,7 @@ const onUpdate = async () => {
             type="number"
             :label="$t('Sort Number')"
             required="true"
-            :rules="[(v) => !!v || $t('Sort Number') + $t('required')]"
+            :rules="[v => !!v || $t('Sort Number') + $t('required')]"
           />
         </VCol>
       </VRow>
@@ -75,5 +78,5 @@ meta:
   title: Position Update
   layout: default
   subject: Auth
-  active: "position"
+  active: 'position'
 </route>

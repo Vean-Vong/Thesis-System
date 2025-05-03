@@ -26,12 +26,12 @@ const meta = ref({
 
 const formatDate = date => {
   if (!date) return ''
+  const d = new Date(date)
+  const day = d.getDate()
+  const month = d.toLocaleString('en-US', { month: 'long' })
+  const year = d.getFullYear()
   // eslint-disable-next-line newline-before-return
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  return `${day} ${month}, ${year}`
 }
 
 const initData = () => {
@@ -104,7 +104,7 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'settings-form-role-detail-form', query: { id: item } })
+  router.push({ name: 'product-stock-show', query: { id: item } })
 }
 
 const editCallback = item => {
@@ -160,15 +160,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('stock_edit')"
+    :can-delete="user.can('stock_delete')"
+    :can-create="user.can('stock_create')"
+    :can-view="user.can('stock_view')"
     btn-submit="CreateNew"
     :table-title="$t('List of Stock')"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

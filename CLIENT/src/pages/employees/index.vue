@@ -24,16 +24,6 @@ const meta = ref({
   total: 0,
 })
 
-const formatDate = date => {
-  if (!date) return ''
-  // eslint-disable-next-line newline-before-return
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-}
-
 const initData = () => {
   loading.value = true
   api
@@ -45,8 +35,6 @@ const initData = () => {
     .then(res => {
       items.value = res.data.data.data.map(item => ({
         ...item,
-        date_of_birth: formatDate(item.date_of_birth),
-        hire_date: formatDate(item.hire_date),
       }))
       meta.value = res.data.data.meta
     })
@@ -128,18 +116,13 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'settings-form-role-detail-form', query: { id: item } })
+  router.push({ name: 'employees-show', query: { id: item } })
 }
 
 const editCallback = item => {
   router.push({ name: 'employees-edit', query: { id: item } })
 }
 
-// const updateCallback = item => {
-//   meta.current_page = item.page
-//   meta.per_page = item.limit
-//   initData()
-// }
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
@@ -184,15 +167,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('employee_edit')"
+    :can-delete="user.can('employee_delete')"
+    :can-create="user.can('employee_create')"
+    :can-view="user.can('employee_list')"
     btn-submit="CreateNew"
     :table-title="$t('List of Employees')"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

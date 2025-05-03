@@ -213,7 +213,6 @@ class UserController extends Controller
                 'roles' => $roles,
                 // 'employees' => $employees
             ];
-
         } catch (Throwable $e) {
             // errorLog($e->getMessage());
             $result['status'] = 201;
@@ -234,7 +233,7 @@ class UserController extends Controller
 
             $user = User::find($request->id);
 
-            if($user == null) {
+            if ($user == null) {
                 return NotFoundResourceException($request->id, 'user');
             }
 

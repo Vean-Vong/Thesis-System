@@ -11,15 +11,13 @@
       <div class="about-content">
         <p>{{ $t('aboutDescription') }}</p>
       </div>
-
       <div class="about-image">
         <img
-          src="https://lh3.googleusercontent.com/p/AF1QipMPq2TdJNhvkJ_kTM7BArNsHN320juC_CmYLLuz=s1360-w1360-h1020"
+          src="https://lh3.googleusercontent.com/p/AF1QipMPq2TdJNhvkJ_kTM7BArNsHN320juC_CmYLLuz=w408-h544-k-no"
           alt="Company Image"
         >
         <p>
-          <strong>Address:</strong> #9, Tween Road, Prek Mohatep Park, Phum Prek Mohatep, Sangkat Svay Por, Battambang
-          City.
+          <strong>Address:</strong> #9, Twin Road at Mohatep Park, Sangkat Svay Por, Battambang Province
         </p>
       </div>
     </div>

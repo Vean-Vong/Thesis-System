@@ -25,12 +25,12 @@ const meta = ref({
 })
 const formatDate = date => {
   if (!date) return ''
+  const d = new Date(date)
+  const day = d.getDate()
+  const month = d.toLocaleString('en-US', { month: 'long' })
+  const year = d.getFullYear()
   // eslint-disable-next-line newline-before-return
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  return `${day} ${month}, ${year}`
 }
 
 const initData = () => {

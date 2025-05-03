@@ -12,7 +12,7 @@ const router = createRouter({
 router.beforeEach(to => {
   const isLoggedIn = isUserLoggedIn()
 
-  document.title = to.meta.title + ' - AVEC'
+  document.title = to.meta.title + ' - GANG SAN'
 
   if (isLoggedIn) {
     if (to.name == 'login' || to.path == '/') {

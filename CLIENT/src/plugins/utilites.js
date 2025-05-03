@@ -25,6 +25,7 @@ api.interceptors.request.use(
     // @ts-ignore
     config.headers.Authorization = `Bearer ${useAuthStore()._accessToken}`
     config.headers['x-localization'] = window.localStorage.getItem('lang')
+    // eslint-disable-next-line newline-before-return
     return config
   },
   function (error) {

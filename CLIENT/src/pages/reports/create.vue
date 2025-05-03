@@ -8,14 +8,17 @@ import router from '@/router'
 
 const form = reactive({
   data: {
-    sediment: null,
-    pre_carbon: null,
-    uf_membrane: null,
-    post_carbon: null,
+    customer_name: null,
+    invoice_number: null,
+    unit: null,
+    cash_on_hand: null,
+    cash_on_bank: null,
+    date: null,
+    remark: null,
   },
   options: {
     roles: [],
-    filter: [],
+    reports: [],
   },
 })
 
@@ -23,24 +26,28 @@ const refForm = ref()
 const submitting = ref(false)
 
 onMounted(() => {
-  api.get('/filters').then(res => {
+  api.get('/reports').then(res => {
     form.options = res.data.data
   })
 })
 
 const onCreate = async () => {
   const { valid } = await refForm.value?.validate()
-  if (valid) {
-    submitting.value = true
-    api
-      .post('/filters', form.data)
-      .then(res => {
-        if (res.status === 200) router.back()
-      })
-      .finally(() => {
-        submitting.value = false
-      })
-  }
+  if (!valid) return
+
+  submitting.value = true
+  api
+    .post('/reports', form.data)
+    .then(res => {
+      if (res.status === 200) router.back()
+    })
+    .catch(err => {
+      console.error(err.response?.data || err)
+      alert(err.response?.data?.message || 'Failed to create service')
+    })
+    .finally(() => {
+      submitting.value = false
+    })
 }
 
 const rules = {
@@ -50,8 +57,8 @@ const rules = {
 
 <template>
   <AppFormCreateTemplate
-    cols="9"
-    :title="$t('Create New Stock-in')"
+    cols="6"
+    :title="$t('Create Reports')"
     :submitting="submitting"
     @submit="onCreate"
   >
@@ -64,11 +71,10 @@ const rules = {
           cols="12"
           md="6"
         >
-          <VSelect
-            v-model="form.data.sediment"
-            :label="$t('Sediment')"
+          <VTextField
+            v-model="form.data.customer_name"
+            :label="$t('Customer Name')"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
             outlined
           />
         </VCol>
@@ -76,11 +82,24 @@ const rules = {
           cols="12"
           md="6"
         >
-          <VSelect
-            v-model="form.data.pre_carbon"
-            :label="$t('Pre-Carbon')"
+          <VTextField
+            v-model="form.data.invoice_number"
+            :label="$t('Invoice Number')"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
+            outlined
+          />
+        </VCol>
+
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.unit"
+            :rules="[rules.required]"
+            :label="$t('Unit')"
+            type="number"
             outlined
           />
         </VCol>
@@ -89,11 +108,10 @@ const rules = {
           md="6"
           class="mt-4"
         >
-          <VSelect
-            v-model="form.data.uf_membrane"
-            :label="$t('UF-Membrane')"
+          <VTextField
+            v-model="form.data.cash_on_hand"
+            :label="$t('Cash_on_Hand')"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
             outlined
           />
         </VCol>
@@ -102,11 +120,10 @@ const rules = {
           md="6"
           class="mt-4"
         >
-          <VSelect
-            v-model="form.data.post_carbon"
-            :label="$t('Post-Carbon')"
+          <VTextField
+            v-model="form.data.cash_on_bank"
+            :label="$t('Cash_on_Bank')"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
             outlined
           />
         </VCol>
@@ -117,9 +134,22 @@ const rules = {
         >
           <VTextField
             v-model="form.data.date"
+            :label="$t('date')"
             :rules="[rules.required]"
-            :label="$t('Date')"
             type="date"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VSelect
+            v-model="form.data.remark"
+            :label="$t('Remark')"
+            :rules="[rules.required]"
+            :items="['Paid', 'Sale']"
             outlined
           />
         </VCol>
@@ -130,8 +160,8 @@ const rules = {
 
 <route lang="yaml">
 meta:
-  title: Filter Stock Create
+  title: Daily Report
   layout: default
   subject: Auth
-  active: 'filter-stock'
+  active: 'report '
 </route>

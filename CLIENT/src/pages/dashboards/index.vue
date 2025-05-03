@@ -11,26 +11,42 @@ const price = ref(0) // Store price
 onMounted(async () => {
   try {
     const response = await api.post('summary')
-    console.log(response.data) // Debugging line
-    price.value = response.data.price // Assign price
+    const data = response.data
+    console.log('SUMMARY DATA:', data)
+
+    statistics.value[0].stats = data.totalSalesAmount
+    statistics.value[1].stats = data.totalUtility_expenses
+    statistics.value[2].stats = data.sales
+    statistics.value[3].stats = data.employees
+    statistics.value[4].stats = data.customers
+    statistics.value[5].stats = data.users
+    statistics.value[6].stats = data.products
+    statistics.value[7].stats = data.rental
+    statistics.value[8].stats = data.productStock
+    statistics.value[9].stats = data.filter
   } catch (error) {
-    console.error('Error fetching price:', error)
+    console.error('Error fetching summary:', error)
   }
-})
-onMounted(() => {
-  api.post('summary').then(response => {
-    statistics.value[0].stats = response.data.sales
-    statistics.value[1].stats = response.data.employees
-    statistics.value[2].stats = response.data.customers
-    statistics.value[3].stats = response.data.users
-    statistics.value[4].stats = response.data.products
-    statistics.value[5].stats = response.data.rental
-    statistics.value[6].stats = response.data.productStock
-    statistics.value[7].stats = response.data.filter
-  })
 })
 
 const statistics = ref([
+  {
+    title: 'Total Earnings',
+    stats: 0,
+    icon: 'mdi-cash-multiple',
+    color: '#3b28cc',
+    name: 'totalSalesAmount',
+    i18nKey: 'Total Earnings',
+  },
+  {
+    title: 'Utility Expenses',
+    stats: 0,
+    icon: 'mdi-wallet',
+    color: '#3b28cc',
+    name: 'totalUtility_expenses',
+    to: '/utility_expenses',
+    i18nKey: 'Utility Expenses',
+  },
   {
     title: 'Sale Total',
     stats: 0,
@@ -53,7 +69,7 @@ const statistics = ref([
     title: 'Customer Total',
     stats: 0,
     icon: 'mdi-account-group',
-    color: '#2667ff',
+    color: '#3b28cc',
     name: 'customers',
     to: '/customers',
     i18nKey: 'Customer',
@@ -62,7 +78,7 @@ const statistics = ref([
     title: 'User Total',
     stats: 0,
     icon: 'mdi-account-star',
-    color: '#3f8efc',
+    color: '#3b28cc',
     name: 'users',
     to: 'settings/user-settings',
     i18nKey: 'total_users',
@@ -89,7 +105,7 @@ const statistics = ref([
     title: 'Product in Stock',
     stats: 0,
     icon: 'mdi-warehouse',
-    color: '#2667ff',
+    color: '#3b28cc',
     name: 'productStock',
     to: '/product-stock',
     i18nKey: 'Product in Stock',
@@ -98,7 +114,7 @@ const statistics = ref([
     title: 'Filters Stock',
     stats: price.value,
     icon: 'mdi-filter-menu',
-    color: '#3f8efc',
+    color: '#3b28cc',
     name: 'filter',
     to: '/filter-stock',
     i18nKey: 'Filter in Stock',
@@ -199,7 +215,7 @@ const go = to => {
         {{ $t('total_data_table') }}
       </VCardTitle>
     </VCardItem>
-    <VCardText class="my-1">
+    <VCardText class="my-">
       <VRow>
         <VCol
           v-for="item in statistics"
@@ -212,7 +228,7 @@ const go = to => {
           <VCard
             :class="stat - card"
             :color="item.color"
-            class="d-flex align-center mb-4 py-5 rounded-2"
+            class="d-flex align-center mb-1 py-5 rounded-2"
             dark
             elevation="20"
             @click="go(item.to)"
@@ -238,7 +254,13 @@ const go = to => {
                 {{ $t(item.i18nKey) }}
               </div>
             </div>
-            <span class="text-2xl font-weight-medium text-white ms-auto mx-5">{{ item.stats }}</span>
+            <span class="text-2xl font-weight-medium text-white ms-auto mx-5">
+              {{
+                item.name === 'totalSalesAmount' || item.name === 'totalUtility_expenses'
+                  ? '$ ' + Number(item.stats).toLocaleString()
+                  : item.stats.toLocaleString()
+              }}
+            </span>
           </VCard>
         </VCol>
       </VRow>
@@ -269,7 +291,7 @@ export default {
   cursor: pointer;
 }
 .stat-card {
-  background: linear-gradient(to bottom right, #42a5f5, #0d47a1); 
+  background: linear-gradient(to bottom right, #42a5f5, #0d47a1);
 }
 </style>
 

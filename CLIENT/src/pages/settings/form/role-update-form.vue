@@ -1,49 +1,51 @@
 <script setup>
-import api from "@/plugins/utilites";
-import router from "@/router";
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import api from '@/plugins/utilites'
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import router from '@/router'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const form = ref({});
-const refForm = ref();
+const form = ref({})
+const refForm = ref()
 
-const permissions = ref([]);
+const permissions = ref([])
 
 onMounted(() => {
-  const query = router.currentRoute.value.query;
+  const query = router.currentRoute.value.query
 
   api
-    .post("/roles-edit", { id: query.id })
-    .then((res) => {
-      form.value = res.data.data;
+    .post('/roles-edit', { id: query.id })
+    .then(res => {
+      form.value = res.data.data
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch(err => {
+      console.log(err)
+    })
 
   api
-    .post("/permissions-list")
-    .then((res) => {
-      permissions.value = res.data.data;
+    .post('/permissions-list')
+    .then(res => {
+      permissions.value = res.data.data
     })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+    .catch(err => {
+      console.log(err)
+    })
+})
 
 const onUpdate = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
     api
-      .post("/roles-update", form.value)
-      .then((res) => {
-        if (res.status == 200) router.back();
+      .post('/roles-update', form.value)
+      .then(res => {
+        if (res.status == 200) router.back()
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(err => {
+        console.log(err)
+      })
   }
-};
+}
 
 const selectAll = ret => {
   for (const permission of ret.childrens) {
@@ -62,9 +64,9 @@ const deselectAll = ret => {
   }
 }
 
-const toSentenceFunction = (p) => {
-  return p.charAt(0).toUpperCase() + p.substr(1);
-};
+const toSentenceFunction = p => {
+  return p.charAt(0).toUpperCase() + p.substr(1)
+}
 </script>
 
 <template>
@@ -164,7 +166,6 @@ meta:
   subject: Auth
   active: 'role'
 </route>
-
 
 <style scoped>
 .list-width {

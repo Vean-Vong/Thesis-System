@@ -59,12 +59,13 @@ const headers = [
     align: 'left',
     sortable: false,
   },
-  {
-    title: t('Image'),
-    key: 'image',
-    align: 'center',
-    sortable: false,
-  },
+
+  // {
+  //   title: t('Image'),
+  //   key: 'image',
+  //   align: 'center',
+  //   sortable: false,
+  // },
   {
     title: t('Model'),
     key: 'model',
@@ -73,54 +74,55 @@ const headers = [
   },
   {
     title: t('Color'),
-    key: 'color',
+    key: 'colors',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('filtration_stage'),
+    title: t('Filter'),
     key: 'filtration_stage',
     align: 'center',
     sortable: false,
   },
+
   {
-    title: t('cold_water_tank_capacity'),
+    title: t('Cold water Tank Capacity'),
     key: 'cold_water_tank_capacity',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('hot_water_tank_capacity'),
+    title: t('Hot water Tank Capacity'),
     key: 'hot_water_tank_capacity',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('heating_capacity'),
+    title: t('Heating Capacity'),
     key: 'heating_capacity',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('cooling_capacity'),
+    title: t('Cooling Capacity'),
     key: 'cooling_capacity',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('cold_power_consumption'),
+    title: t('Hot Power Consumption'),
     key: 'cold_power_consumption',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('hot_power_consumption'),
+    title: t('Cold Power Consumption'),
     key: 'hot_power_consumption',
     align: 'center',
     sortable: false,
   },
   {
-    title: t('quantity'),
+    title: t('Quantity'),
     key: 'quantity',
     align: 'center',
     sortable: false,
@@ -136,6 +138,9 @@ const editCallback = item => {
   router.push({ name: 'products-edit', query: { id: item } })
 }
 
+const viewCallback = item => {
+  router.push({ name: 'products-show', query: { id: item } })
+}
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
@@ -183,15 +188,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('product_edit')"
+    :can-view="user.can('product_list')"
+    :can-delete="user.can('product_delete')"
+    :can-create="user.can('product_create')"
     :table-title="$t('List of Products')"
     btn-submit="CreateNew"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

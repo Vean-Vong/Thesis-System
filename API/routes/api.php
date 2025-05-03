@@ -14,9 +14,11 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FilterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\UtilityExpensesController;
 use App\Models\Employee;
 
 /*
@@ -71,4 +73,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('rentals', RentalController::class);
     Route::apiResource('filters', FilterController::class);
     Route::apiResource('services', ServiceController::class);
+
+    Route::apiResource('utility_expenses', UtilityExpensesController::class);
+    Route::apiResource('reports', ReportController::class);
 });

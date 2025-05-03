@@ -126,7 +126,7 @@ const rules = {
             v-model="form.data.duration"
             :label="$t('Duration')"
             :rules="[rules.required]"
-            :items="['1 Year', '1 Month']"
+            :items="['Once a year', 'Unlimited']"
             outlined
           />
         </VCol>

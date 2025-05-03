@@ -1,30 +1,32 @@
 <script setup>
-import api from "@/plugins/utilites";
-import router from "@/router";
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import api from '@/plugins/utilites'
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import router from '@/router'
 
 const form = ref({
-  khmer_name: "",
-  latin_name: "",
+  khmer_name: '',
+  latin_name: '',
   sort: 1,
-});
+})
 
-const refForm = ref();
-const submitting = ref(false);
+const refForm = ref()
+const submitting = ref(false)
 
 const onCreate = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
-    submitting.value = true;
+    submitting.value = true
     api
-      .post("/positions-create", form.value)
-      .then((res) => {
-        if (res.status == 200) router.back();
+      .post('/positions-create', form.value)
+      .then(res => {
+        if (res.status == 200) router.back()
       })
       .finally(() => {
-        submitting.value = false;
-      });
+        submitting.value = false
+      })
   }
-};
+}
 </script>
 
 <template>
@@ -34,7 +36,10 @@ const onCreate = async () => {
     :title="$t('Create New Position')"
     :submitting="submitting"
   >
-    <VForm ref="refForm" lazy-validation>
+    <VForm
+      ref="refForm"
+      lazy-validation
+    >
       <VRow>
         <VCol cols="12">
           <AppTextField
@@ -42,7 +47,7 @@ const onCreate = async () => {
             v-model="form.khmer_name"
             :label="$t('Khmer Name')"
             required="true"
-            :rules="[(v) => !!v || $t('Khmer Name') + $t('required')]"
+            :rules="[v => !!v || $t('Khmer Name') + $t('required')]"
           />
         </VCol>
 
@@ -60,7 +65,7 @@ const onCreate = async () => {
             type="number"
             :label="$t('Sort Number')"
             required="true"
-            :rules="[(v) => !!v || $t('Sort Number') + $t('required')]"
+            :rules="[v => !!v || $t('Sort Number') + $t('required')]"
           />
         </VCol>
       </VRow>
@@ -73,5 +78,5 @@ meta:
   title: Position Create
   layout: default
   subject: Auth
-  active: "position"
+  active: 'position'
 </route>

@@ -4,16 +4,13 @@
 import AppDataTable from '@/components/AppDataTable.vue'
 import api from '@/plugins/utilites'
 import router from '@/router'
-import { onMounted } from 'vue'
 import { useAuthStore } from '@/plugins/auth.module'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 const user = useAuthStore().user
 const { t } = useI18n()
 const items = ref([])
-
-const loading = ref(false)
-
 const search = ref(null)
+const loading = ref(false)
 const delete_item = ref(null)
 const deleting = ref(false)
 const dialog = ref(false)
@@ -27,16 +24,30 @@ const meta = ref({
   total: 0,
 })
 
+const formatDate = bill_date => {
+  if (!bill_date) return ''
+  const d = new Date(bill_date)
+  const day = d.getDate()
+  const month = d.toLocaleString('en-US', { month: 'long' })
+  const year = d.getFullYear()
+  // eslint-disable-next-line newline-before-return
+  return `${day} ${month}, ${year}`
+}
+
 const initData = () => {
   loading.value = true
   api
-    .post('/users-list', {
+    .get('/utility_expenses', {
       page: meta?.current_page,
       limit: meta?.per_page,
       search: search.value,
     })
     .then(res => {
-      items.value = res.data.data.data
+      items.value = res.data.data.data.map(utility_expenses => ({
+        ...utility_expenses,
+        cost: `$${utility_expenses.cost.toLocaleString()}`, // Add $ symbol
+        bill_date: formatDate(utility_expenses.bill_date),
+      }))
       meta.value = res.data.data.meta
     })
     .finally(() => {
@@ -48,36 +59,48 @@ onMounted(() => {
   initData()
 })
 
+const onSearch = () => {
+  initData()
+}
+
 const headers = [
   {
     title: t('No'),
     key: 'no',
     align: 'left',
     sortable: false,
-    minWidth: '100px',
-    maxWidth: '100px',
-  },
-  {
-    title: t('User Name'),
-    key: 'username',
-    align: 'center',
-    sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
-  },
-  {
-    title: t('Email'),
-    key: 'email',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Role'),
-    key: 'roles[0].name',
-    align: 'center',
-    sortable: false,
   },
 
+  {
+    title: t('Type'),
+    key: 'type',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Bill Date'),
+    key: 'bill_date',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Usage Amount'),
+    key: 'usage_amount',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Cost'),
+    key: 'cost',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Unit Rate'),
+    key: 'unit_rate',
+    align: 'center',
+    sortable: false,
+  },
   {
     title: t('Actions'),
     key: 'actions',
@@ -87,29 +110,16 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'settings-form-user-detail-form', query: { id: item } })
+  router.push({ name: 'utility_expenses-show', query: { id: item } })
+}
+
+const editCallback = item => {
+  router.push({ name: 'utility_expenses-edit', query: { id: item } })
 }
 
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
-}
-
-const editCallback = item => {
-  router.push({
-    name: 'settings-form-user-update-form',
-    query: { uuid: item },
-  })
-}
-
-const updateCallback = item => {
-  meta.current_page = item.page
-  meta.per_page = item.limit
-  initData()
-}
-
-const onSearch = () => {
-  initData()
 }
 
 const cancelCallback = () => {
@@ -120,11 +130,14 @@ const cancelCallback = () => {
 const confirmDeleteCallback = () => {
   deleting.value = true
   api
-    .post('users-delete', { id: delete_item.value })
+    .delete(`/utility_expenses/${delete_item.value}`)
     .then(res => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         initData()
       }
+    })
+    .catch(error => {
+      console.error('Delete request failed:', error.response?.data || error)
     })
     .finally(() => {
       deleting.value = false
@@ -142,7 +155,8 @@ const confirmDeleteCallback = () => {
     @on-confirm-delete="confirmDeleteCallback"
   />
   <AppDataTable
-    create-url="settings-form-user-create-form"
+    cols="12"
+    create-url="utility_expenses-create"
     :headers="headers"
     :items="items"
     :items-per-page="meta?.per_page"
@@ -150,17 +164,15 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_users')"
-    :can-delete="user.can('delete_users')"
-    :can-create="user.can('create_users')"
+    :can-edit="user.can('edit_roles')"
+    :can-delete="user.can('delete_roles')"
+    :can-create="user.can('create_roles')"
+    :table-title="$t('List of utility_expenses')"
     btn-submit="CreateNew"
-    :table-title="$t('List of Users')"
-    cols="12"
     :loading="loading"
     @on-edit="editCallback"
-    @on-update="updateCallback"
+    @on-create="createCallback"
     @on-delete="deleteCallback"
-    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->
@@ -195,8 +207,8 @@ const confirmDeleteCallback = () => {
 
 <route lang="yaml">
 meta:
-  title: User
+  title: Utility Expenses
   layout: default
   subject: Auth
-  active: 'user'
+  active: 'utility_expenses '
 </route>

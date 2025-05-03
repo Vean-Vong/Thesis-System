@@ -52,7 +52,7 @@ const rules = {
 <template>
   <AppFormCreateTemplate
     cols="9"
-    :title="$t('Edit Filter Stock')"
+    :title="$t('Update Stock-in')"
     :submitting="submitting"
     @submit="onUpdate"
   >

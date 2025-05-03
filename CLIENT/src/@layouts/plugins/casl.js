@@ -1,5 +1,7 @@
+/* eslint-disable import/no-unresolved */
 // eslint-disable-next-line import/no-unresolved
 import { useAuthStore } from '@/plugins/auth.module'
+// eslint-disable-next-line import/extensions
 import ability from '@/plugins/casl/ability'
 
 /**

@@ -11,47 +11,47 @@ const route = useRoute()
 
 const form = reactive({
   data: {
-    model: null,
-    price: null,
+    customer_name: null,
+    invoice_number: null,
+    unit: null,
+    cash_on_hand: null,
+    cash_on_bank: null,
     date: null,
-    duration: null,
-    warranty: 'Free monthly Maintenance',
-    seller: null,
-    contract_type: null,
+    remark: null,
   },
   options: {
     roles: [],
-    services: [],
+    reports: [],
   },
 })
 
 const refForm = ref()
 const submitting = ref(false)
 
-const fetchServices = async () => {
+const fetchReports = async () => {
   try {
-    const res = await api.get(`/services/${route.query.id}`)
+    const res = await api.get(`/reports/${route.query.id}`)
+    console.log('API response:', res.data)
+
     if (res.data.status === 200) {
       form.data = { ...res.data.data }
     } else {
-      console.error('Error fetching sale:', res.data.message)
+      console.error('Error fetching utility expense:', res.data.message)
     }
   } catch (error) {
-    console.error('Failed to fetch sale:', error)
+    console.error('Failed to fetch utility expense:', error)
   }
 }
 
-onMounted(fetchServices)
+onMounted(fetchReports)
 
 const onUpdate = async () => {
   const { valid } = await refForm.value?.validate()
   if (!valid) return
 
-  form.data.price = parseFloat(form.data.price.toString().replace(/[^0-9.]/g, '')) || 0
-
   submitting.value = true
   api
-    .put(`/services/${route.query.id}`, form.data)
+    .put(`/reports/${route.query.id}`, form.data)
     .then(res => {
       if (res.data.status === 200) router.back()
     })
@@ -71,7 +71,7 @@ const rules = {
 <template>
   <AppFormCreateTemplate
     cols="6"
-    :title="$t('Update Service')"
+    :title="$t('Update Reports')"
     :submitting="submitting"
     @submit="onUpdate"
   >
@@ -84,22 +84,10 @@ const rules = {
           cols="12"
           md="6"
         >
-          <VSelect
-            v-model="form.data.model"
-            :label="$t('Model')"
+          <VTextField
+            v-model="form.data.customer_name"
+            :label="$t('Customer Name')"
             :rules="[rules.required]"
-            :items="[
-              'GP-80B',
-              'GP-900',
-              'GP-50',
-              'G-6000C',
-              'GP-900S',
-              'GP-500S',
-              'GP-80S',
-              'GP-700S',
-              'Maxtream',
-              'Under-Sink-Case',
-            ]"
             outlined
           />
         </VCol>
@@ -107,11 +95,10 @@ const rules = {
           cols="12"
           md="6"
         >
-          <VSelect
-            v-model="form.data.price"
-            :label="$t('Price')"
+          <VTextField
+            v-model="form.data.invoice_number"
+            :label="$t('Invoice Number')"
             :rules="[rules.required]"
-            :items="['$12', '$130']"
             outlined
           />
         </VCol>
@@ -122,9 +109,46 @@ const rules = {
           class="mt-4"
         >
           <VTextField
-            v-model="form.data.date"
+            v-model="form.data.unit"
             :rules="[rules.required]"
-            :label="$t('Date')"
+            :label="$t('Unit')"
+            type="number"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.cash_on_hand"
+            :label="$t('Cash_on_Hand')"
+            :rules="[rules.required]"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.cash_on_bank"
+            :label="$t('Cash_on_Bank')"
+            :rules="[rules.required]"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VTextField
+            v-model="form.data.date"
+            :label="$t('date')"
+            :rules="[rules.required]"
             type="date"
             outlined
           />
@@ -135,49 +159,10 @@ const rules = {
           class="mt-4"
         >
           <VSelect
-            v-model="form.data.duration"
-            :label="$t('Duration')"
+            v-model="form.data.remark"
+            :label="$t('Remark')"
             :rules="[rules.required]"
-            :items="['Unlimited', 'Once a year']"
-            outlined
-          />
-        </VCol>
-        <VCol
-          cols="12"
-          md="6"
-          class="mt-4"
-        >
-          <VSelect
-            v-model="form.data.warranty"
-            :label="$t('Warranty')"
-            :rules="[rules.required]"
-            :items="['Free monthly Maintenance']"
-            outlined
-          />
-        </VCol>
-        <VCol
-          cols="12"
-          md="6"
-          class="mt-4"
-        >
-          <VSelect
-            v-model="form.data.seller"
-            :label="$t('Seller')"
-            :rules="[rules.required]"
-            :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin', 'Phoung Chansophol']"
-            outlined
-          />
-        </VCol>
-        <VCol
-          cols="12"
-          md="6"
-          class="mt-4"
-        >
-          <VSelect
-            v-model="form.data.contract_type"
-            :label="$t('Contract Type')"
-            :rules="[rules.required]"
-            :items="['Monthly Fees', 'Yearly Fees']"
+            :items="['Paid', 'Sale']"
             outlined
           />
         </VCol>
@@ -188,8 +173,8 @@ const rules = {
 
 <route lang="yaml">
 meta:
-  title: Edit Service
+  title: Daily Report
   layout: default
   subject: Auth
-  active: 'service'
+  active: 'report '
 </route>

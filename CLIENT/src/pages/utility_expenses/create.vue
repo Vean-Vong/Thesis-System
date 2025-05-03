@@ -8,14 +8,15 @@ import router from '@/router'
 
 const form = reactive({
   data: {
-    sediment: null,
-    pre_carbon: null,
-    uf_membrane: null,
-    post_carbon: null,
+    type: null,
+    bill_date: null,
+    usage_amount: null,
+    cost: null,
+    unit_rate: null,
   },
   options: {
     roles: [],
-    filter: [],
+    utility_expenses: [],
   },
 })
 
@@ -23,24 +24,28 @@ const refForm = ref()
 const submitting = ref(false)
 
 onMounted(() => {
-  api.get('/filters').then(res => {
+  api.get('/utility_expenses').then(res => {
     form.options = res.data.data
   })
 })
 
 const onCreate = async () => {
   const { valid } = await refForm.value?.validate()
-  if (valid) {
-    submitting.value = true
-    api
-      .post('/filters', form.data)
-      .then(res => {
-        if (res.status === 200) router.back()
-      })
-      .finally(() => {
-        submitting.value = false
-      })
-  }
+  if (!valid) return
+
+  submitting.value = true
+  api
+    .post('/utility_expenses', form.data)
+    .then(res => {
+      if (res.status === 200) router.back()
+    })
+    .catch(err => {
+      console.error(err.response?.data || err)
+      alert(err.response?.data?.message || 'Failed to create service')
+    })
+    .finally(() => {
+      submitting.value = false
+    })
 }
 
 const rules = {
@@ -50,8 +55,8 @@ const rules = {
 
 <template>
   <AppFormCreateTemplate
-    cols="9"
-    :title="$t('Create New Stock-in')"
+    cols="6"
+    :title="$t('Create Utility_expenses')"
     :submitting="submitting"
     @submit="onCreate"
   >
@@ -65,10 +70,10 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.sediment"
-            :label="$t('Sediment')"
+            v-model="form.data.type"
+            :label="$t('Type')"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
+            :items="['Water', 'Electricity', 'Garbage']"
             outlined
           />
         </VCol>
@@ -76,37 +81,25 @@ const rules = {
           cols="12"
           md="6"
         >
-          <VSelect
-            v-model="form.data.pre_carbon"
-            :label="$t('Pre-Carbon')"
+          <VTextField
+            v-model="form.data.bill_date"
+            :label="$t('Bill Date')"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
+            type="date"
             outlined
           />
         </VCol>
-        <VCol
-          cols="12"
-          md="6"
-          class="mt-4"
-        >
-          <VSelect
-            v-model="form.data.uf_membrane"
-            :label="$t('UF-Membrane')"
-            :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
-            outlined
-          />
-        </VCol>
+
         <VCol
           cols="12"
           md="6"
           class="mt-4"
         >
-          <VSelect
-            v-model="form.data.post_carbon"
-            :label="$t('Post-Carbon')"
+          <VTextField
+            v-model="form.data.usage_amount"
             :rules="[rules.required]"
-            :items="['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']"
+            :label="$t('Usage Amount')"
+            type="number"
             outlined
           />
         </VCol>
@@ -116,10 +109,22 @@ const rules = {
           class="mt-4"
         >
           <VTextField
-            v-model="form.data.date"
+            v-model="form.data.cost"
+            :label="$t('Cost')"
             :rules="[rules.required]"
-            :label="$t('Date')"
-            type="date"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+          class="mt-4"
+        >
+          <VSelect
+            v-model="form.data.unit_rate"
+            :label="$t('Unit Rate')"
+            :rules="[rules.required]"
+            :items="['130', '12']"
             outlined
           />
         </VCol>
@@ -130,8 +135,8 @@ const rules = {
 
 <route lang="yaml">
 meta:
-  title: Filter Stock Create
+  title: Utility Expenses
   layout: default
   subject: Auth
-  active: 'filter-stock'
+  active: 'utility_expenses '
 </route>

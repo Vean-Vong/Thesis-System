@@ -187,7 +187,7 @@ const rules = {
           class="mt-4"
         >
           <VTextField
-            v-model="form.data.hire_date"
+            v-model="form.data.date_of_birth"
             :rules="[rules.required, rules.hire_date]"
             :label="$t('Hire Date')"
             type="date"

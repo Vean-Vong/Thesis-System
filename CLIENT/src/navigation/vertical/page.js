@@ -1,17 +1,5 @@
 export default [
   {
-    title: 'Users',
-    to: 'settings-user-settings',
-    icon: { icon: 'tabler-user-cog', size: 23 },
-    active: 'users',
-  },
-  {
-    title: 'Roles',
-    to: 'settings-role-settings',
-    icon: { icon: 'tabler-users-group', size: 23 },
-    active: 'role',
-  },
-  {
     title: 'Employee',
     to: 'employees',
     icon: { icon: 'tabler-users', size: 23 },
@@ -47,6 +35,18 @@ export default [
     icon: { icon: 'mdi-tools', size: 23 },
     active: 'service',
   },
+  {
+    title: 'Daily Report',
+    to: 'reports',
+    icon: { icon: 'mdi-file-document-outline', size: 23 },
+    active: 'report',
+  },
+  {
+    title: 'Utility Expenses',
+    to: 'utility_expenses',
+    icon: { icon: 'mdi-cash-multiple', size: 23 },
+    active: 'utility_expenses',
+  },
 
   {
     title: 'Stock',
@@ -73,6 +73,18 @@ export default [
         to: 'settings-account-settings',
         icon: { icon: 'tabler-adjustments', size: 23 },
       },
+      {
+        title: 'Roles',
+        to: 'settings-role-settings',
+        icon: { icon: 'tabler-users-group', size: 23 },
+        active: 'role',
+      },
+      {
+        title: 'Users',
+        to: 'settings-user-settings',
+        icon: { icon: 'tabler-user-cog', size: 23 },
+        active: 'users',
+      },
     ],
   },
   {
@@ -87,7 +99,7 @@ export default [
       {
         title: 'Partner',
         to: 'about-partner',
-        icon: { icon: 'tabler-users', size: 23 },
+        icon: { icon: 'tabler-users-group', size: 23 },
       },
     ],
   },

@@ -13,7 +13,7 @@ class Product extends Model
 
     protected $fillable = [
         'model',
-        'color',
+        'colors',
         'filtration_stage',
         'cold_water_tank_capacity',
         'hot_water_tank_capacity',

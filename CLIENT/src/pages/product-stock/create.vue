@@ -11,7 +11,7 @@ const form = reactive({
     model: null,
     quantity: null,
     date: null,
-    supplier: null,
+    supplier: 'Head Office',
   },
   options: {
     roles: [],
@@ -51,7 +51,7 @@ const rules = {
 <template>
   <AppFormCreateTemplate
     cols="9"
-    :title="$t('Create New​ Stock')"
+    :title="$t('Create New Stock-in')"
     :submitting="submitting"
     @submit="onCreate"
   >
@@ -68,7 +68,18 @@ const rules = {
             v-model="form.data.model"
             :label="$t('Model')"
             :rules="[rules.required]"
-            :items="['GP-80B', 'G-6000C']"
+            :items="[
+              'GP-80B',
+              'GP-900',
+              'GP-50',
+              'G-6000C',
+              'GP-900S',
+              'GP-500S',
+              'GP-80S',
+              'GP-700S',
+              'Maxtream',
+              'Under-Sink-Case',
+            ]"
             outlined
           />
         </VCol>

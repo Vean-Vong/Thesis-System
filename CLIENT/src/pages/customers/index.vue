@@ -28,12 +28,12 @@ const meta = ref({
 
 const formatDate = date => {
   if (!date) return ''
+  const d = new Date(date)
+  const day = d.getDate()
+  const month = d.toLocaleString('en-US', { month: 'long' })
+  const year = d.getFullYear()
   // eslint-disable-next-line newline-before-return
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  return `${day} ${month}, ${year}`
 }
 
 const initData = () => {
@@ -71,7 +71,7 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'customer-show', query: { id: item } })
+  router.push({ name: 'customers-show', query: { id: item } })
 }
 const onSearch = () => {
   initData()
@@ -128,9 +128,10 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('customer_edit')"
+    :can-delete="user.can('customer_delete')"
+    :can-create="user.can('customer_create')"
+    :can-view="user.can('customer_list')"
     :table-title="$t('List of Customers')"
     btn-submit="CreateNew"
     :loading="loading"

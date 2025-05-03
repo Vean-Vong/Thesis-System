@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rental;
+use App\Models\Report;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class RentalController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $result['status'] = 200;
-
+        $result = ['status' => 200];
         try {
-            $rentals = Rental::latest()->paginate(10);
-            $result['data'] = $rentals;
+            $reports = Report::latest()->paginate(10);
+            $result['data'] = $reports;
         } catch (\Throwable $e) {
             $result['status'] = 500;
             $result['message'] = $e->getMessage();
         }
-
         return response()->json($result);
     }
 
@@ -40,45 +37,40 @@ class RentalController extends Controller
     public function store(Request $request)
     {
         $result = ['status' => 200];
-
         try {
             $validated = $request->validate([
-                'model' => 'required|string',
-                'price' => 'required|string',
-                'discount' => 'nullable|string',
+                'customer_name' => 'required|string|max:255',
+                'invoice_number' => 'required|string|max:255|unique:reports',
+                'unit' => 'required|numeric|min:0',
+                'cash_on_hand' => 'required|numeric|min:0',
+                'cash_on_bank' => 'required|numeric|min:0',
                 'date' => 'required|date',
-                'duration' => 'nullable|string',
-                'warranty' => 'nullable|string',
-                'seller' => 'required|string',
-                'contract_type' => 'required|string|in:rental',
+                'remark' => 'nullable|string|max:255',
             ]);
 
-
-            $rental = Rental::create($validated);
-            $result['data'] = $rental;
-            $result['message'] = 'Rental created successfully!';
+            $report = Report::create($validated);
+            $result['data'] = $report;
+            $result['message'] = 'Report created successfully!';
         } catch (\Illuminate\Validation\ValidationException $e) {
             $result['status'] = 422;
             $result['errors'] = $e->errors();
         } catch (\Throwable $e) {
             $result['status'] = 500;
-            $result['message'] = 'An error occurred while creating the rental.';
+            $result['message'] = 'An error occurred while creating the report.';
         }
-
         return response()->json($result);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Rental $rental)
+    public function show(Report $report)
     {
-        $result['status'] = 200;
-
+        $result = ['status' => 200];
         try {
-            $result['data'] = $rental;
+            $result['data'] = $report;
         } catch (\Throwable $e) {
-            $result['status'] = 500; // Use 500 for server errors
+            $result['status'] = 500;
             $result['message'] = $e->getMessage();
         }
         return response()->json($result);
@@ -87,7 +79,7 @@ class RentalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rental $rental)
+    public function edit(Report $report)
     {
         //
     }
@@ -95,53 +87,46 @@ class RentalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rental $rental)
+    public function update(Request $request, Report $report)
     {
-        $result['status'] = 200;
-
+        $result = ['status' => 200];
         try {
             $validated = $request->validate([
-                'model' => 'required|string',
-                'price' => 'required|string',
-                'discount' => 'nullable|string',
+                'customer_name' => 'required|string|max:255',
+                'invoice_number' => 'required|string|max:255|unique:reports,invoice_number,' . $report->id,
+                'unit' => 'required|numeric|min:0',
+                'cash_on_hand' => 'required|numeric|min:0',
+                'cash_on_bank' => 'required|numeric|min:0',
                 'date' => 'required|date',
-                'duration' => 'nullable|string',
-                'warranty' => 'nullable|string',
-                'seller' => 'required|string',
-                'contract_type' => 'required|string|in:rental',
+                'remark' => 'nullable|string|max:255',
             ]);
 
-
-            $rental->update($validated);
-            $result['data'] = $rental;
-            $result['message'] = 'Rental updated successfully!';
+            $report->update($validated);
+            $result['data'] = $report;
+            $result['message'] = 'Report updated successfully!';
         } catch (\Illuminate\Validation\ValidationException $e) {
             $result['status'] = 422;
             $result['errors'] = $e->errors();
         } catch (\Throwable $e) {
             $result['status'] = 500;
-            $result['message'] = 'An error occurred while creating the Rental.';
+            $result['message'] = 'An error occurred while updating the report.';
         }
-
         return response()->json($result);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rental $rental)
+    public function destroy(Report $report)
     {
         $result = ['status' => 200];
-
         try {
-            $rental->delete();
-            $result['message'] = 'Stock deleted successfully!';
+            $report->delete();
+            $result['message'] = 'Report deleted successfully!';
         } catch (\Throwable $e) {
-            Log::error('Stock delete error: ' . $e->getMessage());
             $result['status'] = 500;
-            $result['message'] = 'An error occurred while deleting the Stock.';
+            $result['message'] = 'An error occurred while deleting the report.';
         }
-
         return response()->json($result);
     }
 }
