@@ -51,7 +51,7 @@ const rules = {
 <template>
   <AppFormCreateTemplate
     cols="9"
-    :title="$t('Create New Stock-in')"
+    :title="$t('Create New Filter Stock-in')"
     :submitting="submitting"
     @submit="onCreate"
   >

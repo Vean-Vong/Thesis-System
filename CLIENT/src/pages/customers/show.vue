@@ -49,7 +49,7 @@ onMounted(fetchCustomer)
           indeterminate
           color="primary"
         />
-        <span class="ml-3">{{ $t('Loading customer data...') }}</span>
+        <span class="ml-3">{{ $t('Loading data...') }}</span>
       </VCardText>
     </VCard>
 

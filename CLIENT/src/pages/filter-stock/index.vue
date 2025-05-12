@@ -109,18 +109,14 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'settings-form-role-detail-form', query: { id: item } })
+  router.push({ name: 'filter-stock-show', query: { id: item } })
 }
 
 const editCallback = item => {
   router.push({ name: 'filter-stock-edit', query: { id: item } })
 }
 
-// const updateCallback = item => {
-//   meta.current_page = item.page
-//   meta.per_page = item.limit
-//   initData()
-// }
+
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
@@ -165,15 +161,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('filter_stock_edit')"
+    :can-delete="user.can('filter_stock_delete')"
+    :can-view="user.can('filter_stock_list')"
+    :can-create="user.can('filter_stock_create')"
     btn-submit="CreateNew"
-    :table-title="$t('List of Stock')"
+    :table-title="$t('List of Filter')"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

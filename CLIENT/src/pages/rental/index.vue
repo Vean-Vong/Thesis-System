@@ -128,7 +128,7 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'rentals-show', query: { id: item } })
+  router.push({ name: 'rental-show', query: { id: item } })
 }
 
 const editCallback = item => {
@@ -182,15 +182,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('rental_edit')"
+    :can-view="user.can('rental_list')"
+    :can-delete="user.can('rental_delete')"
+    :can-create="user.can('rental_create')"
     :table-title="$t('List of Rentals')"
     btn-submit="CreateNew"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

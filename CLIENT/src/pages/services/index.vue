@@ -33,7 +33,6 @@ const formatDate = date => {
   return `${day} ${month}, ${year}`
 }
 
-
 const initData = () => {
   loading.value = true
   api
@@ -129,12 +128,6 @@ const viewCallback = item => {
 const editCallback = item => {
   router.push({ name: 'services-edit', query: { id: item } })
 }
-
-// const updateCallback = item => {
-//   meta.current_page = item.page
-//   meta.per_page = item.limit
-//   initData()
-// }
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
@@ -182,15 +175,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('service_edit')"
+    :can-view="user.can('service_list')"
+    :can-delete="user.can('service_delete')"
+    :can-create="user.can('service_create')"
     :table-title="$t('List of Services')"
     btn-submit="CreateNew"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

@@ -164,15 +164,17 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('edit_roles')"
-    :can-delete="user.can('delete_roles')"
-    :can-create="user.can('create_roles')"
+    :can-edit="user.can('utility_expenses_edit')"
+    :can-delete="user.can('utility_expenses_delete')"
+    :can-view="user.can('utility_expenses_list')"
+    :can-create="user.can('utility_expenses_create')"
     :table-title="$t('List of utility_expenses')"
     btn-submit="CreateNew"
     :loading="loading"
     @on-edit="editCallback"
     @on-create="createCallback"
     @on-delete="deleteCallback"
+    @on-view="viewCallback"
   >
     <template #forFilter>
       <!-- <p>Search and Filter</p> -->

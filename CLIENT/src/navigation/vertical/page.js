@@ -8,7 +8,7 @@ export default [
   {
     title: 'Customer',
     to: 'customers',
-    icon: { icon: 'tabler-user', size: 23 },
+    icon: { icon: 'mdi-account-group', size: 23 },
     active: 'customer',
   },
   {

@@ -59,7 +59,7 @@ const statistics = ref([
   {
     title: 'Employee Total',
     stats: 0,
-    icon: 'mdi-account-tie',
+    icon: 'tabler-users',
     color: 'primary',
     name: 'employees',
     to: '/employees',
