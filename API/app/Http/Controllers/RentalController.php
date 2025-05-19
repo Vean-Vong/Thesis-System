@@ -44,7 +44,7 @@ class RentalController extends Controller
         try {
             $validated = $request->validate([
                 'model' => 'required|string',
-                'price' => 'required|string',
+                'price' => 'required|numeric|min:0',
                 'discount' => 'nullable|string',
                 'date' => 'required|date',
                 'duration' => 'nullable|string',
@@ -102,7 +102,7 @@ class RentalController extends Controller
         try {
             $validated = $request->validate([
                 'model' => 'required|string',
-                'price' => 'required|string',
+                'price' => 'required|numeric|min:0',
                 'discount' => 'nullable|string',
                 'date' => 'required|date',
                 'duration' => 'nullable|string',

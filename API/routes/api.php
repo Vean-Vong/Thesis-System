@@ -67,7 +67,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('employees', EmployeeController::class);
     Route::apiResource('customers', CustomerController::class);
+
     Route::apiResource('sales', SaleController::class);
+    // Custom route for monthly sales count
+    Route::get('/sales/total-by-month', [SaleController::class, 'totalSalesPerMonth']);
+
+
+
     Route::apiResource('products', ProductController::class);
     Route::apiResource('stock', StockController::class);
     Route::apiResource('rentals', RentalController::class);

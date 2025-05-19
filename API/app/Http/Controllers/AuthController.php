@@ -33,7 +33,7 @@ class AuthController extends Controller
 
             $result['user'] = new UserResource($user);
             $result['access_token'] = $token;
-            $result['message'] = "Successfully Login.";
+            $result['message'] = "Successfully logged in.";
         } catch (Throwable $e) {
             $result['message'] = $e->getMessage();
             $result['status'] = 201;
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
             $request->user()->currentAccessToken()->delete();
 
-            $result['message'] = "Successfully Logout.";
+            $result['message'] = "Successfully logged out.";
         } catch (Throwable $e) {
             $result['message'] = $e->getMessage();
             $result['status'] = 201;

@@ -32,14 +32,14 @@ class DashboardController extends Controller
 
             $result['customers'] = Customer::count();
             $result['employees'] = Employee::count();
-            $result['products'] = Product::count();
+            $result['products'] = Product::sum('quantity');
             $result['sales'] = Sale::count();
             $result['users'] = User::count();
             $result['rental'] = Rental::count();
             $result['productStock'] = Stock::sum('quantity');
             $result['filter'] = Filter::count();
 
-            $result['totalSalesAmount'] = Sale::sum('price') + Service::sum('price') + Report::sum('cash_on_hand') + Report::sum('cash_on_bank');
+            $result['totalSalesAmount'] = Sale::sum('price') + Service::sum('price') + Rental::sum('price') + Report::sum('cash_on_hand') + Report::sum('cash_on_bank');
 
             $result['totalUtility_expenses'] = Utility_expenses::sum('cost');
         } catch (Throwable $e) {
