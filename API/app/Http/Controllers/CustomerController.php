@@ -12,20 +12,36 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result['status'] = 200;
 
         try {
-            $customers = Customer::latest()->paginate(20);
+            $query = Customer::query();
+
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                        ->orWhere('phone', 'like', "%$search%")
+                        ->orWhere('address', 'like', "%$search%")
+                        ->orWhere('job', 'like', "%$search%");
+                });
+            }
+
+            $perPage = $request->input('limit', 15);
+            $customers = $query->latest()->paginate($perPage);
+
             $result['data'] = $customers;
         } catch (Throwable $e) {
-            $result['status'] = 500; // Use 500 for server errors
+            $result['status'] = 500;
             $result['message'] = $e->getMessage();
         }
 
         return response()->json($result);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -45,10 +61,9 @@ class CustomerController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'nullable|email|unique:customers,email',
                 'phone' => 'nullable|string|max:20',
                 'address' => 'required|string|max:255',
-                'date' => 'required|date_format:Y-m-d',
+                'date' => 'required|date',
                 'job' => 'required|string|max:255'
             ]);
 
@@ -70,11 +85,15 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        $result['status'] = 200;
-        $result['data'] = $customer;
+        // Load sales relationship explicitly
+        $customer->load('sales');
 
-        return response()->json($result);
+        return response()->json([
+            'status' => 200,
+            'data' => $customer,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -94,10 +113,9 @@ class CustomerController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
-                'email' => 'sometimes|required|email|unique:customers,email,' . $customer->id,
                 'phone' => 'nullable|string|max:20',
                 'address' => 'required|string|max:255',
-                'date' => 'required|date_format:Y-m-d',
+                'date' => 'required|date',
                 'job' => 'required|string|max:255'
             ]);
 

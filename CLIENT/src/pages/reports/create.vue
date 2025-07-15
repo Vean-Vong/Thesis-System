@@ -51,7 +51,7 @@ const onCreate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
 }
 </script>
 
@@ -110,7 +110,7 @@ const rules = {
         >
           <VTextField
             v-model="form.data.cash_on_hand"
-            :label="$t('Cash_on_Hand')"
+            :label="$t('Cash on Hand')"
             :rules="[rules.required]"
             outlined
           />
@@ -122,7 +122,7 @@ const rules = {
         >
           <VTextField
             v-model="form.data.cash_on_bank"
-            :label="$t('Cash_on_Bank')"
+            :label="$t('Cash on Bank')"
             :rules="[rules.required]"
             outlined
           />
@@ -160,7 +160,7 @@ const rules = {
 
 <route lang="yaml">
 meta:
-  title: Daily Report
+  title: Daily Report Create
   layout: default
   subject: Auth
   active: 'report '

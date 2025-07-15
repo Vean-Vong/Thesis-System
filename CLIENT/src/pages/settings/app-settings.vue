@@ -63,9 +63,11 @@
 </template>
 
 <script setup>
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
+// eslint-disable-next-line import/no-unresolved
 import AppImageUpload from '@/components/AppImageUpload.vue'
-// import { useAuthStore } from "@/plugins/auth.module"
+
 
 // const data = useAuthStore()._settings
 

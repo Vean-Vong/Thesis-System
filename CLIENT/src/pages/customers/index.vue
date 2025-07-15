@@ -40,16 +40,18 @@ const initData = () => {
   loading.value = true
   api
     .get('/customers', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(item => ({
+      const response = res.data.data
+      items.value = response.data.map(item => ({
         ...item,
-        date: formatDate(item.date), // Format date here
+        date: formatDate(item.date),
       }))
-      meta.value = res.data.data.meta
     })
     .finally(() => {
       loading.value = false
@@ -62,7 +64,7 @@ onMounted(() => {
 
 const headers = [
   { title: t('No'), key: 'no', align: 'left', sortable: false, minWidth: '100px' },
-  { title: t('headers.name'), key: 'name', align: 'center', sortable: false },
+  { title: t('headers.name'), key: 'name', align: 'center', sortable: false, minWidth: '150px', maxWidth: '500px' },
   { title: t('Address'), key: 'address', align: 'center', sortable: false, minWidth: '200px', maxWidth: '500px' },
   { title: t('Phone'), key: 'phone', align: 'center', sortable: false, minWidth: '200px', maxWidth: '500px' },
   { title: t('Date'), key: 'date', align: 'center', sortable: false, minWidth: '200px', maxWidth: '500px' },

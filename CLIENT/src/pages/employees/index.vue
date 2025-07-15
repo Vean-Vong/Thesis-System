@@ -28,20 +28,24 @@ const initData = () => {
   loading.value = true
   api
     .get('/employees', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(item => ({
-        ...item,
-      }))
-      meta.value = res.data.data.meta
+      items.value = res.data.data.data
+      meta.value = {
+        ...meta.value,
+        ...res.data.data,
+      }
     })
     .finally(() => {
       loading.value = false
     })
 }
+
 onMounted(() => {
   initData()
 })
@@ -56,12 +60,16 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
   {
     title: t('headers.name'),
     key: 'name',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {
@@ -69,42 +77,56 @@ const headers = [
     key: 'gender',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Position'),
     key: 'position',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Email'),
     key: 'email',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Phone'),
     key: 'phone',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Address'),
     key: 'address',
     align: 'center',
     sortable: false,
+    minWidth: '180px',
+    maxWidth: '500px',
   },
   {
     title: t('Date of Birth'),
     key: 'date_of_birth',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Hire Date'),
     key: 'hire_date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {

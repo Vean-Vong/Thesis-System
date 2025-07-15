@@ -11,18 +11,26 @@ export default [
     icon: { icon: 'mdi-account-group', size: 23 },
     active: 'customer',
   },
-  {
-    title: 'Product',
-    to: 'products',
-    icon: { icon: 'tabler-package', size: 23 },
-    active: 'product',
-  },
+
   {
     title: 'Sale',
-    to: 'sales',
-    icon: { icon: 'tabler-cash', size: 23 },
-    active: 'sale',
+    icon: { icon: 'tabler-shopping-cart', size: 23 },
+    children: [
+      {
+        title: 'Sales_department',
+        to: 'pos',
+        icon: { icon: 'fa-plus', size: 10 },
+        active: 'pos',
+      },
+      {
+        title: 'Sale History',
+        to: 'sales-history',
+        icon: { icon: 'fa-plus', size: 10 },
+        active: 'sale_history',
+      },
+    ],
   },
+
   {
     title: 'Rental',
     to: 'rental',
@@ -35,12 +43,7 @@ export default [
     icon: { icon: 'mdi-tools', size: 23 },
     active: 'service',
   },
-  {
-    title: 'Daily Report',
-    to: 'reports',
-    icon: { icon: 'mdi-file-document-outline', size: 23 },
-    active: 'report',
-  },
+
   {
     title: 'Utility Expenses',
     to: 'utility_expenses',
@@ -49,18 +52,40 @@ export default [
   },
 
   {
+    title: 'Report',
+    icon: { icon: 'mdi-file-document-outline', size: 23 },
+    children: [
+      {
+        title: 'Daily Report',
+        to: 'reports',
+        icon: { icon: 'fa-plus', size: 10 },
+      },
+      {
+        title: 'New Setup',
+        to: 'new-setup',
+        icon: { icon: 'fa-plus', size: 10 },
+      },
+    ],
+  },
+  {
     title: 'Stock',
     icon: { icon: 'mdi-warehouse', size: 23 },
     children: [
       {
         title: 'Product Stock',
         to: 'product-stock',
-        icon: { icon: 'mdi-package-variant-closed', size: 23 },
+        icon: { icon: 'fa-plus', size: 10 },
+      },
+      {
+        title: 'Product',
+        to: 'products',
+        icon: { icon: 'fa-plus', size: 10 },
+        active: 'product',
       },
       {
         title: 'Filter Stock',
         to: 'filter-stock',
-        icon: { icon: 'mdi-filter-menu', size: 23 },
+        icon: { icon: 'fa-plus', size: 10 },
       },
     ],
   },

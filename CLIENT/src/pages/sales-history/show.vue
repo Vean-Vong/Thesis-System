@@ -9,6 +9,7 @@ const route = useRoute()
 const loading = ref(true)
 const sale = ref(null)
 const error = ref(false)
+
 const fetchSale = async () => {
   try {
     const res = await api.get(`/sales/${route.query.id}`)
@@ -113,8 +114,8 @@ onMounted(fetchSale)
 
 <route lang="yaml">
 meta:
-  title: sale View
+  title: Sale View
   layout: default
   subject: Auth
-  active: 'sale'
+  active: 'sale_history'
 </route>

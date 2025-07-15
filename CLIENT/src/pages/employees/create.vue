@@ -48,7 +48,7 @@ const onCreate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
   email: v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
   dob: v => !!v || 'Date of Birth is required',
   hire_date: v => !!v || 'Hire Date is required',
@@ -175,7 +175,7 @@ const rules = {
         >
           <VTextField
             v-model="form.data.date_of_birth"
-            :rules="[rules.required, rules.dob]"
+            :rules="[rules.required]"
             :label="$t('Date of Birth')"
             type="date"
             outlined
@@ -187,8 +187,8 @@ const rules = {
           class="mt-4"
         >
           <VTextField
-            v-model="form.data.date_of_birth"
-            :rules="[rules.required, rules.hire_date]"
+            v-model="form.data.hire_date"
+            :rules="[rules.required]"
             :label="$t('Hire Date')"
             type="date"
             outlined

@@ -53,7 +53,7 @@ const onCreate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
 }
 </script>
 

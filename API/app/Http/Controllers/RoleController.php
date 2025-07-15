@@ -17,14 +17,34 @@ class RoleController extends Controller
 
     public function list(Request $request)
     {
-
         $result['status'] = 200;
 
         try {
+            $perPage = $request->input('perPage', 15);
+            $search = $request->input('search');
 
-            $roles = Role::latest()->paginate($request->perPage);
+            $query = Role::withCount([
+                'permissions as permissions_count',
+                'users as user_counts'
+            ])->latest();
 
-            $result['data'] = $roles;
+            if ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            }
+
+            $roles = $query->paginate($perPage);
+
+            $result['data'] = [
+                'data' => $roles->items(),
+                'meta' => [
+                    'current_page' => $roles->currentPage(),
+                    'from' => $roles->firstItem(),
+                    'last_page' => $roles->lastPage(),
+                    'per_page' => $roles->perPage(),
+                    'to' => $roles->lastItem(),
+                    'total' => $roles->total(),
+                ],
+            ];
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();
@@ -75,7 +95,6 @@ class RoleController extends Controller
             $role['permissions'] = $permissions;
 
             $result['data'] = $role;
-
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();
@@ -94,7 +113,6 @@ class RoleController extends Controller
             $role = Role::findOrFail($request->id);
 
             $result['data'] = new RoleResource($role);
-
         } catch (Throwable $e) {
             $result['status'] = 201;
             $result['message'] = $e->getMessage();

@@ -1,3 +1,4 @@
+<!-- eslint-disable indent -->
 <!-- eslint-disable import/extensions -->
 <!-- eslint-disable import/no-unresolved -->
 <script setup>
@@ -37,18 +38,43 @@ const formatDate = bill_date => {
 const initData = () => {
   loading.value = true
   api
+  api
     .get('/utility_expenses', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(utility_expenses => ({
-        ...utility_expenses,
-        cost: `$${utility_expenses.cost.toLocaleString()}`, // Add $ symbol
-        bill_date: formatDate(utility_expenses.bill_date),
-      }))
-      meta.value = res.data.data.meta
+      const paginated = res.data.data
+      items.value = paginated.data.map(utility_expense => {
+        let unit = ''
+        switch (utility_expense.type) {
+          case 'Electricity':
+            unit = 'kWh'
+            break
+          case 'Water':
+            unit = 'm³'
+            break
+          case 'Garbage':
+            unit = 'Kg'
+            break
+        }
+
+        return {
+          ...utility_expense,
+          cost: `$${parseFloat(utility_expense.cost).toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}`,
+          bill_date: formatDate(utility_expense.bill_date),
+          unit_rate: `${parseFloat(utility_expense.unit_rate).toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })} ${unit}`,
+        }
+      })
     })
     .finally(() => {
       loading.value = false
@@ -69,37 +95,48 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
-
   {
     title: t('Type'),
     key: 'type',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Bill Date'),
     key: 'bill_date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Usage Amount'),
     key: 'usage_amount',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Cost'),
     key: 'cost',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Unit Rate'),
     key: 'unit_rate',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Actions'),

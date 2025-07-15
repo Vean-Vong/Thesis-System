@@ -28,17 +28,28 @@ const initData = () => {
   loading.value = true
   api
     .get('/sales', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(sale => ({
+      const paginated = res.data.data
+      items.value = paginated.data.map(sale => ({
         ...sale,
-        price: `$${sale.price.toLocaleString()}`, // Add $ symbol
-        discount: `${sale.discount}%`, // Add % symbol
+        price: `$${sale.price.toLocaleString()}`,
+        deposit: `$${sale.deposit.toLocaleString()}`,
+        discount: `${sale.discount}%`,
       }))
-      meta.value = res.data.data.meta
+      meta.value = {
+        current_page: paginated.current_page,
+        from: paginated.from,
+        last_page: paginated.last_page,
+        per_page: paginated.per_page,
+        to: paginated.to,
+        total: paginated.total,
+      }
     })
     .finally(() => {
       loading.value = false
@@ -59,6 +70,8 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
 
   {
@@ -66,11 +79,15 @@ const headers = [
     key: 'model',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Price'),
     key: 'price',
     align: 'center',
+    minWidth: '150px',
+    maxWidth: '500px',
     sortable: false,
   },
   {
@@ -78,36 +95,57 @@ const headers = [
     key: 'discount',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
+  {
+    title: t('Deposit'),
+    key: 'deposit',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
+  },
+
   {
     title: t('Date'),
     key: 'date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Duration'),
     key: 'duration',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Warranty'),
     key: 'warranty',
     align: 'center',
     sortable: false,
+    minWidth: '250px',
+    maxWidth: '500px',
   },
   {
     title: t('Seller'),
     key: 'seller',
     align: 'center',
     sortable: false,
+    minWidth: '160px',
+    maxWidth: '500px',
   },
   {
     title: t('Contract Type'),
     key: 'contract_type',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {
@@ -119,18 +157,13 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'sales-show', query: { id: item } })
+  router.push({ name: 'sales-history-show', query: { id: item } })
 }
 
 const editCallback = item => {
-  router.push({ name: 'sales-edit', query: { id: item } })
+  router.push({ name: 'sales-history-edit', query: { id: item } })
 }
 
-// const updateCallback = item => {
-//   meta.current_page = item.page
-//   meta.per_page = item.limit
-//   initData()
-// }
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
@@ -170,7 +203,7 @@ const confirmDeleteCallback = () => {
   />
   <AppDataTable
     cols="12"
-    create-url="sales-create"
+    create-url="sales-history-create"
     :headers="headers"
     :items="items"
     :items-per-page="meta?.per_page"
@@ -179,7 +212,7 @@ const confirmDeleteCallback = () => {
     :current-page="meta?.current_page"
     :to="meta?.to"
     :can-edit="user.can('sale_edit')"
-    :can-view="user.can('sale_list')" 
+    :can-view="user.can('sale_list')"
     :can-delete="user.can('sale_delete')"
     :can-create="user.can('sale_create')"
     :table-title="$t('List of Sales')"
@@ -223,8 +256,8 @@ const confirmDeleteCallback = () => {
 
 <route lang="yaml">
 meta:
-  title: Sale
+  title: Sale History
   layout: default
   subject: Auth
-  active: 'sale'
+  active: 'sale_history'
 </route>

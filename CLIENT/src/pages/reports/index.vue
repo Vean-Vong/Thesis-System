@@ -38,17 +38,29 @@ const initData = () => {
   loading.value = true
   api
     .get('/reports', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(reports => ({
-        ...reports,
-        cash_on_hand: `$${reports.cash_on_hand.toLocaleString()}`, // Add $ symbol
-        date: formatDate(reports.date),
+      const paginated = res.data.data
+      items.value = paginated.data.map(report => ({
+        ...report,
+        cash_on_hand: `$${report.cash_on_hand.toLocaleString()}`,
+        cash_on_bank: `$${report.cash_on_bank.toLocaleString()}`,
+        unit: Number(report.unit).toLocaleString(),
+        date: formatDate(report.date),
       }))
-      meta.value = res.data.data.meta
+      meta.value = {
+        current_page: paginated.current_page,
+        from: paginated.from,
+        last_page: paginated.last_page,
+        per_page: paginated.per_page,
+        to: paginated.to,
+        total: paginated.total,
+      }
     })
     .finally(() => {
       loading.value = false
@@ -69,6 +81,8 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
 
   {
@@ -76,42 +90,56 @@ const headers = [
     key: 'customer_name',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Invoice Number'),
     key: 'invoice_number',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Unit'),
     key: 'unit',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
-    title: t('Cash_on_Hand'),
+    title: t('Cash on Hand'),
     key: 'cash_on_hand',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
-    title: t('Cash_on_Bank'),
+    title: t('Cash on Bank'),
     key: 'cash_on_bank',
     align: 'center',
     sortable: false,
+    minWidth: '170px',
+    maxWidth: '500px',
   },
   {
     title: t('Date'),
     key: 'date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Remark'),
     key: 'remark',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Actions'),

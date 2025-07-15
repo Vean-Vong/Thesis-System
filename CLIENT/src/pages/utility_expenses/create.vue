@@ -49,7 +49,7 @@ const onCreate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
 }
 </script>
 
@@ -120,11 +120,10 @@ const rules = {
           md="6"
           class="mt-4"
         >
-          <VSelect
+          <VTextField
             v-model="form.data.unit_rate"
             :label="$t('Unit Rate')"
             :rules="[rules.required]"
-            :items="['130', '12']"
             outlined
           />
         </VCol>

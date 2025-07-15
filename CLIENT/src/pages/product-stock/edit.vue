@@ -13,6 +13,7 @@ const form = reactive({
     model: null,
     quantity: null,
     date: null,
+    colors: null,
     supplier: null,
   },
 })
@@ -52,7 +53,7 @@ const onUpdate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
 }
 </script>
 
@@ -87,7 +88,23 @@ const rules = {
               'GP-700S',
               'Maxtream',
               'Under-Sink-Case',
+              'CABINET',
+              'G-2000BA',
+              'AQF-501',
+              'FRO-0110',
             ]"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VSelect
+            v-model="form.data.colors"
+            :label="$t('Color')"
+            :rules="[rules.required]"
+            :items="['Black', 'White']"
             outlined
           />
         </VCol>

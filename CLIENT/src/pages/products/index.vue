@@ -1,13 +1,20 @@
-<!-- eslint-disable import/extensions -->
-<!-- eslint-disable import/no-unresolved -->
 <script setup>
+import { ref, computed, onMounted } from 'vue'
+// eslint-disable-next-line import/no-unresolved
 import AppDataTable from '@/components/AppDataTable.vue'
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import router from '@/router'
+// eslint-disable-next-line import/no-unresolved
 import { useAuthStore } from '@/plugins/auth.module'
+// eslint-disable-next-line import/no-unresolved
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import { useI18n } from 'vue-i18n'
+
 const user = useAuthStore().user
 const { t } = useI18n()
+
 const items = ref([])
 const search = ref(null)
 const loading = ref(false)
@@ -24,20 +31,39 @@ const meta = ref({
   total: 0,
 })
 
+// Computed property to add 'no' and format 'total_stock'
+const displayItems = computed(() =>
+  items.value.map((item, index) => ({
+    ...item,
+    no: meta.value.from + index,
+    total_stock: item.total_stock && item.total_stock > 0 ? item.total_stock : 'អស់ស្តុក',
+  })),
+)
+
 const initData = () => {
   loading.value = true
-  console.log('Data', items.value)
   api
     .get('/products', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(product => ({
-        ...product,
+      const paginated = res.data.data
+      items.value = paginated.data.map(item => ({
+        ...item,
+        price: `$${item.price}`,
       }))
-      meta.value = res.data.data.data.meta
+      meta.value = {
+        current_page: paginated.current_page,
+        from: paginated.from,
+        last_page: paginated.last_page,
+        per_page: paginated.per_page,
+        to: paginated.to,
+        total: paginated.total,
+      }
     })
     .finally(() => {
       loading.value = false
@@ -49,6 +75,7 @@ onMounted(() => {
 })
 
 const onSearch = () => {
+  meta.value.current_page = 1
   initData()
 }
 
@@ -58,74 +85,48 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
-
-  // {
-  //   title: t('Image'),
-  //   key: 'image',
-  //   align: 'center',
-  //   sortable: false,
-  // },
   {
     title: t('Model'),
     key: 'model',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Color'),
     key: 'colors',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Filter'),
     key: 'filtration_stage',
     align: 'center',
     sortable: false,
-  },
-
-  {
-    title: t('Cold water Tank Capacity'),
-    key: 'cold_water_tank_capacity',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Hot water Tank Capacity'),
-    key: 'hot_water_tank_capacity',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Heating Capacity'),
-    key: 'heating_capacity',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Cooling Capacity'),
-    key: 'cooling_capacity',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Hot Power Consumption'),
-    key: 'cold_power_consumption',
-    align: 'center',
-    sortable: false,
-  },
-  {
-    title: t('Cold Power Consumption'),
-    key: 'hot_power_consumption',
-    align: 'center',
-    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Quantity'),
-    key: 'quantity',
+    key: 'total_stock',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
+  },
+  {
+    title: t('Price'),
+    key: 'price',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Actions'),
@@ -134,6 +135,7 @@ const headers = [
     sortable: false,
   },
 ]
+
 const editCallback = item => {
   router.push({ name: 'products-edit', query: { id: item } })
 }
@@ -141,6 +143,7 @@ const editCallback = item => {
 const viewCallback = item => {
   router.push({ name: 'products-show', query: { id: item } })
 }
+
 const deleteCallback = item => {
   dialog.value = true
   delete_item.value = item
@@ -182,7 +185,7 @@ const confirmDeleteCallback = () => {
     cols="12"
     create-url="products-create"
     :headers="headers"
-    :items="items"
+    :items="displayItems"
     :items-per-page="meta?.per_page"
     :items-length="meta?.total"
     :from="meta?.from"
@@ -201,7 +204,6 @@ const confirmDeleteCallback = () => {
     @on-view="viewCallback"
   >
     <template #forFilter>
-      <!-- <p>Search and Filter</p> -->
       <VRow
         class="justify-start"
         dense

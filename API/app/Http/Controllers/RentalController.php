@@ -11,12 +11,29 @@ class RentalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result['status'] = 200;
 
         try {
-            $rentals = Rental::latest()->paginate(10);
+            $query = Rental::query();
+
+            // ✅ Apply search if provided
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('model', 'like', "%$search%")
+                        ->orWhere('seller', 'like', "%$search%")
+                        ->orWhere('contract_type', 'like', "%$search%")
+                        ->orWhere('duration', 'like', "%$search%")
+                        ->orWhere('warranty', 'like', "%$search%");
+                });
+            }
+
+            // ✅ Use pagination with optional `limit`
+            $perPage = $request->input('limit', 10);
+            $rentals = $query->latest()->paginate($perPage);
+
             $result['data'] = $rentals;
         } catch (\Throwable $e) {
             $result['status'] = 500;

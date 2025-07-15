@@ -37,17 +37,28 @@ const formatDate = date => {
 const initData = () => {
   loading.value = true
   api
+  api
     .get('/stock', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(item => ({
+      const paginated = res.data.data
+      items.value = paginated.data.map(item => ({
         ...item,
         date: formatDate(item.date),
       }))
-      meta.value = res.data.data.meta
+      meta.value = {
+        current_page: paginated.current_page,
+        from: paginated.from,
+        last_page: paginated.last_page,
+        per_page: paginated.per_page,
+        to: paginated.to,
+        total: paginated.total,
+      }
     })
     .finally(() => {
       loading.value = false
@@ -68,12 +79,24 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
   {
     title: t('Model'),
     key: 'model',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
+  },
+  {
+    title: t('Color'),
+    key: 'colors',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {
@@ -81,18 +104,24 @@ const headers = [
     key: 'quantity',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Date'),
     key: 'date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Supplier'),
     key: 'supplier',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {

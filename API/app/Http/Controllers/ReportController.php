@@ -10,16 +10,34 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result = ['status' => 200];
+
         try {
-            $reports = Report::latest()->paginate(10);
+            $query = Report::query();
+
+            // ✅ Search filter
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('customer_name', 'like', "%$search%")
+                        ->orWhere('invoice_number', 'like', "%$search%")
+                        ->orWhere('unit', 'like', "%$search%")
+                        ->orWhere('remark', 'like', "%$search%");
+                });
+            }
+
+            // ✅ Pagination
+            $perPage = $request->input('limit', 10);
+            $reports = $query->latest()->paginate($perPage);
+
             $result['data'] = $reports;
         } catch (\Throwable $e) {
             $result['status'] = 500;
             $result['message'] = $e->getMessage();
         }
+
         return response()->json($result);
     }
 

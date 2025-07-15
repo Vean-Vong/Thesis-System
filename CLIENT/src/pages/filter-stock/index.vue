@@ -67,18 +67,24 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
   {
     title: t('Sediment'),
     key: 'sediment',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {
     title: t('Pre-Carbon'),
     key: 'pre_carbon',
     align: 'center',
+    minWidth: '150px',
+    maxWidth: '500px',
     sortable: false,
   },
   {
@@ -86,18 +92,24 @@ const headers = [
     key: 'uf_membrane',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Post-Carbon'),
     key: 'post_carbon',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Date'),
     key: 'date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {
@@ -115,7 +127,6 @@ const viewCallback = item => {
 const editCallback = item => {
   router.push({ name: 'filter-stock-edit', query: { id: item } })
 }
-
 
 const deleteCallback = item => {
   dialog.value = true

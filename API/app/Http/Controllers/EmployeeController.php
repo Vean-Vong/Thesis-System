@@ -12,18 +12,36 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result['status'] = 200;
+
         try {
-            $employees = Employee::latest()->paginate(10);
+            $query = Employee::query();
+
+            // Apply search filter
+            if ($request->has('search') && $request->search !== null) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                        ->orWhere('phone', 'like', "%$search%")
+                        ->orWhere('position', 'like', "%$search%");
+                });
+            }
+
+            $perPage = $request->input('limit', 15);
+            $employees = $query->latest()->paginate($perPage);
+
             $result['data'] = $employees;
         } catch (\Throwable $e) {
-            $result['status'] = 500; // Use 500 for server errors
+            $result['status'] = 500;
             $result['message'] = $e->getMessage();
         }
+
         return response()->json($result);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -48,8 +66,8 @@ class EmployeeController extends Controller
                 'email' => 'nullable|email|unique:employees,email',
                 'phone' => 'nullable|string|max:20',
                 'address' => 'required|string|max:255',
-                'hire_date' => 'required|date_format:Y-m-d',
-                'date_of_birth' => 'required|date_format:Y-m-d',
+                'hire_date' => 'required|date',
+                'date_of_birth' => 'required|date',
             ]);
 
             $employee = Employee::create($validated);
@@ -101,8 +119,8 @@ class EmployeeController extends Controller
                 'email' => 'nullable|email|unique:employees,email,' . $employee->id,
                 'phone' => 'nullable|string|max:20',
                 'address' => 'required|string|max:255',
-                'hire_date' => 'required|date_format:Y-m-d',
-                'date_of_birth' => 'required|date_format:Y-m-d',
+                'hire_date' => 'required|date',
+                'date_of_birth' => 'required|date',
             ]);
 
             $employee->update($validated);

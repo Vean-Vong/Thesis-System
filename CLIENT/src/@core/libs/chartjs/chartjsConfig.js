@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { hexToRgb } from '@layouts/utils'
 
 // 👉 Colors variables
@@ -161,6 +162,7 @@ export const LineChartJs = themeColors => {
 // 👉 Line Chart Config
 export const getLineChartConfig = themeColors => {
   const { borderColor, labelColor, legendColor } = colorVariables(themeColors)
+
   return {
     type: 'line',
     responsive: true,

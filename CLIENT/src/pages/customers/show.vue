@@ -1,14 +1,14 @@
-<!-- eslint-disable import/no-unresolved -->
-<!-- eslint-disable import/extensions -->
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const loading = ref(true)
-const customer = ref(null)
 const error = ref(false)
+const customer = ref(null)
 
 const formatDate = date => {
   if (!date) return '-'
@@ -16,18 +16,32 @@ const formatDate = date => {
   const day = d.getDate()
   const month = d.toLocaleString('en-US', { month: 'long' })
   const year = d.getFullYear()
-  // eslint-disable-next-line newline-before-return
+
   return `${day} ${month}, ${year}`
 }
 
 const fetchCustomer = async () => {
   try {
     const res = await api.get(`/customers/${route.query.id}`)
-    const data = res.data.data
-    data.date = formatDate(data.date)
-    customer.value = data
-  } catch (e) {
-    console.error('Failed to fetch customer:', e)
+    if (res.data.status === 200) {
+      const data = res.data.data
+
+      // Format customer date
+      data.date = formatDate(data.date)
+
+      // Format sales dates
+      if (Array.isArray(data.sales)) {
+        data.sales = data.sales.map(sale => ({
+          ...sale,
+        }))
+      }
+
+      customer.value = data
+    } else {
+      throw new Error('Failed to load customer data')
+    }
+  } catch (err) {
+    console.error('Error fetching customer:', err)
     error.value = true
   } finally {
     loading.value = false
@@ -42,7 +56,7 @@ onMounted(fetchCustomer)
     cols="6"
     :title="$t('Customer Details')"
   >
-    <!-- When Loading -->
+    <!-- Loading state -->
     <VCard v-if="loading">
       <VCardText>
         <VProgressCircular
@@ -53,7 +67,7 @@ onMounted(fetchCustomer)
       </VCardText>
     </VCard>
 
-    <!-- When Error -->
+    <!-- Error state -->
     <VCard v-else-if="error">
       <VCardText>
         <VAlert
@@ -65,7 +79,7 @@ onMounted(fetchCustomer)
       </VCardText>
     </VCard>
 
-    <!-- When Data is Loaded -->
+    <!-- Customer & Sales Data -->
     <VCard v-else>
       <VCardText>
         <VRow dense>
@@ -100,15 +114,35 @@ onMounted(fetchCustomer)
             <strong>{{ $t('Date') }}:</strong> {{ customer.date || '-' }}
           </VCol>
         </VRow>
+
+        <VDivider class="my-4" />
+
+        <h3>{{ $t('Product') }}</h3>
+
+        <VList
+          v-if="customer.sales && customer.sales.length"
+          dense
+        >
+          <VListItem
+            v-for="sale in customer.sales"
+            :key="sale.id"
+          >
+            <VListItemContent>
+              <VListItemTitle> {{ $t('Model') }}: {{ sale.model }} </VListItemTitle>
+              <VListItemTitle>{{ $t('Price') }}: ${{ sale.price }}</VListItemTitle>
+              <VListItemTitle>{{ $t('Discount') }}: {{ sale.discount }}%</VListItemTitle>
+              <VListItemTitle>{{ $t('Sub_Total') }}: {{ sale.sub_total }}</VListItemTitle>
+              <VListItemTitle>{{ $t('Deposit') }}: ${{ sale.deposit }}</VListItemTitle>
+              <VListItemTitle>{{ $t('Duration') }}: {{ sale.duration }}</VListItemTitle>
+              <VListItemTitle>{{ $t('Contract Type') }}: {{ sale.contract_type }}</VListItemTitle>
+              <VListItemTitle>{{ $t('Seller') }}: {{ sale.seller }}</VListItemTitle>
+              <VListItemTitle>{{ $t('Warranty') }}: {{ sale.warranty }}</VListItemTitle>
+            </VListItemContent>
+          </VListItem>
+        </VList>
+
+        <p v-else>{{ $t('No sales found for this customer.') }}</p>
       </VCardText>
     </VCard>
   </AppFormDetailTemplate>
 </template>
-
-<route lang="yaml">
-meta:
-  title: Customer View
-  layout: default
-  subject: Auth
-  active: 'customer'
-</route>

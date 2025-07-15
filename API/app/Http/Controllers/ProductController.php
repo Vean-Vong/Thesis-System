@@ -12,12 +12,58 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result = ['status' => 200];
 
         try {
-            $products = Product::latest()->paginate(10);
+            $query = Product::query();
+
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('model', 'like', "%$search%")
+                        ->orWhere('colors', 'like', "%$search%")
+                        ->orWhere('filtration_stage', 'like', "%$search%")
+                        ->orWhere('cold_water_tank_capacity', 'like', "%$search%")
+                        ->orWhere('hot_water_tank_capacity', 'like', "%$search%")
+                        ->orWhere('heating_capacity', 'like', "%$search%")
+                        ->orWhere('cooling_capacity', 'like', "%$search%")
+                        ->orWhere('cold_power_consumption', 'like', "%$search%")
+                        ->orWhere('hot_power_consumption', 'like', "%$search%")
+                        ->orWhere('quantity', 'like', "%$search%");
+                });
+            }
+
+            $perPage = $request->input('limit', 10);
+
+            // Load stocks relation
+            $products = $query->with('stocks')->latest()->paginate($perPage);
+
+            // Transform collection items
+            $products->getCollection()->transform(function ($product) {
+
+                $stockSum = $product->stocks->sum('quantity');
+                return [
+                    'id' => $product->id,
+                    'model' => $product->model,
+                    'colors' => $product->colors,
+                    'filtration_stage' => $product->filtration_stage,
+                    'cold_water_tank_capacity' => $product->cold_water_tank_capacity,
+                    'hot_water_tank_capacity' => $product->hot_water_tank_capacity,
+                    'heating_capacity' => $product->heating_capacity,
+                    'cooling_capacity' => $product->cooling_capacity,
+                    'cold_power_consumption' => $product->cold_power_consumption,
+                    'hot_power_consumption' => $product->hot_power_consumption,
+                    'price' => $product->price,
+                    'image' => $product->image,
+                    'quantity' => $product->quantity,
+                    'stock_quantity' => $stockSum > 0 ? $stockSum : $product->quantity,
+                    'total_stock' => $product->total_stock,  // uses accessor
+                    'stock_status' => $product->stock_status, // uses accessor
+                ];
+            });
+
             $result['data'] = $products;
         } catch (\Throwable $e) {
             $result['status'] = 500;
@@ -26,6 +72,32 @@ class ProductController extends Controller
 
         return response()->json($result);
     }
+
+
+    public function stockQuantities()
+    {
+        try {
+            $products = Product::with('stocks')
+                ->get()
+                ->map(function ($product) {
+                    return [
+                        'id' => $product->id,
+                        'stock_quantity' => $product->stocks->sum('quantity'),
+                    ];
+                });
+
+            return response()->json([
+                'status' => 200,
+                'data' => $products,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
 
     /**
@@ -37,9 +109,11 @@ class ProductController extends Controller
 
         try {
             $validated = $request->validate([
-                'image' => 'nullable|image|max:2048',
+                'images' => 'nullable|array',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'model' => 'required|string|max:255',
                 'colors' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
                 'filtration_stage' =>  'required|string|max:255',
                 'cold_water_tank_capacity' => 'required|string|max:255',
                 'hot_water_tank_capacity' => 'required|string|max:255',
@@ -51,11 +125,16 @@ class ProductController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            // Handle image upload if provided
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('product_images', 'public');
-                $validated['image'] = $imagePath;
+            // Handle multiple image uploads
+            $imagePaths = [];
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $imagePaths[] = $file->store('product_images', 'public');
+                }
             }
+
+            $validated['images'] = $imagePaths; // Save as JSON array
+
 
             $product = Product::create($validated);
             $result['data'] = $product;
@@ -98,9 +177,11 @@ class ProductController extends Controller
 
         try {
             $validated = $request->validate([
-                'image' => 'nullable|image|max:2048',
+                'images' => 'nullable|array',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
                 'model' => 'required|string|max:255',
                 'colors' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
                 'filtration_stage' => 'required|string|max:255',
                 'cold_water_tank_capacity' => 'required|string|max:255',
                 'hot_water_tank_capacity' => 'required|string|max:255',
@@ -111,19 +192,21 @@ class ProductController extends Controller
                 'quantity' => 'required|integer|min:0',
             ]);
 
-            // Handle image upload if provided
-            if ($request->hasFile('image')) {
-                // Delete old image if it exists
-                if ($product->image) {
-                    Storage::delete('public/' . $product->image);
+            $imagePaths = [];
+            if ($request->hasFile('images')) {
+                if ($product->images && is_array($product->images)) {
+                    foreach ($product->images as $oldImage) {
+                        Storage::disk('public')->delete($oldImage);
+                    }
                 }
-
-                // Store new image
-                $imagePath = $request->file('image')->store('product_images', 'public');
-                $validated['image'] = $imagePath;
+                foreach ($request->file('images') as $file) {
+                    $imagePaths[] = $file->store('product_images', 'public');
+                }
+                $validated['images'] = $imagePaths;  // Assign new images here
+            } else {
+                $validated['images'] = $product->images; // keep old images if no new ones
             }
 
-            // Update the product with new data
             $product->update($validated);
             $result['data'] = $product;
             $result['message'] = 'Product updated successfully!';
@@ -138,6 +221,7 @@ class ProductController extends Controller
 
         return response()->json($result);
     }
+
 
 
     /**

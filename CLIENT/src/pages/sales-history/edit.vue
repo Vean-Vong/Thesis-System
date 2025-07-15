@@ -67,7 +67,7 @@ const onUpdate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
 }
 </script>
 
@@ -179,7 +179,7 @@ const rules = {
             v-model="form.data.seller"
             :label="$t('Seller')"
             :rules="[rules.required]"
-            :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin','Phoung Chansophol']"
+            :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin', 'Phoung Chansophol']"
             outlined
           />
         </VCol>

@@ -62,7 +62,7 @@ const headers = [
     key: 'username',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
+    minWidth: '170px',
     maxWidth: '500px',
   },
   {

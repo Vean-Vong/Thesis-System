@@ -22,6 +22,36 @@ class Product extends Model
         'cold_power_consumption',
         'hot_power_consumption',
         'quantity',
-        'image',
+        'images',
+        'price'
     ];
+
+    protected $casts = [
+        'images' => 'array',  // Important for JSON cast
+    ];
+
+    public function stocks()
+    {
+        // Connect Product to Stock via "model" field
+        return $this->hasMany(Stock::class, 'model', 'model');
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+    // Add an accessor for total stock quantity
+    public function getTotalStockAttribute()
+    {
+        return $this->stocks()
+            ->where('colors', $this->colors)
+            ->sum('quantity');
+    }
+    // public function getStockStatusAttribute()
+    // {
+    //     $total = $this->total_stock;
+    //     return $total > 0 ? $total : 'Out of stock';
+    // }
+
 }

@@ -12,7 +12,7 @@ const form = reactive({
     address: null,
     phone: null,
     email: null,
-    date: null,
+    date: new Date().toISOString().split('T')[0], // Default to today
     job: null,
   },
   options: {
@@ -52,7 +52,7 @@ const onCreate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
   phone: v => /^\d{8,15}$/.test(v) || 'Phone number must be valid',
   date: v => !!Date.parse(v) || 'Invalid date format',
 }

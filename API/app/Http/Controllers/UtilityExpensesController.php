@@ -10,12 +10,29 @@ class UtilityExpensesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result = ['status' => 200];
 
         try {
-            $utility_expenses = Utility_expenses::latest()->paginate(10);
+            $query = Utility_expenses::query();
+
+            // Search filter example (adjust fields as needed)
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('type', 'like', "%$search%")
+                        ->orWhere('unit_rate', 'like', "%$search%");
+                    // Add more fields if needed
+                });
+            }
+
+            // Use limit parameter or default to 10
+            $perPage = $request->input('limit', 10);
+
+            // Pagination
+            $utility_expenses = $query->latest()->paginate($perPage);
+
             $result['data'] = $utility_expenses;
         } catch (\Throwable $e) {
             $result['status'] = 500;

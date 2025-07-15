@@ -7,6 +7,9 @@ import api from '@/plugins/utilites'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import constant from '@/constants'
 
+// eslint-disable-next-line import/no-unresolved
+import defaultImage from '@/assets/images/productImage/default.png'
+
 const route = useRoute()
 const loading = ref(true)
 const product = ref(null)
@@ -29,7 +32,7 @@ onMounted(fetchProduct)
 
 <template>
   <AppFormDetailTemplate
-    cols="6"
+    cols="9"
     :title="$t('Product Details')"
   >
     <!-- Loading -->
@@ -132,29 +135,69 @@ onMounted(fetchProduct)
                 cols="12"
                 md="6"
               >
-                <strong>{{ $t('Quantity') }}:</strong>
-                <span class="text-subtitle-1"> {{ product.quantity || '-' }} </span>
+                <strong>{{ $t('Price') }}:</strong>
+                <span class="text-subtitle-1"> {{ product.price || '-' }} </span>
               </VCol>
             </VRow>
           </VCol>
 
-          <!-- Right: Image -->
-          <VCol
-            cols="12"
-            md="4"
-            class="text-center"
-          >
-            <img
-              :src="constant.storagePath + product.image"
-              alt="Product Image"
-              style="max-width: 100%; max-height: 300px; object-fit: contain"
+          <!-- Right: Carousel for Images -->
+          <VCol>
+            <!-- If images exist -->
+            <VCarousel
+              v-if="product.images && product.images.length"
+              hide-delimiters
+              show-arrows
+              height="500"
             >
+              <VCarouselItem
+                v-for="(img, index) in product.images"
+                :key="index"
+              >
+                <img
+                  :src="constant.storagePath + img"
+                  alt="Product Image"
+                  class="carousel-image"
+                />
+              </VCarouselItem>
+            </VCarousel>
+
+            <!-- If no images -->
+            <div v-else>
+              <VAlert class="default mt-3">
+                <img
+                  :src="defaultImage"
+                  alt="Default Image"
+                  style="max-width: 200px"
+                />
+              </VAlert>
+            </div>
           </VCol>
         </VRow>
       </VCardText>
     </VCard>
   </AppFormDetailTemplate>
 </template>
+
+<style scoped>
+.default {
+  background-color: rgb(214, 213, 213);
+  text-align: center;
+  border-radius: 30px;
+}
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  margin-top: -100px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+.carousel-image img {
+  width: 400%;
+  height: 400%;
+  object-fit: contain;
+}
+</style>
 
 <route lang="yaml">
 meta:

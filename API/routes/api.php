@@ -17,6 +17,7 @@ use App\Http\Controllers\RentalController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SetupController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UtilityExpensesController;
 use App\Models\Employee;
@@ -72,6 +73,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // Custom route for monthly sales count
     Route::get('/sales/total-by-month', [SaleController::class, 'totalSalesPerMonth']);
 
+    Route::get('/products/stock-quantities', [ProductController::class, 'stockQuantities']);
+
 
 
     Route::apiResource('products', ProductController::class);
@@ -82,4 +85,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('utility_expenses', UtilityExpensesController::class);
     Route::apiResource('reports', ReportController::class);
+    Route::apiResource('setup', SetupController::class);
 });

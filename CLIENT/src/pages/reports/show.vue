@@ -90,7 +90,7 @@ onMounted(fetchReport)
                 cols="12"
                 md="6"
               >
-                <strong>{{ $t('Cash_on_Hand') }}:</strong>
+                <strong>{{ $t('Cash on Hand') }}:</strong>
                 <span class="text-subtitle-1"> {{ report.cash_on_hand || '-' }} </span>
               </VCol>
 
@@ -98,7 +98,7 @@ onMounted(fetchReport)
                 cols="12"
                 md="6"
               >
-                <strong>{{ $t('Cash_on_Bank') }}:</strong>
+                <strong>{{ $t('Cash on Bank') }}:</strong>
                 <span class="text-subtitle-1"> {{ report.cash_on_bank || '-' }} </span>
               </VCol>
               <VCol

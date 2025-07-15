@@ -10,12 +10,28 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result = ['status' => 200];
 
         try {
-            $services = Service::latest()->paginate(10);
+            $query = Service::query();
+
+            // ✅ Apply search filter if available
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('model', 'like', "%$search%")
+                        ->orWhere('seller', 'like', "%$search%")
+                        ->orWhere('contract_type', 'like', "%$search%")
+                        ->orWhere('warranty', 'like', "%$search%");
+                });
+            }
+
+            // ✅ Handle pagination limit (default to 10)
+            $perPage = $request->input('limit', 10);
+            $services = $query->latest()->paginate($perPage);
+
             $result['data'] = $services;
         } catch (\Throwable $e) {
             $result['status'] = 500;

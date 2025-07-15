@@ -1,100 +1,117 @@
+<!-- eslint-disable import/no-unresolved -->
 <script setup>
-import { useAuthStore } from "@/plugins/auth.module";
-import api from "@/plugins/utilites";
-import avatar1 from "@images/avatars/avatar-1.png";
-import constant from "@/constants"
+import { useAuthStore } from '@/plugins/auth.module'
+// eslint-disable-next-line import/extensions
+import api from '@/plugins/utilites'
+import avatar1 from '@images/avatars/avatar-1.png'
+// eslint-disable-next-line import/extensions
+import constant from '@/constants'
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 
-const refInputEl = ref();
-const accountDataLocal = ref(authStore._user);
-const refForm = ref();
-const submitting = ref(false);
+const refInputEl = ref()
+const accountDataLocal = ref(authStore._user)
+const refForm = ref()
+const submitting = ref(false)
 
 onMounted(() => {
-  if (accountDataLocal.value.photo_path) accountDataLocal.value.avatarImg = constant.storagePath + accountDataLocal.value.photo_path
-  else accountDataLocal.value.avatarImg = avatar1;
-});
+  if (accountDataLocal.value.photo_path)
+    accountDataLocal.value.avatarImg = constant.storagePath + accountDataLocal.value.photo_path
+  else accountDataLocal.value.avatarImg = avatar1
+})
 
-const changeAvatar = (file) => {
-  const fileReader = new FileReader();
-  const { files } = file.target;
+const changeAvatar = file => {
+  const fileReader = new FileReader()
+  const { files } = file.target
   if (files && files.length) {
-    fileReader.readAsDataURL(files[0]);
-    // console.log(files[0]);
+    fileReader.readAsDataURL(files[0])
+    console.log(files[0])
     accountDataLocal.value.photo_path = files[0]
     fileReader.onload = () => {
-      if (typeof fileReader.result === "string")
-        accountDataLocal.value.avatarImg = fileReader.result;
-    };
+      if (typeof fileReader.result === 'string') accountDataLocal.value.avatarImg = fileReader.result
+    }
   }
-};
+}
 
 // reset avatar image
 const resetAvatar = () => {
-  accountDataLocal.value.avatarImg = avatar1;
+  accountDataLocal.value.avatarImg = avatar1
   accountDataLocal.value.photo_path = null
-};
+}
 
 const submitHandler = async () => {
-  const { valid } = await refForm.value?.validate();
+  const { valid } = await refForm.value?.validate()
   if (valid) {
-    let formData = new FormData();
-    formData.append("email", accountDataLocal.value.email);
-    formData.append("id", accountDataLocal.value.id);
+    let formData = new FormData()
+    formData.append('email', accountDataLocal.value.email)
+    formData.append('id', accountDataLocal.value.id)
     if (accountDataLocal.value.avatarImg !== avatar1) {
-      formData.append("photo_path", accountDataLocal.value.photo_path);
+      formData.append('photo_path', accountDataLocal.value.photo_path)
     }
     console.log(accountDataLocal.value.photo_path)
-    submitting.value = true;
+    submitting.value = true
     api
-      .post("update-profile", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-      .then((res) => {
-        getProfileAcc();
+      .post('update-profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(res => {
+        getProfileAcc()
       })
       .finally(() => {
-        submitting.value = false;
-      });
+        submitting.value = false
+      })
   }
-};
+}
 
 const getProfileAcc = () => {
-  api.post("verify-auth").then((res) => {
-    accountDataLocal.value.email = res.data.user?.email;
-    accountDataLocal.value.username = res.data.user?.username;
-    accountDataLocal.value.id = res.data.user?.id;
+  api.post('verify-auth').then(res => {
+    accountDataLocal.value.email = res.data.user?.email
+    accountDataLocal.value.username = res.data.user?.username
+    accountDataLocal.value.id = res.data.user?.id
 
     if (res.data.user?.photo_path) {
-      accountDataLocal.value.avatarImg = constant.storagePath + res.data.user?.photo_path;
+      accountDataLocal.value.avatarImg = constant.storagePath + res.data.user?.photo_path
     }
 
     nextTick(() => {
-      authStore.$patch((state) => {
-        state._user = res.data.user;
-      });
-    });
-  });
-};
+      authStore.$patch(state => {
+        state._user = res.data.user
+      })
+    })
+  })
+}
 </script>
 
 <template>
   <VRow>
-    <VCol cols="12" md="12">
+    <VCol
+      cols="12"
+      md="12"
+    >
       <VCard :title="$t('Profile Details')">
         <VCardText class="d-flex">
           <!-- 👉 Avatar -->
-          <VAvatar rounded size="100" class="me-6" :image="accountDataLocal.avatarImg" />
+          <VAvatar
+            rounded
+            size="100"
+            class="me-6"
+            :image="accountDataLocal.avatarImg"
+          />
 
           <!-- 👉 Upload Photo -->
           <form class="d-flex flex-column justify-center gap-4">
             <div class="d-flex flex-wrap gap-2">
-              <VBtn color="primary" @click="refInputEl?.click()">
-                <VIcon icon="tabler-cloud-upload" class="d-sm-none" />
-                <span class="d-none d-sm-block">{{ $t("Upload new photo") }}</span>
+              <VBtn
+                color="primary"
+                @click="refInputEl?.click()"
+              >
+                <VIcon
+                  icon="tabler-cloud-upload"
+                  class="d-sm-none"
+                />
+                <span class="d-none d-sm-block">{{ $t('Upload new photo') }}</span>
               </VBtn>
 
               <input
@@ -106,9 +123,17 @@ const getProfileAcc = () => {
                 @input="changeAvatar"
               />
 
-              <VBtn type="reset" color="secondary" variant="tonal" @click="resetAvatar">
-                <span class="d-none d-sm-block">{{ $t("Reset") }}</span>
-                <VIcon icon="tabler-refresh" class="d-sm-none" />
+              <VBtn
+                type="reset"
+                color="secondary"
+                variant="tonal"
+                @click="resetAvatar"
+              >
+                <span class="d-none d-sm-block">{{ $t('Reset') }}</span>
+                <VIcon
+                  icon="tabler-refresh"
+                  class="d-sm-none"
+                />
               </VBtn>
             </div>
 
@@ -129,18 +154,24 @@ const getProfileAcc = () => {
             @submit.prevent="submitHandler"
           >
             <VRow>
-              <VCol md="6" cols="12">
+              <VCol
+                md="6"
+                cols="12"
+              >
                 <AppTextField
                   v-model="accountDataLocal.username"
                   disabled
                   :label="$t('User Name')"
                 />
               </VCol>
-              <VCol md="6" cols="12">
+              <VCol
+                md="6"
+                cols="12"
+              >
                 <AppTextField
                   v-model="accountDataLocal.email"
                   :label="$t('Email')"
-                  :rules="[(v) => !!v || $t('Email') + $t('required')]"
+                  :rules="[v => !!v || $t('Email') + $t('required')]"
                 />
               </VCol>
               <!-- <VCol md="6" cols="12">
@@ -162,8 +193,15 @@ const getProfileAcc = () => {
                 </VCol> -->
             </VRow>
 
-            <VCol cols="12" class="px-0 mt-2">
-              <VBtn :loading="submitting" type="submit">{{ $t("Save changes") }}</VBtn>
+            <VCol
+              cols="12"
+              class="px-0 mt-2"
+            >
+              <VBtn
+                :loading="submitting"
+                type="submit"
+                >{{ $t('Save changes') }}</VBtn
+              >
             </VCol>
           </VForm>
           <!-- </fieldset> -->

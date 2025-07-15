@@ -16,4 +16,10 @@ class Customer extends Model
     protected $casts = [
         'date' => 'datetime',
     ];
+
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }

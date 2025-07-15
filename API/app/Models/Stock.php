@@ -13,8 +13,16 @@ class Stock extends Model
         'model',
         'quantity',
         'date',
+        'colors',
         'supplier'
     ];
+
+
+    public function product()
+    {
+        // Connect Stock to Product via "model" field
+        return $this->belongsTo(Product::class, 'model', 'model');
+    }
 
     public function sales()
     {

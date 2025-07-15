@@ -11,12 +11,24 @@ class StockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $result = ['status' => 200];
 
         try {
-            $stocks = Stock::latest()->paginate(10);
+            $query = Stock::query();
+
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where('model', 'like', "%$search%")
+                    ->orWhere('supplier', 'like', "%$search%");
+                // Add other searchable fields as necessary
+            }
+
+            $perPage = $request->input('limit', 10);
+
+            $stocks = $query->latest()->paginate($perPage);
+
             $result['data'] = $stocks;
         } catch (\Throwable $e) {
             $result['status'] = 500;
@@ -44,6 +56,7 @@ class StockController extends Controller
         try {
             $validated = $request->validate([
                 'model' => 'required|string|max:255',
+                'colors' => 'required|string|max:255',
                 'quantity' => 'required|integer|min:0',
                 'date' => 'required|date',
                 'supplier' => 'required|string|max:255',
@@ -94,6 +107,7 @@ class StockController extends Controller
         try {
             $validated = $request->validate([
                 'model' => 'required|string|max:255',
+                'colors' => 'required|string|max:255',
                 'quantity' => 'required|integer|min:0',
                 'date' => 'required|date',
                 'supplier' => 'required|string|max:255',

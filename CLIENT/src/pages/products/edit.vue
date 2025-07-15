@@ -5,90 +5,122 @@ import { useRoute, useRouter } from 'vue-router'
 import api from '@/plugins/utilites'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import constant from '@/constants'
+// eslint-disable-next-line import/no-unresolved
+import defaultImage from '@/assets/images/productImage/default.png'
 
 const route = useRoute()
 const router = useRouter()
 
 const form = reactive({
-  data: {
-    image: null,
-    model: null,
-    colors: null,
-    filtration_stage: null,
-    cold_water_tank_capacity: null,
-    hot_water_tank_capacity: null,
-    heating_capacity: null,
-    cooling_capacity: null,
-    cold_power_consumption: null,
-    hot_power_consumption: null,
-    quantity: null,
-  },
+  images: [null, null, null, null], // For new images
+  previews: [defaultImage, defaultImage, defaultImage, defaultImage], // Preview URLs
+  model: null,
+  colors: null,
+  filtration_stage: null,
+  cold_water_tank_capacity: null,
+  hot_water_tank_capacity: null,
+  heating_capacity: null,
+  cooling_capacity: null,
+  cold_power_consumption: null,
+  hot_power_consumption: null,
+  quantity: 0,
+  price: null,
 })
 
 const refForm = ref()
 const submitting = ref(false)
-const previewImage = ref(null)
 
+const rules = {
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
+  integer: v => Number.isInteger(Number(v)) || 'ត្រូវតែជាលេខ',
+}
+
+// Fetch existing product details
 const fetchProduct = async () => {
   if (!route.query.id) return
   try {
     const res = await api.get(`/products/${route.query.id}`)
     const data = res.data.data || {}
-    form.data = { ...data }
-    if (data.image) {
-      previewImage.value = constant.storagePath + data.image
+
+    // Populate form fields
+    form.model = data.model
+    form.colors = data.colors
+    form.filtration_stage = data.filtration_stage
+    form.cold_water_tank_capacity = data.cold_water_tank_capacity
+    form.hot_water_tank_capacity = data.hot_water_tank_capacity
+    form.heating_capacity = data.heating_capacity
+    form.cooling_capacity = data.cooling_capacity
+    form.cold_power_consumption = data.cold_power_consumption
+    form.hot_power_consumption = data.hot_power_consumption
+    form.quantity = data.quantity
+    form.price = data.price
+
+    // Populate existing images
+    if (Array.isArray(data.images)) {
+      data.images.forEach((img, i) => {
+        if (img) {
+          form.previews[i] = constant.storagePath + img
+        }
+      })
     }
   } catch (error) {
     console.error('Failed to fetch product:', error)
   }
 }
 
-onMounted(() => {
-  fetchProduct()
-})
+onMounted(fetchProduct)
 
-const handleImageChange = event => {
+// Handle image selection & preview
+function selectImage(index, event) {
   const file = event.target.files[0]
   if (file) {
-    form.data.image = file
-    previewImage.value = URL.createObjectURL(file)
+    form.images[index] = file // Store new file
+    form.previews[index] = URL.createObjectURL(file) // Show preview
   }
 }
 
+// Submit updated data
 const onUpdate = async () => {
   const { valid } = await refForm.value?.validate()
-  if (valid) {
-    submitting.value = true
-    try {
-      const formData = new FormData()
+  if (!valid) return
 
-      // Append the form data
-      for (const key in form.data) {
-        if (key === 'image' && form.data.image instanceof File) {
-          formData.append('image', form.data.image)
-        } else {
-          formData.append(key, form.data[key])
-        }
+  submitting.value = true
+
+  try {
+    const formData = new FormData()
+
+    // Append images
+    form.images.forEach((file, i) => {
+      if (file) {
+        formData.append(`images[${i}]`, file)
       }
+    })
 
-      const res = await api.post(`/products/${route.query.id}?_method=PUT`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+    // Append other fields
+    formData.append('model', form.model)
+    formData.append('colors', form.colors)
+    formData.append('filtration_stage', form.filtration_stage)
+    formData.append('cold_water_tank_capacity', form.cold_water_tank_capacity)
+    formData.append('hot_water_tank_capacity', form.hot_water_tank_capacity)
+    formData.append('heating_capacity', form.heating_capacity)
+    formData.append('cooling_capacity', form.cooling_capacity)
+    formData.append('cold_power_consumption', form.cold_power_consumption)
+    formData.append('hot_power_consumption', form.hot_power_consumption)
+    formData.append('quantity', form.quantity)
+    formData.append('price', form.price)
 
-      if (res.status === 200) {
-        router.back()
-      }
-    } catch (error) {
-      console.error('Error updating product:', error)
-    } finally {
-      submitting.value = false
+    const response = await api.post(`/products/${route.query.id}?_method=PUT`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+
+    if (response.status === 200) {
+      router.push('/products')
     }
+  } catch (error) {
+    console.error('Error updating product:', error)
+  } finally {
+    submitting.value = false
   }
-}
-
-const rules = {
-  required: v => !!v || 'This field is required',
-  integer: v => Number.isInteger(Number(v)) || 'Must be an integer',
 }
 </script>
 
@@ -102,31 +134,42 @@ const rules = {
     <VForm
       ref="refForm"
       @submit.prevent="onUpdate"
+      lazy-validation
     >
-      <VRow>
-        <VCol cols="12">
-          <div>
-            <div v-if="previewImage">
-              <img
-                :src="previewImage"
-                alt="Preview"
-                style="width: 200px"
-              >
-            </div>
-          </div>
-          <input
-            type="file"
-            accept="image/*"
-            @change="handleImageChange"
+      <!-- Multiple Images -->
+      <VCol cols="12">
+        <h5>ជ្រើសរើសរូបភាព</h5>
+        <div class="image-grid">
+          <div
+            v-for="(preview, index) in form.previews"
+            :key="index"
+            class="image-option"
           >
-        </VCol>
+            <img
+              :src="preview"
+              alt="Product Image"
+              class="default-image"
+              @click="$refs[`fileInput${index}`]?.click()"
+            >
+            <input
+              :ref="`fileInput${index}`"
+              type="file"
+              accept="image/*"
+              class="file-input"
+              @change="event => selectImage(index, event)"
+            >
+          </div>
+        </div>
+      </VCol>
 
+      <!-- Other Form Fields -->
+      <VRow>
         <VCol
           cols="12"
           md="6"
         >
           <VSelect
-            v-model="form.data.model"
+            v-model="form.model"
             :label="$t('Model')"
             :rules="[rules.required]"
             :items="[
@@ -140,6 +183,10 @@ const rules = {
               'GP-700S',
               'Maxtream',
               'Under-Sink-Case',
+              'CABINET',
+              'G-2000BA',
+              'AQF-501',
+              'FRO-0110',
             ]"
             outlined
           />
@@ -150,7 +197,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.colors"
+            v-model="form.colors"
             :label="$t('Color')"
             :rules="[rules.required]"
             :items="['Black', 'White', 'Red', 'Blue']"
@@ -163,7 +210,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.filtration_stage"
+            v-model="form.filtration_stage"
             :label="$t('Filter')"
             :rules="[rules.required]"
             :items="['4-filters', '5-filters']"
@@ -176,7 +223,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.cold_water_tank_capacity"
+            v-model="form.cold_water_tank_capacity"
             :label="$t('Cold water Tank Capacity')"
             :rules="[rules.required]"
             :items="['8L', '3L', '3.5L', '5L', '7.5L']"
@@ -189,7 +236,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.hot_water_tank_capacity"
+            v-model="form.hot_water_tank_capacity"
             :label="$t('Hot water Tank Capacity')"
             :rules="[rules.required]"
             :items="['3L', '1.25L', '2.15L', '5L']"
@@ -202,7 +249,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.heating_capacity"
+            v-model="form.heating_capacity"
             :label="$t('Heating Capacity')"
             :rules="[rules.required]"
             :items="['80C-90C']"
@@ -215,7 +262,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.cooling_capacity"
+            v-model="form.cooling_capacity"
             :label="$t('Cooling Capacity')"
             :rules="[rules.required]"
             :items="['4C-10C']"
@@ -228,7 +275,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.cold_power_consumption"
+            v-model="form.cold_power_consumption"
             :label="$t('Cold Power Consumption')"
             :rules="[rules.required]"
             :items="['100W', '110W']"
@@ -241,7 +288,7 @@ const rules = {
           md="6"
         >
           <VSelect
-            v-model="form.data.hot_power_consumption"
+            v-model="form.hot_power_consumption"
             :label="$t('Hot Power Consumption')"
             :rules="[rules.required]"
             :items="['300W', '430W']"
@@ -254,8 +301,8 @@ const rules = {
           md="6"
         >
           <VTextField
-            v-model="form.data.quantity"
-            :label="$t('Quantity')"
+            v-model="form.price"
+            :label="$t('Price')"
             :rules="[rules.required, rules.integer]"
             outlined
             type="number"
@@ -265,6 +312,41 @@ const rules = {
     </VForm>
   </AppFormCreateTemplate>
 </template>
+
+<style scoped>
+.image-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.image-option {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.default-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+</style>
 
 <route lang="yaml">
 meta:

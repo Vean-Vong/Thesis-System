@@ -38,17 +38,29 @@ const initData = () => {
   loading.value = true
   api
     .get('/rentals', {
-      page: meta?.current_page,
-      limit: meta?.per_page,
-      search: search.value,
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value,
+      },
     })
     .then(res => {
-      items.value = res.data.data.data.map(rental => ({
+      const paginated = res.data.data
+      items.value = paginated.data.map(rental => ({
         ...rental,
         date: formatDate(rental.date),
+        price: `$${rental.price.toLocaleString()}`,
       }))
-      meta.value = res.data.data.meta
+      meta.value = {
+        current_page: paginated.current_page,
+        from: paginated.from,
+        last_page: paginated.last_page,
+        per_page: paginated.per_page,
+        to: paginated.to,
+        total: paginated.total,
+      }
     })
+
     .finally(() => {
       loading.value = false
     })
@@ -68,6 +80,8 @@ const headers = [
     key: 'no',
     align: 'left',
     sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
   },
 
   {
@@ -75,11 +89,15 @@ const headers = [
     key: 'model',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Rental Price'),
     key: 'price',
     align: 'center',
+    minWidth: '150px',
+    maxWidth: '500px',
     sortable: false,
   },
   {
@@ -87,23 +105,31 @@ const headers = [
     key: 'discount',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Date'),
     key: 'date',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Duration'),
     key: 'duration',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
   {
     title: t('Warranty'),
     key: 'warranty',
     align: 'center',
+    minWidth: '210px',
+    maxWidth: '500px',
     sortable: false,
   },
   {
@@ -111,12 +137,16 @@ const headers = [
     key: 'seller',
     align: 'center',
     sortable: false,
+    minWidth: '170px',
+    maxWidth: '500px',
   },
   {
     title: t('Contract Type'),
     key: 'contract_type',
     align: 'center',
     sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {

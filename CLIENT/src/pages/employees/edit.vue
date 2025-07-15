@@ -55,7 +55,7 @@ const onUpdate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
   email: v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
   dob: v => !!v || 'Date of Birth is required',
   hire_date: v => !!v || 'Hire Date is required',
@@ -181,7 +181,7 @@ const rules = {
         >
           <VTextField
             v-model="form.data.date_of_birth"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.dob]"
             :label="$t('Date of Birth')"
             type="date"
             outlined
@@ -194,7 +194,7 @@ const rules = {
         >
           <VTextField
             v-model="form.data.hire_date"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.hire_date]"
             :label="$t('Hire Date')"
             type="date"
             outlined

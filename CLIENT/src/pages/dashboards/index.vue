@@ -1,34 +1,14 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
 import { useI18n } from 'vue-i18n'
+
 const router = useRouter()
 const { t } = useI18n()
-const price = ref(0) // Store price
 
-onMounted(async () => {
-  try {
-    const response = await api.post('summary')
-    const data = response.data
-    console.log('SUMMARY DATA:', data)
-
-    statistics.value[0].stats = data.totalSalesAmount
-    statistics.value[1].stats = data.totalUtility_expenses
-    statistics.value[2].stats = data.sales
-    statistics.value[3].stats = data.employees
-    statistics.value[4].stats = data.customers
-    statistics.value[5].stats = data.users
-    statistics.value[6].stats = data.products
-    statistics.value[7].stats = data.rental
-    statistics.value[8].stats = data.productStock
-    statistics.value[9].stats = data.filter
-  } catch (error) {
-    console.error('Error fetching summary:', error)
-  }
-})
-
+// Statistics cards data
 const statistics = ref([
   {
     title: 'Total Earnings',
@@ -88,7 +68,7 @@ const statistics = ref([
     stats: 0,
     icon: 'mdi-package-variant',
     color: '#3b28cc',
-    name: 'product',
+    name: 'products',
     to: '/products',
     i18nKey: 'Product',
   },
@@ -112,83 +92,106 @@ const statistics = ref([
   },
   {
     title: 'Filters Stock',
-    stats: price.value,
+    stats: 0,
     icon: 'mdi-filter-menu',
     color: '#3b28cc',
     name: 'filter',
     to: '/filter-stock',
     i18nKey: 'Filter in Stock',
   },
-])
-
-const series = ref([
   {
-    name: 'Inflation',
-    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    title: 'Service Total',
+    stats: 0,
+    icon: 'mdi-tools',
+    color: '#3b28cc',
+    name: 'service',
+    to: '/services',
+    i18nKey: 'Service',
+  },
+  {
+    title: 'Daily Report',
+    stats: 0,
+    icon: 'mdi-file-document-outline',
+    color: 'primary',
+    name: 'reports',
+    to: '/reports',
+    i18nKey: 'Total Daily Report',
   },
 ])
 
+// Fetch summary and monthly sales data on mount
+onMounted(async () => {
+  try {
+    const response = await api.post('summary')
+    const data = response.data
+    if (data.status === 200) {
+      // Update statistics cards
+      statistics.value.forEach(item => {
+        if (data[item.name] !== undefined) {
+          item.stats = data[item.name]
+        }
+      })
+
+      // Assume your backend also returns monthlySales: {1: val, 2: val, ... 12: val}
+      if (data.monthlySales) {
+        const monthlyData = []
+        for (let i = 1; i <= 12; i++) {
+          monthlyData.push(data.monthlySales[i] || 0)
+        }
+        series.value = [{ name: t('Sales'), data: monthlyData }]
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching summary:', error)
+  }
+})
+
+// Chart data series (initially empty)
+const series = ref([
+  {
+    name: t('Sales'),
+    data: Array(12).fill(0), 
+  },
+])
+
+// Chart options
 const chartOptions = ref({
   chart: {
     height: 350,
     type: 'bar',
   },
+  colors: ['#3b28cc'],
   plotOptions: {
     bar: {
       borderRadius: 10,
-      dataLabels: {
-        position: 'top', // top, center, bottom
-      },
+      dataLabels: { position: 'top' },
     },
   },
   dataLabels: {
     enabled: true,
-    formatter: function (val) {
-      return val
-    },
+    formatter: val => `$${val}`,
     offsetY: -20,
-    style: {
-      fontSize: '12px',
-      colors: ['#304758'],
-    },
+    style: { fontSize: '12px', colors: ['#304758'] },
   },
   xaxis: {
     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     position: 'top',
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
+    axisBorder: { show: false },
+    axisTicks: { show: false },
     crosshairs: {
       fill: {
         type: 'gradient',
-        gradient: {
-          colorFrom: '#D8E3F0',
-          colorTo: '#BED1E6',
-          stops: [0, 100],
-          opacityFrom: 0.4,
-          opacityTo: 0.5,
-        },
+        gradient: { colorFrom: '#D8E3F0', colorTo: '#BED1E6', stops: [0, 100], opacityFrom: 0.4, opacityTo: 0.5 },
       },
     },
-    tooltip: {
-      enabled: true,
-    },
+    tooltip: { enabled: true },
   },
   yaxis: {
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: true,
-    },
+    axisBorder: { show: false },
+    axisTicks: { show: true },
     labels: {
-      show: false,
-      formatter: function (val) {
-        return val
-      },
+      show: true,
+      formatter: val => `$${val}`,
     },
   },
   title: {
@@ -197,14 +200,13 @@ const chartOptions = ref({
     show: true,
     offsetY: 330,
     align: 'center',
-    style: {
-      color: '#444',
-    },
+    style: { color: '#444' },
   },
 })
 
+// Navigate to other routes
 const go = to => {
-  router.push(to)
+  if (to) router.push(to)
 }
 </script>
 
@@ -264,6 +266,8 @@ const go = to => {
           </VCard>
         </VCol>
       </VRow>
+
+      <!-- Chart JS  -->
 
       <div class="mt-12">
         <VueApexCharts

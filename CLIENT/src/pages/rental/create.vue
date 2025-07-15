@@ -39,7 +39,7 @@ const onCreate = async () => {
     api
       .post('/rentals', form.data)
       .then(res => {
-        console.log(res) // Log response to debug
+        console.log(res)
         if (res.status === 200) router.back()
       })
       .catch(error => {
@@ -52,7 +52,7 @@ const onCreate = async () => {
 }
 
 const rules = {
-  required: v => !!v || 'This field is required',
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
 }
 </script>
 
@@ -99,7 +99,7 @@ const rules = {
             v-model="form.data.price"
             :label="$t('Rental Price')"
             :rules="[rules.required]"
-            :items="['$28', '$27', '$25', '$23', '$17']"
+            :items="['28', '27', '25', '23', '17']"
             outlined
           />
         </VCol>

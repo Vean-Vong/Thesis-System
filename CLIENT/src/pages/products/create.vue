@@ -1,112 +1,129 @@
-<script>
-import { reactive, ref, onMounted } from 'vue'
+<script setup>
+import { reactive, ref } from 'vue'
 // eslint-disable-next-line import/extensions, import/no-unresolved
-import api from '@/plugins/utilites'
+import api from '@/plugins/utilites' // your axios instance or similar
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import router from '@/router'
+// eslint-disable-next-line import/no-unresolved
+import defaultImage from '@/assets/images/productImage/default.png'
 
-export default {
-  setup() {
-    const form = reactive({
-      image: null,
-      model: null,
-      colors: null,
-      filtration_stage: null,
-      cold_water_tank_capacity: null,
-      hot_water_tank_capacity: null,
-      heating_capacity: null,
-      cooling_capacity: null,
-      cold_power_consumption: null,
-      hot_power_consumption: null,
-      quantity: null,
+// Form reactive state
+const form = reactive({
+  images: [null, null, null, null],
+  previews: [defaultImage, defaultImage, defaultImage, defaultImage],
+  model: null,
+  colors: null,
+  price: null,
+  filtration_stage: null,
+  cold_water_tank_capacity: null,
+  hot_water_tank_capacity: null,
+  heating_capacity: null,
+  cooling_capacity: null,
+  cold_power_consumption: null,
+  hot_power_consumption: null,
+  quantity: 0,
+})
+
+const refForm = ref(null)
+const submitting = ref(false)
+
+const rules = {
+  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
+  numeric: v => !v || !isNaN(v) || 'ត្រូវតែជាលេខ',
+}
+
+// Handle image selection & preview
+function selectImage(index, event) {
+  const file = event.target.files[0]
+  if (file) {
+    form.images[index] = file
+    form.previews[index] = URL.createObjectURL(file)
+  }
+}
+
+async function onCreate() {
+  // Validate form first (assuming Vuetify VForm)
+  const valid = await refForm.value.validate()
+  if (!valid) return
+
+  submitting.value = true
+
+  try {
+    const formData = new FormData()
+    form.images.forEach((file, i) => {
+      if (file) {
+        formData.append(`images[${i}]`, file)
+      }
     })
 
-    const refForm = ref()
-    const submitting = ref(false)
-    const previewImage = ref(null) // to store the image preview URL
+    // Append other form fields
+    formData.append('model', form.model)
+    formData.append('colors', form.colors)
+    formData.append('price', form.price)
+    formData.append('filtration_stage', form.filtration_stage)
+    formData.append('cold_water_tank_capacity', form.cold_water_tank_capacity)
+    formData.append('hot_water_tank_capacity', form.hot_water_tank_capacity)
+    formData.append('heating_capacity', form.heating_capacity)
+    formData.append('cooling_capacity', form.cooling_capacity)
+    formData.append('cold_power_consumption', form.cold_power_consumption)
+    formData.append('hot_power_consumption', form.hot_power_consumption)
+    formData.append('quantity', form.quantity)
 
-    const onCreate = async () => {
-      const { valid } = await refForm.value?.validate()
-      if (valid) {
-        submitting.value = true
-        const formData = new FormData()
+    // Send POST request
+    const response = await api.post('/products', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
 
-        Object.keys(form).forEach(key => {
-          formData.append(key, form[key])
-        })
-
-        api
-          .post('/products', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          })
-          .then(res => {
-            if (res.status === 200) {
-              router.push('/products')
-            }
-          })
-          .catch(error => {
-            console.error('Error creating product:', error)
-          })
-          .finally(() => {
-            submitting.value = false
-          })
-      }
+    if (response.status === 200) {
+      router.push('/products')
     }
-
-    // Handle image selection and set the preview
-    const handleImageChange = event => {
-      const file = event.target.files[0]
-      if (file) {
-        form.image = file
-        previewImage.value = URL.createObjectURL(file)
-      }
-    }
-
-    const rules = {
-      required: v => !!v || 'This field is required',
-      integer: v => Number.isInteger(Number(v)) || 'Must be an integer',
-    }
-
-    return {
-      form,
-      refForm,
-      submitting,
-      onCreate,
-      rules,
-      previewImage, // expose the previewImage ref
-      handleImageChange, // expose the handleImageChange function
-    }
-  },
+  } catch (error) {
+    console.error('Error creating product:', error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
 <template>
   <AppFormCreateTemplate
     cols="9"
-    :title="$t('Create New Customer')"
+    :title="$t('Create New Product')"
     :submitting="submitting"
     @submit="onCreate"
   >
     <VForm
       ref="refForm"
       @submit.prevent="onCreate"
+      lazy-validation
     >
       <VCol cols="12">
-        <div class="mb-4">
-          <div v-if="previewImage">
+        <h5 class="select_images">ជ្រើសរើសរូបភាព</h5>
+        <div class="image-grid">
+          <div
+            v-for="(preview, index) in form.previews"
+            :key="index"
+            class="image-option"
+          >
             <img
-              :src="previewImage"
-              alt="Preview"
-              style="width: 200px"
+              :src="preview"
+              alt="Product Image"
+              class="default-image"
+              @click="$refs[`fileInput${index}`]?.click()"
+            >
+            <input
+              :ref="`fileInput${index}`"
+              type="file"
+              accept="image/*"
+              class="file-input"
+              @change="event => selectImage(index, event)"
             >
           </div>
         </div>
-        <input
-          type="file"
-          accept="image/*"
-          @change="handleImageChange"
-        >
       </VCol>
+
       <VRow>
         <VCol
           cols="12"
@@ -127,10 +144,15 @@ export default {
               'GP-700S',
               'Maxtream',
               'Under-Sink-Case',
+              'CABINET',
+              'G-2000BA',
+              'AQF-501',
+              'FRO-0110',
             ]"
             outlined
           />
         </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -143,6 +165,20 @@ export default {
             outlined
           />
         </VCol>
+
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VTextField
+            v-model="form.price"
+            :label="$t('Price')"
+            :rules="[rules.required, rules.numeric]"
+            type="number"
+            outlined
+          />
+        </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -155,6 +191,9 @@ export default {
             outlined
           />
         </VCol>
+
+        <!-- Add remaining fields similarly -->
+
         <VCol
           cols="12"
           md="6"
@@ -167,6 +206,7 @@ export default {
             outlined
           />
         </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -179,6 +219,7 @@ export default {
             outlined
           />
         </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -191,6 +232,7 @@ export default {
             outlined
           />
         </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -203,6 +245,7 @@ export default {
             outlined
           />
         </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -215,6 +258,7 @@ export default {
             outlined
           />
         </VCol>
+
         <VCol
           cols="12"
           md="6"
@@ -227,27 +271,43 @@ export default {
             outlined
           />
         </VCol>
-        <VCol
-          cols="12"
-          md="6"
-        >
-          <VTextField
-            v-model="form.quantity"
-            :label="$t('Quantity')"
-            :rules="[rules.required, rules.integer]"
-            outlined
-            type="number"
-          />
-        </VCol>
       </VRow>
     </VForm>
   </AppFormCreateTemplate>
 </template>
 
-<route lang="yaml">
-meta:
-  title: Product Create
-  layout: default
-  subject: Auth
-  active: 'product'
-</route>
+<style scoped>
+.image-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.image-option {
+  position: relative;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  width: 200px;
+  height: 200px;
+}
+
+.default-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+</style>

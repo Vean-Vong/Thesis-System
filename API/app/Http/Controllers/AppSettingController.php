@@ -37,8 +37,8 @@ class AppSettingController extends Controller
 
         try {
 
-            foreach($request->validated()['app_settings'] as $app_setting) {
-                if($app_setting['value']) {
+            foreach ($request->validated()['app_settings'] as $app_setting) {
+                if ($app_setting['value']) {
                     AppSetting::find($app_setting['id'])->update(['value' => $app_setting['value']]);
                 }
             }
