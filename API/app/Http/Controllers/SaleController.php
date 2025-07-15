@@ -53,7 +53,7 @@ class SaleController extends Controller
         $result = ['status' => 200];
 
         try {
-            // Validate sale data
+            // Validate sale and products data
             $validatedSale = $request->validate([
                 'model'         => 'required|string|max:255',
                 'price'         => 'required|numeric|min:0',
@@ -64,31 +64,47 @@ class SaleController extends Controller
                 'warranty'      => 'sometimes|string|max:255',
                 'seller'        => 'required|string|max:255',
                 'contract_type' => 'sometimes|string|in:purchase,installment',
-                'customer_id'   => 'nullable|exists:customers,id', // Optional if new customer
-                'customer'      => 'sometimes|array',              // New customer data
+                'customer_id'   => 'nullable|exists:customers,id',
+                'customer'      => 'sometimes|array',
                 'customer.name' => 'required_with:customer|string|max:255',
                 'customer.phone' => 'nullable|string|max:20',
                 'customer.address' => 'required_with:customer|string|max:255',
                 'customer.date' => 'required_with:customer|date',
                 'customer.job'  => 'required_with:customer|string|max:255',
+
+                // New validation for products array
+                'products'              => 'required|array|min:1',
+                'products.*.product_id' => 'required|exists:products,id',
+                'products.*.quantity'   => 'required|integer|min:1',
+                'products.*.price'      => 'required|numeric|min:0',
             ]);
 
-            // 🔥 If customer_id not provided, create customer
+            // Create customer if needed
             if (empty($validatedSale['customer_id']) && isset($validatedSale['customer'])) {
                 $customer = Customer::create($validatedSale['customer']);
                 $validatedSale['customer_id'] = $customer->id;
             }
 
-            // 🔥 Calculate sub_total
+            // Calculate sub_total based on price and discount
             $discount = $validatedSale['discount'] ?? 0;
             $subTotal = $validatedSale['price'] - $discount;
             $validatedSale['sub_total'] = $subTotal;
 
-            // Create the sale
+            // Create sale
             $sale = Sale::create($validatedSale);
 
-            $result['data'] = $sale;
-            $result['message'] = 'Sale created successfully!';
+            // Attach products to pivot table with quantity and price
+            $products = [];
+            foreach ($validatedSale['products'] as $product) {
+                $products[$product['product_id']] = [
+                    'quantity' => $product['quantity'],
+                    'price'    => $product['price'],
+                ];
+            }
+            $sale->products()->sync($products);
+
+            $result['data'] = $sale->load('products', 'customer');
+            $result['message'] = 'Sale created successfully with products!';
         } catch (\Illuminate\Validation\ValidationException $e) {
             $result['status'] = 422;
             $result['errors'] = $e->errors();
@@ -102,45 +118,23 @@ class SaleController extends Controller
     }
 
 
+
     /**
      * Display the specified resource.
      */
     public function show(Sale $sale)
     {
         $result = ['status' => 200];
-
         try {
-            // Load customer and stock (with product)
-            $sale->load(['customer', 'stock.product']);
+            // Eager load customer, stock, and products (pivot)
+            $sale->load(['customer', 'stock', 'products']);
+            if ($sale->products->isEmpty()) {
+                $sale->setRelation('products', []);
+            }
 
-            $data = [
-                'id'            => $sale->id,
-                'date'          => $sale->date,
-                'model'         => $sale->model ?? $sale->stock->product->model ?? '',
-                'price'         => $sale->price ?? $sale->stock->product->price ?? 0,
-                'deposit'       => $sale->deposit,
-                'discount'      => $sale->discount ?? 0,
-                'sub_total'     => $sale->sub_total ?? ($sale->price - ($sale->price * $sale->discount / 100)),
-                'duration'      => $sale->duration,
-                'warranty'      => $sale->warranty,
-                'seller'        => $sale->seller,
-                'contract_type' => $sale->contract_type,
-                'quantity'      => $sale->quantity_sold ?? 1,
-                'customer'      => [
-                    'name'    => $sale->customer->name ?? '',
-                    'phone'   => $sale->customer->phone ?? '',
-                    'address' => $sale->customer->address ?? '',
-                ],
-                'item' => [
-                    'model'     => $sale->model ?? $sale->stock->product->model ?? '',
-                    'quantity'  => $sale->quantity_sold ?? 1,
-                    'price'     => $sale->price ?? $sale->stock->product->price ?? 0,
-                    'discount'  => $sale->discount ?? 0,
-                    'sub_total' => $sale->sub_total ?? ($sale->price - ($sale->price * $sale->discount / 100)),
-                ],
-            ];
 
-            $result['data'] = $data;
+            // Return sale including products pivot data
+            $result['data'] = $sale;
         } catch (\Throwable $e) {
             $result['status'] = 500;
             $result['message'] = $e->getMessage();
@@ -148,6 +142,7 @@ class SaleController extends Controller
 
         return response()->json($result);
     }
+
 
 
     /**

@@ -36,16 +36,18 @@ class Sale extends Model
     {
         return $this->belongsTo(Customer::class);
     }
-    public function products()
-    {
-        return $this->belongsTo(Product::class);
-    }
-
     // public function products()
     // {
-    //     return $this->belongsToMany(Product::class, 'sale_product') // Pivot table
-    //         ->withPivot('quantity', 'price');
+    //     return $this->belongsTo(Product::class);
     // }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'sale_products')
+            ->withPivot('quantity', 'price')
+            ->withTimestamps();
+    }
+
 
     /**
      * Accessor for formatted price (if stored as a string)

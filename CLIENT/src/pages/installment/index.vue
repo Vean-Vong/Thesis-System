@@ -183,9 +183,9 @@ function updateQuantity(item) {
 const totalPrice = computed(() => cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
 
 // Auto-calculate sub_total based on price and discount
-watch(cart, () => {
-  const discountAmount = totalPrice.value * (form.data.discount / 100)
-  form.data.sub_total = totalPrice.value - discountAmount
+watch([() => form.data.price, () => form.data.discount], ([price, discount]) => {
+  const discountAmount = price * (discount / 100)
+  form.data.sub_total = price - discountAmount
 })
 
 // Submit form
@@ -204,7 +204,6 @@ const onCreate = async () => {
   try {
     const payload = {
       ...form.data,
-      customer_id: form.data.customer_id || undefined,
       products: cart.map(item => ({
         product_id: item.id,
         quantity: item.quantity,
@@ -244,133 +243,6 @@ onMounted(() => {
       @submit.prevent="onCreate"
     >
       <VRow dense>
-        <!-- POS Section -->
-        <VRow>
-          <VCol
-            cols="12"
-            md="7"
-          >
-            <div class="menu mb-4">
-              <VBtn
-                v-for="category in ['All', 'Stand', 'Counter Top', 'Under Sink']"
-                :key="category"
-                :color="selectedCategory === category ? 'primary' : 'grey'"
-                class="mr-2"
-                @click="selectCategory(category)"
-              >
-                {{ category }}
-              </VBtn>
-            </div>
-            <div class="product-list">
-              <div
-                v-for="product in filteredProducts"
-                :key="product.id"
-                class="product-card"
-              >
-                <img
-                  :src="product.image"
-                  :alt="product.name"
-                  class="product-image"
-                />
-                <h4 class="mt-2">
-                  {{ product.name }}
-                </h4>
-                <p class="stock">
-                  <span :class="{ 'text-danger': product.out_of_stock }">
-                    {{ product.out_of_stock ? 'អស់ស្តុក' : product.stock_quantity }}
-                  </span>
-                </p>
-                <p class="price">{{ $t('Price') }}: ${{ product.price }}</p>
-                <VBtn
-                  :disabled="product.out_of_stock"
-                  color="primary"
-                  block
-                  @click="onProductClick(product)"
-                >
-                  ដាក់ចូលកន្ត្រក
-                </VBtn>
-              </div>
-            </div>
-          </VCol>
-
-          <!-- Cart -->
-          <VCol
-            cols="12"
-            md="5"
-          >
-            <div class="cart-summary">
-              <h3>🛒 កន្ត្រកទំនិញ</h3>
-              <div
-                v-if="cart.length === 0"
-                class="empty-cart"
-              >
-                មិនមានទំនិញនៅក្នុងកន្ត្រកទេ
-              </div>
-              <div v-else>
-                <VList>
-                  <VListItem
-                    v-for="item in cart"
-                    :key="item.id"
-                    class="cart-item"
-                  >
-                    <template #prepend>
-                      <VListItemTitle>{{ item.name }}</VListItemTitle>
-                    </template>
-                    <template #append>
-                      <div class="item-controls">
-                        <div class="qty-price">
-                          <input
-                            v-model.number="item.quantity"
-                            type="number"
-                            min="1"
-                            :max="item.stock_quantity"
-                            class="qty-input"
-                            @change="updateQuantity(item)"
-                          />
-                          ${{ (item.price * item.quantity).toFixed(2) }}
-                        </div>
-                        <VBtn
-                          icon
-                          color="red"
-                          @click="cart.splice(cart.indexOf(item), 1)"
-                        >
-                          ❌
-                        </VBtn>
-                      </div>
-                    </template>
-                  </VListItem>
-                </VList>
-                <div class="total-row mt-2">
-                  <strong>Total:</strong>
-                  <strong>${{ totalPrice.toFixed(2) }}</strong>
-                </div>
-                <div class="total-row mt-2">
-                  <strong>Deposit:</strong>
-                  <strong>${{ form.data.deposit || 0 }}</strong>
-                </div>
-                <div class="total-row mt-2">
-                  <strong>Discount:</strong>
-                  <strong>{{ form.data.discount }}%</strong>
-                </div>
-                <div class="total-row mt-2">
-                  <strong>Sub Total:</strong>
-                  <strong>${{ form.data.sub_total?.toFixed(2) || 0 }}</strong>
-                </div>
-
-                <VBtn
-                  block
-                  color="primary"
-                  class="mt-3"
-                  :loading="submitting"
-                  :disabled="cart.length === 0"
-                  @click="onCreate"
-                >
-                  ទូរទាត់ប្រាក់
-                </VBtn>
-              </div>
-            </div>
-          </VCol>
-        </VRow>
         <!-- 🔥 Existing Customer Dropdown -->
         <VCol
           cols="12"
@@ -558,6 +430,121 @@ onMounted(() => {
             />
           </VCol>
         </template>
+        <!-- POS Section -->
+        <VRow>
+          <VCol
+            cols="12"
+            md="8"
+          >
+            <div class="menu mb-4">
+              <VBtn
+                v-for="category in ['All', 'Stand', 'Counter Top', 'Under Sink']"
+                :key="category"
+                :color="selectedCategory === category ? 'primary' : 'grey'"
+                class="mr-2"
+                @click="selectCategory(category)"
+              >
+                {{ category }}
+              </VBtn>
+            </div>
+            <div class="product-list">
+              <div
+                v-for="product in filteredProducts"
+                :key="product.id"
+                class="product-card"
+              >
+                <img
+                  :src="product.image"
+                  :alt="product.name"
+                  class="product-image"
+                />
+                <h4 class="mt-2">
+                  {{ product.name }}
+                </h4>
+                <p class="stock">
+                  <span :class="{ 'text-danger': product.out_of_stock }">
+                    {{ product.out_of_stock ? 'អស់ស្តុក' : product.stock_quantity }}
+                  </span>
+                </p>
+                <p class="price">{{ $t('Price') }}: ${{ product.price }}</p>
+                <VBtn
+                  :disabled="product.out_of_stock"
+                  color="primary"
+                  block
+                  @click="onProductClick(product)"
+                >
+                  ដាក់ចូលកន្ត្រក
+                </VBtn>
+              </div>
+            </div>
+          </VCol>
+
+          <!-- Cart -->
+          <VCol
+            cols="12"
+            md="4"
+          >
+            <div class="cart-summary">
+              <h3>🛒 កន្ត្រកទំនិញ</h3>
+              <div
+                v-if="cart.length === 0"
+                class="empty-cart"
+              >
+                មិនមានទំនិញនៅក្នុងកន្ត្រកទេ
+              </div>
+              <div v-else>
+                <VList>
+                  <VListItem
+                    v-for="item in cart"
+                    :key="item.id"
+                    class="cart-item"
+                  >
+                    <template #prepend>
+                      <VListItemTitle>{{ item.name }}</VListItemTitle>
+                    </template>
+                    <template #append>
+                      <div class="item-controls">
+                        <div class="qty-price">
+                          <input
+                            v-model.number="item.quantity"
+                            type="number"
+                            min="1"
+                            :max="item.stock_quantity"
+                            class="qty-input"
+                            @change="updateQuantity(item)"
+                          />
+                          ${{ (item.price * item.quantity).toFixed(2) }}
+                        </div>
+                        <VBtn
+                          icon
+                          color="red"
+                          @click="cart.splice(cart.indexOf(item), 1)"
+                        >
+                          ❌
+                        </VBtn>
+                      </div>
+                    </template>
+                  </VListItem>
+                </VList>
+                <div class="total-row mt-2">
+                  <strong>Total:</strong>
+                  <strong>${{ totalPrice.toFixed(2) }}</strong>
+                </div>
+
+                <VBtn
+                  block
+                  color="primary"
+                  class="mt-3"
+                  :loading="submitting"
+                  :disabled="cart.length === 0"
+                  @click="onCreate"
+                >
+                  ទូរទាត់ប្រាក់
+                </VBtn>
+              </div>
+            </div>
+          </VCol>
+        </VRow>
       </VRow>
     </VForm>
   </VCardItem>
@@ -565,8 +552,8 @@ onMounted(() => {
 
 <route lang="yaml">
 meta:
-  title: Sale Create POS
+  title: Installment
   layout: default
   subject: Auth
-  active: 'pos'
+  active: 'installment'
 </route>

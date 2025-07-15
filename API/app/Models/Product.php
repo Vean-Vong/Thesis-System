@@ -36,10 +36,10 @@ class Product extends Model
         return $this->hasMany(Stock::class, 'model', 'model');
     }
 
-    public function sales()
-    {
-        return $this->hasMany(Sale::class);
-    }
+    // public function sales()
+    // {
+    //     return $this->hasMany(Sale::class);
+    // }
 
     // Add an accessor for total stock quantity
     public function getTotalStockAttribute()
@@ -53,5 +53,10 @@ class Product extends Model
     //     $total = $this->total_stock;
     //     return $total > 0 ? $total : 'Out of stock';
     // }
-
+    public function sales()
+    {
+        return $this->belongsToMany(Sale::class, 'sale_products')
+            ->withPivot('quantity', 'price')
+            ->withTimestamps();
+    }
 }

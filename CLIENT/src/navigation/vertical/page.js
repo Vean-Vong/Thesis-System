@@ -28,6 +28,12 @@ export default [
         icon: { icon: 'fa-plus', size: 10 },
         active: 'sale_history',
       },
+      {
+        title: 'Installment',
+        to: 'installment',
+        icon: { icon: 'fa-plus', size: 10 },
+        active: 'installment',
+      },
     ],
   },
 
