@@ -390,19 +390,7 @@ const totalQuantityPaid = computed(() => {
                 >
                   {{ t('Date') }} ({{ payment.payment_date }})
                 </VBtn>
-                <!-- <VCol
-                  cols="12"
-                  class="monthly_fee mt-3"
-                >
-                  <VTextField
-                    v-model="payment.payment_date"
-                    :label="t('Date')"
-                    type="date"
-                    variant="outlined"
-                    density="compact"
-                    color="primary"
-                  />
-                </VCol> -->
+
                 <VCol
                   cols="12"
                   class="pay_now"
