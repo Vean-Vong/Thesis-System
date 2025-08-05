@@ -13,6 +13,7 @@ class Sale extends Model
     protected $table = 'sales';
 
     protected $fillable = [
+        'invoice_number',
         'customer_id',
         'stock_id',
         'model',
@@ -23,6 +24,7 @@ class Sale extends Model
         'duration',
         'warranty',
         'seller',
+        'seller_id',
         'contract_type',
         'quantity_sold'
     ];
@@ -34,7 +36,7 @@ class Sale extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(\App\Models\Customer::class);
     }
     // public function products()
     // {
@@ -67,4 +69,16 @@ class Sale extends Model
     protected $casts = [
         'date' => 'date:d-m-Y', // Automatically formats the date
     ];
+    public function installments()
+    {
+        return $this->hasMany(\App\Models\Installment::class);
+    }
+    public function seller()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'seller_id');
+    }
+    public function getTotalPriceAttribute()
+    {
+        return $this->price * ($this->quantity_sold ?? 1);
+    }
 }

@@ -14,12 +14,16 @@ class Customer extends Model
     protected $fillable = ['name', 'address', 'phone', 'date', 'job'];
 
     protected $casts = [
-        'date' => 'datetime',
+        'date' => 'datetime:Y-m-d',
     ];
-
 
     public function sales()
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(\App\Models\Sale::class);
+    }
+
+    public function rentals()
+    {
+        return $this->hasMany(\App\Models\Rental::class);
     }
 }

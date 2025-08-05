@@ -34,7 +34,7 @@ class DashboardController extends Controller
 
             $result['customers'] = Customer::count();
             $result['employees'] = Employee::count();
-            $result['products'] = Product::sum('quantity');
+            $result['products'] = Product::count();
             $result['sales'] = Sale::count();
             $result['users'] = User::count();
             $result['rental'] = Rental::count();

@@ -14,6 +14,8 @@ const form = reactive({
   model: null,
   colors: null,
   price: null,
+  rental_price: null,
+  install_price: null,
   filtration_stage: null,
   cold_water_tank_capacity: null,
   hot_water_tank_capacity: null,
@@ -68,6 +70,8 @@ async function onCreate() {
     formData.append('cold_power_consumption', form.cold_power_consumption)
     formData.append('hot_power_consumption', form.hot_power_consumption)
     formData.append('quantity', form.quantity)
+    formData.append('rental_price', form.rental_price || 0)
+    formData.append('install_price', form.install_price || 0)
 
     // Send POST request
     const response = await api.post('/products', formData, {
@@ -112,14 +116,14 @@ async function onCreate() {
               alt="Product Image"
               class="default-image"
               @click="$refs[`fileInput${index}`]?.click()"
-            >
+            />
             <input
               :ref="`fileInput${index}`"
               type="file"
               accept="image/*"
               class="file-input"
               @change="event => selectImage(index, event)"
-            >
+            />
           </div>
         </div>
       </VCol>
@@ -161,7 +165,7 @@ async function onCreate() {
             v-model="form.colors"
             :label="$t('Color')"
             :rules="[rules.required]"
-            :items="['Black', 'White']"
+            :items="['Black', 'White', 'silver', 'red', 'grey']"
             outlined
           />
         </VCol>
@@ -174,6 +178,18 @@ async function onCreate() {
             v-model="form.price"
             :label="$t('Price')"
             :rules="[rules.required, rules.numeric]"
+            type="number"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VTextField
+            v-model="form.rental_price"
+            :label="$t('Rental Price')"
+            :rules="[rules.numeric]"
             type="number"
             outlined
           />
@@ -191,7 +207,18 @@ async function onCreate() {
             outlined
           />
         </VCol>
-
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VTextField
+            v-model="form.install_price"
+            :label="$t('Install Price')"
+            :rules="[rules.numeric]"
+            type="number"
+            outlined
+          />
+        </VCol>
         <!-- Add remaining fields similarly -->
 
         <VCol

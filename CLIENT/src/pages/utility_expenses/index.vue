@@ -2,19 +2,24 @@
 <!-- eslint-disable import/extensions -->
 <!-- eslint-disable import/no-unresolved -->
 <script setup>
+import { ref, computed, onMounted } from 'vue'
 import AppDataTable from '@/components/AppDataTable.vue'
 import api from '@/plugins/utilites'
 import router from '@/router'
 import { useAuthStore } from '@/plugins/auth.module'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import { VBtn, VRow, VCol } from 'vuetify/lib/components/index.mjs'
+
 const user = useAuthStore().user
 const { t } = useI18n()
+
 const items = ref([])
 const search = ref(null)
 const loading = ref(false)
 const delete_item = ref(null)
 const deleting = ref(false)
 const dialog = ref(false)
+const printRef = ref(null)
 
 const meta = ref({
   current_page: 1,
@@ -31,13 +36,12 @@ const formatDate = bill_date => {
   const day = d.getDate()
   const month = d.toLocaleString('en-US', { month: 'long' })
   const year = d.getFullYear()
-  // eslint-disable-next-line newline-before-return
+
   return `${day} ${month}, ${year}`
 }
 
 const initData = () => {
   loading.value = true
-  api
   api
     .get('/utility_expenses', {
       params: {
@@ -48,6 +52,14 @@ const initData = () => {
     })
     .then(res => {
       const paginated = res.data.data
+      meta.value = {
+        current_page: paginated.current_page,
+        from: paginated.from,
+        last_page: paginated.last_page,
+        per_page: paginated.per_page,
+        to: paginated.to,
+        total: paginated.total,
+      }
       items.value = paginated.data.map(utility_expense => {
         let unit = ''
         switch (utility_expense.type) {
@@ -143,11 +155,16 @@ const headers = [
     key: 'actions',
     align: 'center',
     sortable: false,
+    class: 'actions',
   },
 ]
 
 const viewCallback = item => {
   router.push({ name: 'utility_expenses-show', query: { id: item } })
+}
+
+const viewInvoice = item => {
+  router.push({ name: 'utility_expenses-invoice', query: { id: item } })
 }
 
 const editCallback = item => {
@@ -182,6 +199,14 @@ const confirmDeleteCallback = () => {
       dialog.value = false
     })
 }
+
+const totalCost = computed(() => {
+  return items.value.reduce((sum, expense) => {
+    const numericCost = parseFloat(expense.cost.replace(/[^0-9.-]+/g, '')) || 0
+
+    return sum + numericCost
+  }, 0)
+})
 </script>
 
 <template>
@@ -191,57 +216,66 @@ const confirmDeleteCallback = () => {
     @on-cancel="cancelCallback"
     @on-confirm-delete="confirmDeleteCallback"
   />
-  <AppDataTable
-    cols="12"
-    create-url="utility_expenses-create"
-    :headers="headers"
-    :items="items"
-    :items-per-page="meta?.per_page"
-    :items-length="meta?.total"
-    :from="meta?.from"
-    :current-page="meta?.current_page"
-    :to="meta?.to"
-    :can-edit="user.can('utility_expenses_edit')"
-    :can-delete="user.can('utility_expenses_delete')"
-    :can-view="user.can('utility_expenses_list')"
-    :can-create="user.can('utility_expenses_create')"
-    :table-title="$t('List of utility_expenses')"
-    btn-submit="CreateNew"
-    :loading="loading"
-    @on-edit="editCallback"
-    @on-create="createCallback"
-    @on-delete="deleteCallback"
-    @on-view="viewCallback"
-  >
-    <template #forFilter>
-      <!-- <p>Search and Filter</p> -->
-      <VRow
-        class="justify-start"
-        dense
-      >
-        <VCol
-          cols="8"
-          md="3"
+
+  <!-- Wrap table and total cost in ref container for printing -->
+  <div ref="printRef">
+    <AppDataTable
+      cols="12"
+      create-url="utility_expenses-create"
+      :headers="headers"
+      :items="items"
+      :items-per-page="meta?.per_page"
+      :items-length="meta?.total"
+      :from="meta?.from"
+      :current-page="meta?.current_page"
+      :to="meta?.to"
+      :can-edit="user.can('utility_expenses_edit')"
+      :can-delete="user.can('utility_expenses_delete')"
+      :can-view="user.can('utility_expenses_list')"
+      :can-create="user.can('utility_expenses_create')"
+      :table-title="$t('List of utility_expenses')"
+      btn-submit="CreateNew"
+      :loading="loading"
+      @on-edit="editCallback"
+      @on-create="initData"
+      @on-delete="deleteCallback"
+      @on-view="viewCallback"
+    >
+      <template #forFilter>
+        <VRow
+          class="justify-start"
+          dense
         >
-          <AppTextField
-            v-model="search"
-            :placeholder="$t('Search')"
-            @keyup.enter="onSearch"
-          />
-        </VCol>
-        <VCol
-          cols="4"
-          md="2"
+          <VCol
+            cols="8"
+            md="3"
+          >
+            <AppTextField
+              v-model="search"
+              :placeholder="$t('Search')"
+              @keyup.enter="onSearch"
+            />
+          </VCol>
+          <VCol
+            cols="4"
+            md="2"
+          >
+            <AppSearchButton
+              :title="$t('Search')"
+              :show-icon="1"
+              @click="onSearch"
+            />
+          </VCol>
+        </VRow>
+        <VBtn
+          color="primary"
+          @click="viewInvoice"
         >
-          <AppSearchButton
-            :title="$t('Search')"
-            :show-icon="1"
-            @click="onSearch"
-          />
-        </VCol>
-      </VRow>
-    </template>
-  </AppDataTable>
+          {{ t('Invoice') }}
+        </VBtn>
+      </template>
+    </AppDataTable>
+  </div>
 </template>
 
 <route lang="yaml">

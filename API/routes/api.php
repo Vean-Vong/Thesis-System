@@ -12,7 +12,12 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FilterController;
+use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProRentalController;
+use App\Http\Controllers\ProRentalsController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
@@ -68,13 +73,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('employees', EmployeeController::class);
     Route::apiResource('customers', CustomerController::class);
-
+    Route::get('/sales/report', [SaleController::class, 'getSalesReport']);
     Route::apiResource('sales', SaleController::class);
     // Custom route for monthly sales count
     Route::get('/sales/total-by-month', [SaleController::class, 'totalSalesPerMonth']);
 
     Route::get('/products/stock-quantities', [ProductController::class, 'stockQuantities']);
 
+    Route::get('/reports/new-setup-details', [SaleController::class, 'newSetupDetails']);
 
 
     Route::apiResource('products', ProductController::class);
@@ -85,5 +91,40 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('utility_expenses', UtilityExpensesController::class);
     Route::apiResource('reports', ReportController::class);
+    Route::get('/sales/installments-report', [ReportController::class, 'combinedReport']);
     Route::apiResource('setup', SetupController::class);
+    Route::apiResource('installments', InstallmentController::class);
+    Route::get('/sales-with-installments', [SaleController::class, 'salesWithInstallments']);
+    // routes/api.php
+    Route::post('/installments/sync', [InstallmentController::class, 'syncInstallments']);
+    // fetch install history
+    Route::get('/installments/{id}/payments', [InstallmentController::class, 'payments']);
+
+    // Create payment for a installment
+    Route::post('/installments/{installment}/payments', [PaymentController::class, 'store']);
+    // Get payment invoice for a installment
+    Route::get('/payments/{payment}/invoice', [PaymentController::class, 'invoice']);
+    // Get sale report
+    Route::get('/sale/report', [SaleController::class, 'report']);
+    // Get install Report
+    Route::get('/installment-report', [SaleController::class, 'installReport']);
+    // Get rental Report
+    Route::get('/rental-report', [SaleController::class, 'rentalReport']);
+
+    // Get stock report
+    Route::get('/stocks-report', [StockController::class, 'report']);
+
+    // Get rental report
+    Route::get('/rental/report', [RentalController::class, 'report']);
+
+    // Create payment for a rental
+    Route::post('/rentals/{rental}/payments', [PaymentController::class, 'storeRentalPayment']);
+    Route::get('/rentals/{rental}/payments', [RentalController::class, 'payments']);
+
+    Route::apiResource('invoices', InvoiceController::class);
+
+    Route::get('/rentals/{id}', [RentalController::class, 'rentalShow']);
+    // Get payment invoice for a rental
+
+
 });

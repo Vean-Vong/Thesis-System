@@ -54,57 +54,74 @@ onMounted(fetchEmployee)
     </VCard>
 
     <!-- When Data is Loaded -->
-    <VCard v-else>
+    <VCard
+      v-else
+      class="border border-gray-200 shadow-sm rounded-xl"
+    >
       <VCardText>
         <VRow dense>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Name') }}:</strong> {{ employee.name || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Gender') }}:</strong> {{ employee.gender || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Position') }}:</strong> {{ employee.position || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Email') }}:</strong> {{ employee.email || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Phone') }}:</strong> {{ employee.phone || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Address') }}:</strong> {{ employee.address || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Date of Birth') }}:</strong> {{ employee.date_of_birth || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Hire Date') }}:</strong> {{ employee.date_of_birth || '-' }}
-          </VCol>
+          <div class="employeeInfo">
+            <div class="mb-4">
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-account</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Name') }}</p>
+                  <h2 class="name">{{ employee.name || '-' }}</h2>
+                </div>
+              </div>
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-gender-male-female</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Gender') }}</p>
+                  <h2 class="name">{{ employee.gender || '-' }}</h2>
+                </div>
+              </div>
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-briefcase-account</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Position') }}</p>
+                  <h2 class="name">{{ employee.position || '-' }}</h2>
+                </div>
+              </div>
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-email</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Email') }}</p>
+                  <h2 class="name">{{ employee.email || '-' }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-phone</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Phone') }}</p>
+                  <h2 class="name">{{ employee.phone || '-' }}</h2>
+                </div>
+              </div>
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-map-marker</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Address') }}</p>
+                  <h2 class="name">{{ employee.address || '-' }}</h2>
+                </div>
+              </div>
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-cake-variant</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Date of Birth') }}</p>
+                  <h2 class="name">{{ employee.date_of_birth || '-' }}</h2>
+                </div>
+              </div>
+              <div class="container">
+                <div class="icon"><VIcon color="indigo">mdi-calendar-check</VIcon></div>
+                <div class="title">
+                  <p class="names">{{ $t('Hire Date') }}</p>
+                  <h2 class="name">{{ employee.hire_date || '-' }}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
         </VRow>
       </VCardText>
     </VCard>

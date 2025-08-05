@@ -15,8 +15,6 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('school_id')->index();
-            $table->foreignUuid('teacher_id')->index()->nullable();
             $table->string('username', 50)->unique()->nullable();
             $table->string('email', 50)->unique();
             $table->timestamp('email_verified_at')->nullable();

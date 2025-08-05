@@ -2,10 +2,16 @@
 <script setup>
 import { useAuthStore } from '@/plugins/auth.module'
 import avatar1 from '@images/avatars/avatar-1.png'
+import { onMounted } from 'vue'
+import constant from '@/constants'
 const user = useAuthStore().user
 const onLogout = () => {
   useAuthStore().logout()
 }
+
+const user_photo_path = computed(() => {
+  return `${constant.storagePath}${useAuthStore()._user.photo_path}`
+})
 </script>
 
 <template>
@@ -22,7 +28,7 @@ const onLogout = () => {
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VImg :src="user_photo_path" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -47,7 +53,7 @@ const onLogout = () => {
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="user_photo_path" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>

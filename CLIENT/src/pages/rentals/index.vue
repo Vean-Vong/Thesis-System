@@ -23,7 +23,10 @@ const meta = ref({
   to: 1,
   total: 0,
 })
-
+const onPageChange = newPage => {
+  meta.value.current_page = newPage
+  initData()
+}
 const formatDate = date => {
   if (!date) return ''
   const d = new Date(date)
@@ -46,10 +49,12 @@ const initData = () => {
     })
     .then(res => {
       const paginated = res.data.data
+      console.log(paginated)
       items.value = paginated.data.map(rental => ({
         ...rental,
         date: formatDate(rental.date),
         price: `$${rental.price.toLocaleString()}`,
+        deposit: rental.deposit && rental.deposit > 0 ? `$${Number(rental.deposit).toLocaleString()}` : '-',
       }))
       meta.value = {
         current_page: paginated.current_page,
@@ -76,36 +81,51 @@ const onSearch = () => {
 
 const headers = [
   {
-    title: t('No'),
+    title: t('#'),
     key: 'no',
     align: 'left',
     sortable: false,
-    minWidth: '100px',
+    minWidth: '10px',
     maxWidth: '100px',
   },
-
   {
-    title: t('Model'),
-    key: 'model',
+    title: t('Invoice No.'),
+    key: 'invoice_number',
     align: 'center',
     sortable: false,
     minWidth: '150px',
+    maxWidth: '500px',
+  },
+  {
+    title: t('Customer Name'),
+    key: 'customer.name',
+    align: 'center',
+    sortable: false,
+    minWidth: '100px',
     maxWidth: '500px',
   },
   {
     title: t('Rental Price'),
     key: 'price',
     align: 'center',
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
     sortable: false,
+  },
+  {
+    title: t('Deposit'),
+    key: 'deposit',
+    align: 'center',
+    sortable: false,
+    minWidth: '100px',
+    maxWidth: '500px',
   },
   {
     title: t('Discount'),
     key: 'discount',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
   },
   {
@@ -124,31 +144,15 @@ const headers = [
     minWidth: '150px',
     maxWidth: '500px',
   },
-  {
-    title: t('Warranty'),
-    key: 'warranty',
-    align: 'center',
-    minWidth: '210px',
-    maxWidth: '500px',
-    sortable: false,
-  },
+
   {
     title: t('Seller'),
     key: 'seller',
     align: 'center',
     sortable: false,
-    minWidth: '170px',
+    minWidth: '190px',
     maxWidth: '500px',
   },
-  {
-    title: t('Contract Type'),
-    key: 'contract_type',
-    align: 'center',
-    sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
-  },
-
   {
     title: t('Actions'),
     key: 'actions',
@@ -158,7 +162,7 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'rental-show', query: { id: item } })
+  router.push({ name: 'rentals-payment', query: { id: item } })
 }
 
 const editCallback = item => {
@@ -204,7 +208,7 @@ const confirmDeleteCallback = () => {
   />
   <AppDataTable
     cols="12"
-    create-url="rental-create"
+    create-url="rental-history"
     :headers="headers"
     :items="items"
     :items-per-page="meta?.per_page"
@@ -212,7 +216,6 @@ const confirmDeleteCallback = () => {
     :from="meta?.from"
     :current-page="meta?.current_page"
     :to="meta?.to"
-    :can-edit="user.can('rental_edit')"
     :can-view="user.can('rental_list')"
     :can-delete="user.can('rental_delete')"
     :can-create="user.can('rental_create')"
@@ -253,11 +256,26 @@ const confirmDeleteCallback = () => {
       </VRow>
     </template>
   </AppDataTable>
+  <VRow
+    cols="12"
+    sm="6"
+    class="justify-end"
+  >
+    <span class="mt-3"> {{ $t('Items per page') }} {{ meta?.current_page }} {{ $t('នៃ') }} {{ meta?.total }} </span>
+    <VPagination
+      v-model="meta.current_page"
+      :length="meta.last_page"
+      color="primary"
+      circle
+      total-visible="7"
+      @update:model-value="onPageChange"
+    />
+  </VRow>
 </template>
 
 <route lang="yaml">
 meta:
-  title: Rental
+  title: Rentals
   layout: default
   subject: Auth
   active: 'rental'

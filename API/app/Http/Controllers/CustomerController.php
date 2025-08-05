@@ -85,14 +85,20 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        // Load sales relationship explicitly
-        $customer->load('sales');
+        // Load sales with related products and seller
+        $customer->load(
+            'sales.products',
+            'sales.seller',
+            'rentals.products',
+
+        );
 
         return response()->json([
             'status' => 200,
             'data' => $customer,
         ]);
     }
+
 
 
     /**

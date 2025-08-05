@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
 import { useI18n } from 'vue-i18n'
-
 const router = useRouter()
 const { t } = useI18n()
 
@@ -33,7 +32,7 @@ const statistics = ref([
     icon: 'mdi-cart-outline',
     color: '#3b28cc',
     name: 'sales',
-    to: '/sales',
+    to: '/sales-history',
     i18nKey: 'Sale',
   },
   {
@@ -78,7 +77,7 @@ const statistics = ref([
     icon: 'mdi-cart-arrow-down',
     color: 'primary',
     name: 'rental',
-    to: '/rental',
+    to: '/rentals',
     i18nKey: 'Rental',
   },
   {
@@ -88,7 +87,7 @@ const statistics = ref([
     color: '#3b28cc',
     name: 'productStock',
     to: '/product-stock',
-    i18nKey: 'Product in Stock',
+    i18nKey: 'Product Stock',
   },
   {
     title: 'Filters Stock',
@@ -140,6 +139,8 @@ onMounted(async () => {
         }
         series.value = [{ name: t('Sales'), data: monthlyData }]
       }
+
+      pieSeries.value = [data.sales || 0, data.rental || 0]
     }
   } catch (error) {
     console.error('Error fetching summary:', error)
@@ -150,7 +151,7 @@ onMounted(async () => {
 const series = ref([
   {
     name: t('Sales'),
-    data: Array(12).fill(0), 
+    data: Array(12).fill(0),
   },
 ])
 
@@ -171,10 +172,23 @@ const chartOptions = ref({
     enabled: true,
     formatter: val => `$${val}`,
     offsetY: -20,
-    style: { fontSize: '12px', colors: ['#304758'] },
+    style: { fontSize: '12px', colors: ['#666666'] },
   },
   xaxis: {
-    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    categories: [
+      'មករា',
+      'កុម្ភៈ',
+      'មីនា',
+      'មេសា',
+      'ឧសភា',
+      'មិថុនា',
+      'កក្កដា',
+      'សីហា',
+      'កញ្ញា',
+      'តុលា',
+      'វិច្ជិកា',
+      'ធ្នូ',
+    ],
     position: 'top',
     axisBorder: { show: false },
     axisTicks: { show: false },
@@ -185,6 +199,12 @@ const chartOptions = ref({
       },
     },
     tooltip: { enabled: true },
+    labels: {
+      style: {
+        colors: '#666666',
+        fontSize: '12px',
+      },
+    },
   },
   yaxis: {
     axisBorder: { show: false },
@@ -192,6 +212,10 @@ const chartOptions = ref({
     labels: {
       show: true,
       formatter: val => `$${val}`,
+      style: {
+        colors: '#666666',
+        fontSize: '12px',
+      },
     },
   },
   title: {
@@ -200,8 +224,35 @@ const chartOptions = ref({
     show: true,
     offsetY: 330,
     align: 'center',
-    style: { color: '#444' },
+    style: { color: '#666666' },
   },
+})
+
+const pieSeries = ref([0, 0, 0])
+
+const pieChartOptions = ref({
+  chart: {
+    width: 300,
+    type: 'pie',
+  },
+  labels: [t('Sale and Installment'), t('Rental')],
+  colors: ['#3b28cc', '#66bb6a'],
+  legend: {
+    position: 'bottom',
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: val => `${val.toFixed(1)}%`,
+  },
+  responsive: [
+    {
+      breakpoint: 480,
+      options: {
+        chart: { width: 320 },
+        legend: { position: 'bottom' },
+      },
+    },
+  ],
 })
 
 // Navigate to other routes
@@ -269,7 +320,37 @@ const go = to => {
 
       <!-- Chart JS  -->
 
-      <div class="mt-12">
+      <VRow
+        class="mt-12 align-center"
+        dense
+      >
+        <VCol
+          cols="12"
+          md="7"
+        >
+          <VueApexCharts
+            type="bar"
+            height="350"
+            width="1200"
+            :options="chartOptions"
+            :series="series"
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="5"
+          class="d-flex justify-end"
+        >
+          <VueApexCharts
+            type="pie"
+            height="350"
+            :options="pieChartOptions"
+            :series="pieSeries"
+          />
+        </VCol>
+      </VRow>
+
+      <!-- <div class="mt-12">
         <VueApexCharts
           type="bar"
           height="350"
@@ -277,6 +358,15 @@ const go = to => {
           :series="series"
         />
       </div>
+      <!-- Pie Chart -->
+      <!-- <div class="mt-12">
+        <VueApexCharts
+          type="pie"
+          height="350"
+          :options="pieChartOptions"
+          :series="pieSeries"
+        />
+      </div> -->
     </VCardText>
   </VCard>
 </template>

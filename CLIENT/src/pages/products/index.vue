@@ -30,6 +30,10 @@ const meta = ref({
   to: 1,
   total: 0,
 })
+const onPageChange = newPage => {
+  meta.value.current_page = newPage
+  initData()
+}
 
 // Computed property to add 'no' and format 'total_stock'
 const displayItems = computed(() =>
@@ -52,6 +56,7 @@ const initData = () => {
     })
     .then(res => {
       const paginated = res.data.data
+      console.log(paginated)
       items.value = paginated.data.map(item => ({
         ...item,
         price: `$${item.price}`,
@@ -81,52 +86,52 @@ const onSearch = () => {
 
 const headers = [
   {
-    title: t('No'),
+    title: t('#'),
     key: 'no',
     align: 'left',
     sortable: false,
-    minWidth: '100px',
-    maxWidth: '100px',
   },
   {
     title: t('Model'),
     key: 'model',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
   },
   {
     title: t('Color'),
     key: 'colors',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
   },
   {
     title: t('Filter'),
     key: 'filtration_stage',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
   },
   {
     title: t('Quantity'),
     key: 'total_stock',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
   },
   {
     title: t('Price'),
     key: 'price',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
-    maxWidth: '500px',
+  },
+  {
+    title: t('Rental Price'),
+    key: 'rental_price',
+    align: 'center',
+    sortable: false,
+  },
+  {
+    title: t('Install Price'),
+    key: 'install_price',
+    align: 'center',
+    sortable: false,
   },
   {
     title: t('Actions'),
@@ -231,6 +236,21 @@ const confirmDeleteCallback = () => {
       </VRow>
     </template>
   </AppDataTable>
+  <VRow
+    cols="12"
+    sm="6"
+    class="justify-end"
+  >
+    <span class="mt-3"> {{ $t('Items per page') }} {{ meta?.current_page }} {{ $t('នៃ') }} {{ meta?.total }} </span>
+    <VPagination
+      v-model="meta.current_page"
+      :length="meta.last_page"
+      color="primary"
+      circle
+      total-visible="7"
+      @update:model-value="onPageChange"
+    />
+  </VRow>
 </template>
 
 <route lang="yaml">

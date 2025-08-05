@@ -196,6 +196,7 @@ const handleCreate = () => {
                 </v-chip>
               </div>
             </template>
+            <template #bottom></template>
             <template #item.actions="{ item }">
               <div class="d-flex gap-1 justify-center">
                 <IconBtn

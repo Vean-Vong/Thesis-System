@@ -25,6 +25,8 @@ const form = reactive({
   hot_power_consumption: null,
   quantity: 0,
   price: null,
+  rental_price: null,
+  install_price: null,
 })
 
 const refForm = ref()
@@ -54,6 +56,8 @@ const fetchProduct = async () => {
     form.hot_power_consumption = data.hot_power_consumption
     form.quantity = data.quantity
     form.price = data.price
+    form.rental_price = data.rental_price
+    form.install_price = data.install_price
 
     // Populate existing images
     if (Array.isArray(data.images)) {
@@ -108,6 +112,8 @@ const onUpdate = async () => {
     formData.append('hot_power_consumption', form.hot_power_consumption)
     formData.append('quantity', form.quantity)
     formData.append('price', form.price)
+    formData.append('rental_price', form.rental_price)
+    formData.append('install_price', form.install_price)
 
     const response = await api.post(`/products/${route.query.id}?_method=PUT`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -150,14 +156,14 @@ const onUpdate = async () => {
               alt="Product Image"
               class="default-image"
               @click="$refs[`fileInput${index}`]?.click()"
-            >
+            />
             <input
               :ref="`fileInput${index}`"
               type="file"
               accept="image/*"
               class="file-input"
               @change="event => selectImage(index, event)"
-            >
+            />
           </div>
         </div>
       </VCol>
@@ -306,6 +312,30 @@ const onUpdate = async () => {
             :rules="[rules.required, rules.integer]"
             outlined
             type="number"
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VTextField
+            v-model="form.rental_price"
+            :label="$t('Rental Price')"
+            :rules="[rules.numeric]"
+            type="number"
+            outlined
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VTextField
+            v-model="form.install_price"
+            :label="$t('Install Price')"
+            :rules="[rules.numeric]"
+            type="number"
+            outlined
           />
         </VCol>
       </VRow>

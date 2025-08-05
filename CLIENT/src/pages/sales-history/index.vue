@@ -23,7 +23,10 @@ const meta = ref({
   to: 1,
   total: 0,
 })
-
+const onPageChange = newPage => {
+  meta.value.current_page = newPage
+  initData()
+}
 const initData = () => {
   loading.value = true
   api
@@ -36,11 +39,17 @@ const initData = () => {
     })
     .then(res => {
       const paginated = res.data.data
+      console.log(paginated)
       items.value = paginated.data.map(sale => ({
         ...sale,
-        price: `$${sale.price.toLocaleString()}`,
-        deposit: `$${sale.deposit.toLocaleString()}`,
-        discount: `${sale.discount}%`,
+        invoice_number: sale.invoice_number || 'N/A',
+        price: `$${(sale.price ?? 0).toLocaleString()}`,
+        deposit: `$${(sale.deposit ?? 0).toLocaleString()}`,
+        discount: `${sale.discount ?? 0}%`,
+        date: sale.date || 'N/A',
+        duration: sale.duration || '-',
+        warranty: sale.warranty || '-',
+        contract_type: sale.contract_type || 'N/A',
       }))
       meta.value = {
         current_page: paginated.current_page,
@@ -66,12 +75,20 @@ const onSearch = () => {
 
 const headers = [
   {
-    title: t('No'),
+    title: t('#'),
     key: 'no',
     align: 'left',
     sortable: false,
-    minWidth: '100px',
+    minWidth: '10px',
     maxWidth: '100px',
+  },
+  {
+    title: t('Invoice No.'),
+    key: 'invoice_number',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
 
   {
@@ -79,14 +96,14 @@ const headers = [
     key: 'model',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
   },
   {
     title: t('Price'),
     key: 'price',
     align: 'center',
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
     sortable: false,
   },
@@ -95,7 +112,7 @@ const headers = [
     key: 'discount',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
   },
   {
@@ -103,7 +120,7 @@ const headers = [
     key: 'deposit',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
   },
 
@@ -120,7 +137,7 @@ const headers = [
     key: 'duration',
     align: 'center',
     sortable: false,
-    minWidth: '150px',
+    minWidth: '100px',
     maxWidth: '500px',
   },
   {
@@ -129,14 +146,6 @@ const headers = [
     align: 'center',
     sortable: false,
     minWidth: '250px',
-    maxWidth: '500px',
-  },
-  {
-    title: t('Seller'),
-    key: 'seller',
-    align: 'center',
-    sortable: false,
-    minWidth: '160px',
     maxWidth: '500px',
   },
   {
@@ -157,7 +166,7 @@ const headers = [
 ]
 
 const viewCallback = item => {
-  router.push({ name: 'sales-history-show', query: { id: item } })
+  router.push({ name: 'pos-invoice', query: { id: item } })
 }
 
 const editCallback = item => {
@@ -203,7 +212,7 @@ const confirmDeleteCallback = () => {
   />
   <AppDataTable
     cols="12"
-    create-url="sales-history-create"
+    create-url="pos"
     :headers="headers"
     :items="items"
     :items-per-page="meta?.per_page"
@@ -252,6 +261,21 @@ const confirmDeleteCallback = () => {
       </VRow>
     </template>
   </AppDataTable>
+  <VRow
+    cols="12"
+    sm="6"
+    class="justify-end"
+  >
+    <span class="mt-3"> {{ $t('Items per page') }} {{ meta?.current_page }} {{ $t('នៃ') }} {{ meta?.total }} </span>
+    <VPagination
+      v-model="meta.current_page"
+      :length="meta.last_page"
+      color="primary"
+      circle
+      total-visible="7"
+      @update:model-value="onPageChange"
+    />
+  </VRow>
 </template>
 
 <route lang="yaml">

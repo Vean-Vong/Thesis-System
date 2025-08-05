@@ -20,6 +20,13 @@ const formatDate = date => {
   return `${day} ${month}, ${year}`
 }
 
+const formatNumber = num => {
+  if (typeof num !== 'number') num = Number(num) || 0
+
+  return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const fetchCustomer = async () => {
   try {
     const res = await api.get(`/customers/${route.query.id}`)
@@ -29,11 +36,39 @@ const fetchCustomer = async () => {
       // Format customer date
       data.date = formatDate(data.date)
 
-      // Format sales dates
+      // Format sales
       if (Array.isArray(data.sales)) {
-        data.sales = data.sales.map(sale => ({
-          ...sale,
-        }))
+        data.sales = data.sales.map(sale => {
+          const price = Number(sale.price) || 0
+          const quantity = Number(sale.quantity) || 1
+          const discount = Number(sale.discount) || 0
+          const deposit = Number(sale.deposit) || 0
+
+          const totalBeforeDiscount = price * quantity
+          const discountAmount = (totalBeforeDiscount * discount) / 100
+          const totalAfterDiscount = totalBeforeDiscount - discountAmount
+          const sub_total = totalAfterDiscount - deposit
+
+          return {
+            ...sale,
+            sub_total: sub_total > 0 ? formatNumber(sub_total) : '0.00',
+          }
+        })
+      }
+
+      // Format rentals similarly (if any)
+      if (Array.isArray(data.rentals)) {
+        data.rentals = data.rentals.map(rental => {
+          const price = Number(rental.price) || 0
+          const deposit = Number(rental.deposit) || 0
+
+          const sub_total = price - deposit
+
+          return {
+            ...rental,
+            sub_total: sub_total > 0 ? formatNumber(sub_total) : '0.00',
+          }
+        })
       }
 
       customer.value = data
@@ -56,7 +91,7 @@ onMounted(fetchCustomer)
     cols="6"
     :title="$t('Customer Details')"
   >
-    <!-- Loading state -->
+    <!-- Loading -->
     <VCard v-if="loading">
       <VCardText>
         <VProgressCircular
@@ -67,7 +102,7 @@ onMounted(fetchCustomer)
       </VCardText>
     </VCard>
 
-    <!-- Error state -->
+    <!-- Error -->
     <VCard v-else-if="error">
       <VCardText>
         <VAlert
@@ -79,70 +114,164 @@ onMounted(fetchCustomer)
       </VCardText>
     </VCard>
 
-    <!-- Customer & Sales Data -->
-    <VCard v-else>
+    <!-- Customer and Sales / Rentals -->
+    <VCard
+      v-else
+      class="border border-gray-200 shadow-sm rounded-xl"
+    >
       <VCardText>
-        <VRow dense>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Name') }}:</strong> {{ customer.name || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Address') }}:</strong> {{ customer.address || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Phone') }}:</strong> {{ customer.phone || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Job') }}:</strong> {{ customer.job || '-' }}
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <strong>{{ $t('Date') }}:</strong> {{ customer.date || '-' }}
-          </VCol>
-        </VRow>
+        <!-- Customer info -->
+        <div class="bg-gradient-to-r from-indigo-100 to-blue-50 p-4 rounded-xl mb-4">
+          <div class="container">
+            <div class="icon"><VIcon color="indigo">mdi-account</VIcon></div>
+            <div class="title">
+              <p class="names">{{ $t('Customer Name') }}</p>
+              <h2 class="name">{{ customer.name || '-' }}</h2>
+            </div>
+          </div>
+          <div class="container">
+            <div class="icon"><VIcon color="indigo">mdi-phone</VIcon></div>
+            <div class="title">
+              <p class="names">{{ $t('Phone') }}</p>
+              <h2 class="name">{{ customer.phone || '-' }}</h2>
+            </div>
+          </div>
+          <div class="container">
+            <div class="icon"><VIcon color="indigo">mdi-map-marker</VIcon></div>
+            <div class="title">
+              <p class="names">{{ $t('Address') }}</p>
+              <h2 class="name">{{ customer.address || '-' }}</h2>
+            </div>
+          </div>
+          <div class="container">
+            <div class="icon"><VIcon color="indigo">mdi-briefcase</VIcon></div>
+            <div class="title">
+              <p class="names">{{ $t('Job') }}</p>
+              <h2 class="name">{{ customer.job || '-' }}</h2>
+            </div>
+          </div>
+          <div class="container">
+            <div class="icon"><VIcon color="indigo">mdi-calendar</VIcon></div>
+            <div class="title">
+              <p class="names">{{ $t('Date') }}</p>
+              <h2 class="name">{{ customer.date || '-' }}</h2>
+            </div>
+          </div>
+        </div>
 
-        <VDivider class="my-4" />
+        <VDivider class="my-3" />
 
-        <h3>{{ $t('Product') }}</h3>
+        <!-- Show Sales only if exist -->
+        <template v-if="customer.sales && customer.sales.length">
+          <h3 class="text-lg font-bold text-blue-700 mb-2">🛒 {{ $t('Sales Products') }}</h3>
 
-        <VList
-          v-if="customer.sales && customer.sales.length"
-          dense
-        >
-          <VListItem
-            v-for="sale in customer.sales"
-            :key="sale.id"
+          <VExpansionPanels
+            focusable
+            inset
           >
-            <VListItemContent>
-              <VListItemTitle> {{ $t('Model') }}: {{ sale.model }} </VListItemTitle>
-              <VListItemTitle>{{ $t('Price') }}: ${{ sale.price }}</VListItemTitle>
-              <VListItemTitle>{{ $t('Discount') }}: {{ sale.discount }}%</VListItemTitle>
-              <VListItemTitle>{{ $t('Sub_Total') }}: {{ sale.sub_total }}</VListItemTitle>
-              <VListItemTitle>{{ $t('Deposit') }}: ${{ sale.deposit }}</VListItemTitle>
-              <VListItemTitle>{{ $t('Duration') }}: {{ sale.duration }}</VListItemTitle>
-              <VListItemTitle>{{ $t('Contract Type') }}: {{ sale.contract_type }}</VListItemTitle>
-              <VListItemTitle>{{ $t('Seller') }}: {{ sale.seller }}</VListItemTitle>
-              <VListItemTitle>{{ $t('Warranty') }}: {{ sale.warranty }}</VListItemTitle>
-            </VListItemContent>
-          </VListItem>
-        </VList>
+            <VExpansionPanel
+              v-for="sale in customer.sales"
+              :key="sale.id"
+              class="border rounded-lg mb-2"
+            >
+              <VExpansionPanelTitle>
+                <div class="flex justify-between w-full">
+                  <span
+                    >{{ $t('Model') }}: <strong>{{ sale.model }}</strong></span
+                  >
+                  | {{ $t('Price') }}: <span class="text-green-600">${{ formatNumber(sale.price) }}</span>
+                </div>
+              </VExpansionPanelTitle>
+              <VExpansionPanelText>
+                <VRow dense>
+                  <VCol cols="6"
+                    ><strong>{{ $t('Discount') }}:</strong> {{ sale.discount }}%</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Sub_Total') }}:</strong> ${{ sale.sub_total }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Deposit') }}:</strong> ${{ formatNumber(sale.deposit) }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Duration') }}:</strong> {{ sale.duration }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Contract Type') }}:</strong> {{ sale.contract_type }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Seller') }}:</strong> {{ sale.seller }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Warranty') }}:</strong> {{ sale.warranty }}</VCol
+                  >
+                </VRow>
+              </VExpansionPanelText>
+            </VExpansionPanel>
+          </VExpansionPanels>
+        </template>
 
-        <p v-else>{{ $t('No sales found for this customer.') }}</p>
+        <!-- Show Rentals if no sales exist -->
+        <template v-else-if="customer.rentals && customer.rentals.length">
+          <h3 class="text-lg font-bold text-blue-700 mb-2">🛒 {{ $t('Rental Products') }}</h3>
+
+          <VExpansionPanels
+            focusable
+            inset
+          >
+            <VExpansionPanel
+              v-for="rental in customer.rentals"
+              :key="rental.id"
+              class="border rounded-lg mb-2"
+            >
+              <VExpansionPanelTitle>
+                <div class="flex justify-between w-full">
+                  <span
+                    >{{ $t('Model') }}: <strong>{{ rental.model }}</strong></span
+                  >
+                  | {{ $t('Price') }}: <span class="text-green-600">${{ formatNumber(rental.price) }}</span>
+                </div>
+              </VExpansionPanelTitle>
+              <VExpansionPanelText>
+                <VRow dense>
+                  <VCol cols="6"
+                    ><strong>{{ $t('Deposit') }}:</strong> ${{ formatNumber(rental.deposit) }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Sub_Total') }}:</strong> ${{ rental.sub_total }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Duration') }}:</strong> {{ rental.duration }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Contract Type') }}:</strong> {{ rental.contract_type }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Seller') }}:</strong> {{ rental.seller }}</VCol
+                  >
+                  <VCol cols="6"
+                    ><strong>{{ $t('Warranty') }}:</strong> {{ rental.warranty }}</VCol
+                  >
+                </VRow>
+              </VExpansionPanelText>
+            </VExpansionPanel>
+          </VExpansionPanels>
+        </template>
+
+        <!-- Show "no data" if neither sales nor rentals -->
+        <template v-else>
+          <p class="text-gray-500 italic mt-3 text-center">
+            {{ $t('No data available') }}
+          </p>
+        </template>
       </VCardText>
     </VCard>
   </AppFormDetailTemplate>
 </template>
+
+<route lang="yaml">
+meta:
+  title: Customer Detail
+  layout: default
+  active: 'customer'
+</route>

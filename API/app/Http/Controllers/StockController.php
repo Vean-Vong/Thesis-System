@@ -76,6 +76,32 @@ class StockController extends Controller
         return response()->json($result);
     }
 
+
+    public function report(Request $request)
+    {
+        $result = ['status' => 200];
+
+        try {
+            $query = Stock::select('model', 'quantity', 'date', 'supplier');
+
+            // Apply date filter only if both dates are provided
+            if ($request->start_date && $request->end_date) {
+                $query->whereBetween('date', [$request->start_date, $request->end_date]);
+            }
+
+            $report = $query->orderBy('date', 'asc')->get();
+
+            $result['data'] = $report;
+        } catch (\Throwable $e) {
+            $result['status'] = 500;
+            $result['message'] = $e->getMessage();
+        }
+
+        return response()->json($result);
+    }
+
+
+
     /**
      * Display the specified resource.
      */

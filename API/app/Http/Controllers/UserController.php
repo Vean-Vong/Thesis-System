@@ -46,14 +46,7 @@ class UserController extends Controller
 
         try {
 
-            $school_id = Auth::user()->school_id;
-
-            if ($request->school_id) {
-                $school_id = $request->school_id;
-            }
-
             $user = User::create([
-                'school_id' => $school_id,
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,

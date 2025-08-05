@@ -2,11 +2,86 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
+
+
+    public function combinedReport(Request $request)
+    {
+        $start = $request->input('start_date');
+        $end = $request->input('end_date');
+        $groupBy = $request->input('group_by', 'day'); // day/month/year
+
+        // Define date format for grouping
+        switch ($groupBy) {
+            case 'month':
+                $dateFormat = '%Y-%m';
+                break;
+            case 'year':
+                $dateFormat = '%Y';
+                break;
+            case 'day':
+            default:
+                $dateFormat = '%Y-%m-%d';
+                break;
+        }
+
+        // Fetch sales grouped by date and customer
+        $sales = DB::table('sales')
+            ->selectRaw("DATE_FORMAT(created_at, '{$dateFormat}') as period,
+                         COUNT(*) as total_sales,
+                         SUM(total_price) as total_sales_amount,
+                         customer_id")
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('period', 'customer_id')
+            ->get();
+
+        // Fetch installments grouped by date and customer
+        $installments = DB::table('installments')
+            ->selectRaw("DATE_FORMAT(created_at, '{$dateFormat}') as period,
+                         SUM(monthly_fee) as total_installment_amount,
+                         customer_id")
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('period', 'customer_id')
+            ->get();
+
+        // Index installments by period+customer_id for quick lookup
+        $installmentIndex = [];
+        foreach ($installments as $install) {
+            $key = $install->period . '_' . $install->customer_id;
+            $installmentIndex[$key] = $install->total_installment_amount;
+        }
+
+        // Fetch customer names once
+        $customerIds = collect($sales)->pluck('customer_id')->merge(collect($installments)->pluck('customer_id'))->unique();
+        $customers = Customer::whereIn('id', $customerIds)->pluck('name', 'id');
+
+        $report = [];
+
+        foreach ($sales as $sale) {
+            $key = $sale->period . '_' . $sale->customer_id;
+            $installmentAmount = $installmentIndex[$key] ?? 0;
+
+            $report[] = [
+                'period' => $sale->period,
+                'customer_name' => $customers[$sale->customer_id] ?? 'Unknown',
+                'total_sales' => $sale->total_sales,
+                'total_sales_amount' => (float) $sale->total_sales_amount,
+                'total_installment_amount' => (float) $installmentAmount,
+                'total_amount' => (float) $sale->total_sales_amount + $installmentAmount,
+            ];
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => $report,
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */

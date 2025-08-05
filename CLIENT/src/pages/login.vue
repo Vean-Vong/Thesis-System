@@ -28,8 +28,8 @@ const isPasswordVisible = ref(false)
 const refVForm = ref()
 
 const form = ref({
-  email: 'admin',
-  password: 'Pwd@12345',
+  email: '',
+  password: '',
 })
 
 const onSubmit = () => {

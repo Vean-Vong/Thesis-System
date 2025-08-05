@@ -1,51 +1,52 @@
 <template>
   <VContainer>
     <!-- Header Buttons -->
-    <div class="flex justify-between items-center mb-4">
-      <div></div>
+    <div class="flex justify-between items-center mb-4 Header_Buttons">
       <div class="space-x-2">
         <VBtn
-          color="error"
-          variant="flat"
+          variant="text"
+          class="border border-blue-300 text-blue-800"
           @click="goBack"
         >
           <VIcon start>mdi-arrow-left</VIcon>
           {{ $t('Back') }}
         </VBtn>
+
         <VBtn
           color="primary"
+          class="print"
           variant="flat"
-          @click="printInvoice"
-        >
-          <VIcon start>mdi-printer</VIcon>
-          {{ $t('Print') }}
-        </VBtn>
-        <VBtn
-          color="success"
-          variant="flat"
+          target="_blank"
           @click="saveAsPDF"
         >
-          <VIcon start>mdi-content-save</VIcon>
-          {{ $t('Save as PDF') }}
+          <VIcon start>mdi-download</VIcon>
+          {{ $t('Save') }}
         </VBtn>
       </div>
     </div>
 
     <!-- Invoice Card -->
     <VCard
-      class="pa-6"
+      id="invoiceContent"
       ref="invoiceContent"
+      class="pa-6 cart_PaymentInvoice"
     >
       <!-- Title -->
       <div class="text-center mb-4">
+        <img
+          :src="Logo"
+          alt="Company Logo"
+          style="max-width: 100px; margin: auto"
+        />
         <h1 class="text-3xl font-bold">{{ $t('ហ្គាន់សាន់ ខូអិលធីឌី') }}</h1>
-        <p class="text-gray-500">{{ $t('Gang San Co., Ltd') }}</p>
+        <p class="text-gray-500">{{ $t('GANG SAN CO., LTD') }}</p>
+        <p class="text-gray-500 www">admin@gangsan.com.kh | www.gangsan.com.kh</p>
         <VAlert
           color="primary"
           variant="tonal"
           class="mt-4 text-white"
         >
-          <h2 class="text-">{{ $t('Invoice') }}</h2>
+          <h2>{{ $t('Invoice') }}</h2>
         </VAlert>
       </div>
 
@@ -58,7 +59,7 @@
           indeterminate
           color="primary"
         />
-        <p>{{ $t('Loading...') }}</p>
+        <p>{{ $t('Loading data...') }}</p>
       </div>
 
       <!-- Invoice content -->
@@ -85,11 +86,19 @@
             class="text-right"
           >
             <!-- <h4 class="font-bold mb-2">{{ $t('Sale Information') }}</h4> -->
-            <p>Invoice No. 001</p>
+            <p>
+              <strong>{{ $t('Invoice No.') }}</strong> | {{ sale.invoice_number || 'N/A' }}
+            </p>
             <p>
               <strong>{{ $t('Date') }}:</strong> {{ sale.date }}
             </p>
-            <p>{{ $t('Status') }}: <span class="text-success">Paid</span></p>
+            <p>
+              {{ $t('Status') }} :
+              <span class="text-success">
+                <template v-if="sale.contract_type === 'installment'">{{ $t('Installment') }}</template>
+                <template v-else>{{ $t('Purchase') }}</template>
+              </span>
+            </p>
           </VCol>
         </VRow>
 
@@ -103,7 +112,7 @@
               <th>{{ $t('Price') }}</th>
               <th>{{ $t('Discount') }}</th>
               <th>{{ $t('Seller') }}</th>
-              <th>{{ $t('Contract Type') }}</th>
+              <th>{{ $t('Warranty') }}</th>
               <th>{{ $t('Sub_Total') }}</th>
             </tr>
           </thead>
@@ -118,23 +127,38 @@
               <td>${{ formatNumber(product.pivot?.price) }}</td>
               <td>{{ sale.discount || 0 }}%</td>
               <td>{{ sale.seller || 0 }}</td>
-              <td>{{ sale.contract_type || 0 }}</td>
+              <td>{{ sale.warranty || 0 }}</td>
               <td>${{ calculateSubTotal(product.pivot?.price, product.pivot?.quantity, sale.discount) }}</td>
             </tr>
           </tbody>
         </VTable>
-
+        <VDivider />
         <!-- Total Section -->
         <div class="text-right mt-6">
           <p>
-            <strong>{{ $t('Total Price') }}:</strong>
+            <strong>{{ $t('Sub_Total') }}:</strong>
             ${{ formatNumber(totalPrice) }}
           </p>
+          <p v-if="isInstallment">
+            <strong>{{ $t('Deposit') }}:</strong>
+            ${{ sale.deposit || 0 }}
+          </p>
           <p>
-            <strong>{{ $t('Total Discount') }}:</strong>
+            <strong>{{ $t('Discount') }}:</strong>
             {{ sale.discount || 0 }}%
           </p>
-          <h4 class="font-bold text-lg">{{ $t('Grand Total') }}: ${{ formatNumber(grandTotal) }}</h4>
+          <p v-if="isInstallment">
+            <strong>{{ $t('Install Price') }}:</strong>
+            ${{ formatNumber(installPrice) }}
+          </p>
+
+          <h3 class="font-bold">{{ $t('Grand_Total') }}: ${{ formatNumber(grandTotal) }}</h3>
+          <h4
+            v-if="isInstallment"
+            class="font-bold text-lg mt-2"
+          >
+            {{ $t('totalInstallPrice') }}: ${{ formatNumber(totalInstallPrice) }}
+          </h4>
         </div>
       </div>
     </VCard>
@@ -146,7 +170,9 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
-import html2pdf from 'html2pdf.js'
+import html2pdf from 'html2pdf.js' // eslint-disable-next-line import/no-unresolved
+import Logo from '@/assets/images/logo.png'
+import { VDivider } from 'vuetify/lib/components/index.mjs'
 
 const route = useRoute()
 const router = useRouter()
@@ -164,6 +190,7 @@ async function fetchSale() {
   }
   try {
     const res = await api.get(`/sales/${saleId}`)
+    console.log(res)
     if (res.status === 200) {
       sale.value = res.data.data
     } else {
@@ -179,11 +206,14 @@ async function fetchSale() {
   }
 }
 
-function formatDate(dateStr) {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+const formatDate = date => {
+  if (!date) return ''
+  const d = new Date(date)
+  const day = d.getDate()
+  const month = d.toLocaleString('en-US', { month: 'long' })
+  const year = d.getFullYear()
+  // eslint-disable-next-line newline-before-return
+  return `${day} ${month}, ${year}`
 }
 
 function formatNumber(value) {
@@ -193,18 +223,32 @@ function formatNumber(value) {
 const totalPrice = computed(() => {
   if (!sale.value?.products) return 0
 
-  return sale.value.products.reduce((sum, product) => {
+  const discount = Number(sale.value?.discount) || 0
+
+  const totalBeforeDiscount = sale.value.products.reduce((sum, product) => {
     const price = Number(product.pivot?.price) || 0
     const quantity = Number(product.pivot?.quantity) || 0
 
     return sum + price * quantity
   }, 0)
+
+  return totalBeforeDiscount - (totalBeforeDiscount * discount) / 100
 })
+const isInstallment = computed(() => sale.value?.contract_type === 'installment')
 
 const grandTotal = computed(() => {
-  const discount = Number(sale.value?.discount) || 0
+  const deposit = Number(sale.value?.deposit) || 0
 
-  return totalPrice.value - (totalPrice.value * discount) / 100
+  return totalPrice.value + deposit
+})
+const installPrice = computed(() => {
+  return sale.value?.products?.[0]?.install_price || 0
+})
+const totalInstallPrice = computed(() => {
+  const deposit = Number(sale.value?.deposit) || 0
+  const installPrice = Number(sale.value?.products?.[0]?.install_price) || 0
+
+  return deposit + installPrice
 })
 
 function calculateSubTotal(price, quantity, discount) {
@@ -243,11 +287,40 @@ onMounted(() => {
 
 <style scoped>
 @media print {
-  button,
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Only show the invoice content */
+  #invoiceContent,
+  #invoiceContent * {
+    visibility: visible;
+  }
+
+  /* Make the invoice take the full page */
+  #invoiceContent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Optional: Hide buttons when printing */
   .v-btn,
-  .v-icon {
+  .print,
+  .border {
     display: none !important;
   }
+}
+
+.print {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.www {
+  margin-top: -20px;
+  margin-bottom: -1px;
 }
 </style>
 

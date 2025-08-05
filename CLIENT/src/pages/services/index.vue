@@ -23,6 +23,10 @@ const meta = ref({
   to: 1,
   total: 0,
 })
+const onPageChange = newPage => {
+  meta.value.current_page = newPage
+  initData()
+}
 const formatDate = date => {
   if (!date) return ''
   const d = new Date(date)
@@ -74,12 +78,10 @@ const onSearch = () => {
 
 const headers = [
   {
-    title: t('No'),
+    title: t('#'),
     key: 'no',
     align: 'left',
     sortable: false,
-    minWidth: '100px',
-    maxWidth: '100px',
   },
 
   {
@@ -242,6 +244,21 @@ const confirmDeleteCallback = () => {
       </VRow>
     </template>
   </AppDataTable>
+  <VRow
+    cols="12"
+    sm="6"
+    class="justify-end"
+  >
+    <span class="mt-3"> {{ $t('Items per page') }} {{ meta?.current_page }} {{ $t('នៃ') }} {{ meta?.total }} </span>
+    <VPagination
+      v-model="meta.current_page"
+      :length="meta.last_page"
+      color="primary"
+      circle
+      total-visible="7"
+      @update:model-value="onPageChange"
+    />
+  </VRow>
 </template>
 
 <route lang="yaml">

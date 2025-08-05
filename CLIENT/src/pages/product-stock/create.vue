@@ -10,7 +10,7 @@ const form = reactive({
   data: {
     model: null,
     quantity: null,
-    date: null,
+    date: new Date().toISOString().slice(0, 10),
     colors: null,
     supplier: 'Head Office',
   },

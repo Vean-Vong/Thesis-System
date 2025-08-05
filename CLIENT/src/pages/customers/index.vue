@@ -7,6 +7,7 @@ import router from '@/router'
 import { useAuthStore } from '@/plugins/auth.module'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { useI18n } from 'vue-i18n'
+import { VRow } from 'vuetify/lib/components/index.mjs'
 
 const { t } = useI18n()
 const user = useAuthStore().user
@@ -47,23 +48,33 @@ const initData = () => {
       },
     })
     .then(res => {
-      const response = res.data.data
-      items.value = response.data.map(item => ({
+      const rawItems = res.data.data.data
+      console.log(res)
+      items.value = rawItems.map(item => ({
         ...item,
+        job: item.job || '-',
         date: formatDate(item.date),
       }))
+      meta.value = {
+        ...meta.value,
+        ...res.data.data,
+      }
     })
     .finally(() => {
       loading.value = false
     })
 }
 
+const onPageChange = newPage => {
+  meta.value.current_page = newPage
+  initData()
+}
 onMounted(() => {
   initData()
 })
 
 const headers = [
-  { title: t('No'), key: 'no', align: 'left', sortable: false, minWidth: '100px' },
+  { title: t('#'), key: 'no', align: 'left', sortable: false },
   { title: t('headers.name'), key: 'name', align: 'center', sortable: false, minWidth: '150px', maxWidth: '500px' },
   { title: t('Address'), key: 'address', align: 'center', sortable: false, minWidth: '200px', maxWidth: '500px' },
   { title: t('Phone'), key: 'phone', align: 'center', sortable: false, minWidth: '200px', maxWidth: '500px' },
@@ -169,6 +180,22 @@ const confirmDeleteCallback = () => {
       </VRow>
     </template>
   </AppDataTable>
+
+  <VRow
+    cols="12"
+    sm="6"
+    class="justify-end"
+  >
+    <span class="mt-3"> {{ $t('Items per page') }} {{ meta?.current_page }} {{ $t('នៃ') }} {{ meta?.total }} </span>
+    <VPagination
+      v-model="meta.current_page"
+      :length="meta.last_page"
+      color="primary"
+      circle
+      total-visible="7"
+      @update:model-value="onPageChange"
+    />
+  </VRow>
 </template>
 
 <route lang="yaml">

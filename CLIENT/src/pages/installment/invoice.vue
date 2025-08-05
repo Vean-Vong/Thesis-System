@@ -40,6 +40,7 @@
 
     <!-- Invoice Content -->
     <VCard
+      id="invoiceContent"
       ref="invoiceContent"
       class="pa-6"
     >
@@ -54,11 +55,15 @@
             variant="elevated"
             class="text-center text-white"
           >
-            <h2 class="text-white">{{ $t('Invoice') }}</h2>
+            <h2>{{ $t('Invoice for {month}', { month: $t(`months.${getCurrentMonthKey()}`) }) }}</h2>
           </VAlert>
         </VCol>
         <div class="Title">
           <div class="text-center">
+            <img
+              :src="Logo"
+              alt="Logo"
+            />
             <h2 class="font-bold">{{ $t('ហ្គាន់សាន់ ខូអិលធីឌី') }}</h2>
             <p class="text-gray-500">{{ $t('Gang San Co,Ltd') }}</p>
           </div>
@@ -138,6 +143,8 @@ import { useRoute, useRouter } from 'vue-router'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
 import html2pdf from 'html2pdf.js'
+// eslint-disable-next-line import/no-unresolved
+import Logo from '@/assets/images/logo.png'
 
 const route = useRoute()
 const router = useRouter()
@@ -206,9 +213,55 @@ function goBack() {
 onMounted(() => {
   fetchSale()
 })
+
+const getCurrentMonthKey = () => {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+
+  return months[new Date().getMonth()]
+}
 </script>
 
 <style scoped>
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Only show the invoice content */
+  #invoiceContent,
+  #invoiceContent * {
+    visibility: visible;
+  }
+
+  /* Make the invoice take the full page */
+  #invoiceContent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  /* Optional: Hide buttons when printing */
+  .v-btn,
+  .print,
+  .border {
+    display: none !important;
+  }
+}
 @media print {
   button,
   .v-btn,

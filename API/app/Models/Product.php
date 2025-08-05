@@ -23,7 +23,9 @@ class Product extends Model
         'hot_power_consumption',
         'quantity',
         'images',
-        'price'
+        'price',
+        'rental_price',
+        'install_price',
     ];
 
     protected $casts = [

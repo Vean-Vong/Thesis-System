@@ -1,553 +1,322 @@
+<!-- eslint-disable import/extensions -->
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
-// eslint-disable-next-line import/extensions, import/no-unresolved
-import api from '@/plugins/utilites'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
-// eslint-disable-next-line import/extensions, import/no-unresolved
-import router from '@/router'
 
-// Import images (keep your old images)
 // eslint-disable-next-line import/no-unresolved
-import img1 from '@/assets/images/productImage/s13.png' // eslint-disable-next-line import/no-unresolved
-import img2 from '@/assets/images/productImage/s12.png' // eslint-disable-next-line import/no-unresolved
-import img3 from '@/assets/images/productImage/s11.png' // eslint-disable-next-line import/no-unresolved
-import img4 from '@/assets/images/productImage/s10.png' // eslint-disable-next-line import/no-unresolved
-import img5 from '@/assets/images/productImage/s9.png' // eslint-disable-next-line import/no-unresolved
-import img6 from '@/assets/images/productImage/s2.png' // eslint-disable-next-line import/no-unresolved
-import img7 from '@/assets/images/productImage/s14.png' // eslint-disable-next-line import/no-unresolved
-import img8 from '@/assets/images/productImage/s15.png' // eslint-disable-next-line import/no-unresolved
-import c1 from '@/assets/images/productImage/c1.png' // eslint-disable-next-line import/no-unresolved
-import c2 from '@/assets/images/productImage/c2.png' // eslint-disable-next-line import/no-unresolved
-import c3 from '@/assets/images/productImage/c3.png' // eslint-disable-next-line import/no-unresolved
-import c4 from '@/assets/images/productImage/c4.png' // eslint-disable-next-line import/no-unresolved
-import c5 from '@/assets/images/productImage/c5.png' // eslint-disable-next-line import/no-unresolved
-import u1 from '@/assets/images/productImage/u1.png' // eslint-disable-next-line import/no-unresolved
-import u2 from '@/assets/images/productImage/u2.png' // eslint-disable-next-line import/no-unresolved
-import u3 from '@/assets/images/productImage/u3.png' // eslint-disable-next-line import/no-unresolved
-import u4 from '@/assets/images/productImage/u4.png' // eslint-disable-next-line import/no-unresolved
-import u7 from '@/assets/images/productImage/u7.png' // eslint-disable-next-line import/no-unresolved
-import defaultImage from '@/assets/images/productImage/// eslint-disable-next-line import/no-unresolveddefault.png'
+import api from '@/plugins/utilites'
+// eslint-disable-next-line import/no-unresolved
+import { useAuthStore } from '@/plugins/auth.module'
+import { useI18n } from 'vue-i18n'
 
-// Map model names to images
-const imageMap = {
-  'GP-900': img1,
-  'GP-6000B': img2,
-  'GP-501': img3,
-  'GP-80B': img5,
-  'G-6000C': img7,
-  'GP-50': img8,
-  'GP-700S': c2,
-  'GP-900S': c1,
-  'GP-80S': c4,
-  'GP-500S': c5,
-  'G-2000BA': c3,
-  'AQF-501': u1,
-  'FRO-0110': u2,
-  'UNDER-SINK-CASE': u7,
-  CABINET: u3,
-  MAXTREAM: u4,
+const router = useRouter()
+const user = useAuthStore().user
+const { t } = useI18n()
+
+const items = ref([])
+const search = ref(null)
+const loading = ref(false)
+const syncing = ref(false)
+const delete_item = ref(null)
+const deleting = ref(false)
+const dialog = ref(false)
+
+const meta = ref({
+  current_page: 1,
+  from: 1,
+  last_page: 1,
+  per_page: 15,
+  to: 1,
+  total: 0,
+})
+const onPageChange = newPage => {
+  meta.value.current_page = newPage
+  initData()
 }
 
-// Categorize products
-function determineCategory(model) {
-  if (!model) return 'Other'
-  if (model.startsWith('GP-')) return 'Stand'
-  if (['GP-700S', 'GP-80S', 'G-2000BA'].includes(model.toUpperCase())) {
-    return 'Counter Top'
-  }
-  if (['AQF-501', 'FRO-0110', 'CABINET', 'MAXTREAM', 'UNDER-SINK-CASE'].includes(model.toUpperCase()))
-    return 'Under Sink'
+const pad = n => (n < 10 ? `0${n}` : n)
 
-  return 'Other'
+const formatDate = date => {
+  if (!date) return ''
+  const d = new Date(date)
+
+  return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()}`
 }
 
-// Reactive product list and cart
-const products = ref([])
-const cart = reactive([])
-const selectedCategory = ref('All')
+const initData = () => {
+  loading.value = true
+  api
+    .get('/installments', {
+      params: {
+        page: meta.value.current_page,
+        limit: meta.value.per_page,
+        search: search.value?.trim() || '',
+      },
+    })
+    // eslint-disable-next-line sonarjs/cognitive-complexity
+    .then(res => {
+      const data = res.data.data
+      console.log(data)
+      items.value = (data.data || []).map((item, index) => ({
+        ...item,
+        no: (data.current_page - 1) * data.per_page + index + 1,
+        sale_models: item.sale?.products?.map(p => p.name).join(', ') || item.sale?.model || '',
+        contract_type: item.sale?.contract_type || '',
+        customer_name: item.customer?.name || '',
+        seller_name: item.seller?.username || '', // fetch Username from User
+        sale_seller: item.sale?.seller || '-', // fetch Username from sale
+        duration: item.sale?.duration || '',
+        invoice_number: item.sale?.invoice_number || '',
+        sale_date: formatDate(item.sale_date),
+        deposit: item.deposit ? `$${item.deposit.toLocaleString()}` : '-',
 
-// Form data
-const form = reactive({
-  data: {
-    model: null,
-    price: 0,
-    sub_total: null,
-    deposit: null,
-    date: new Date().toISOString().slice(0, 10),
-    seller: null,
-    contract_type: '',
-    duration: null,
-    warranty: null,
-    discount: 0,
+        monthly_fee: (() => {
+          const products = item.sale?.products || []
+          if (products.length > 0 && products[0].install_price != null) {
+            return `$${Number(products[0].install_price).toLocaleString()}`
+          }
 
-    customer_id: null, // for existing customer
-    customer: {
-      name: '',
-      phone: '',
-      address: '',
-      date: new Date().toISOString().slice(0, 10),
-      job: '',
-    },
+          return '-'
+        })(),
+
+        total_price: item.total_price ? `$${item.total_price.toLocaleString()}` : '-',
+        paid_amount: item.paid_amount ? `$${item.paid_amount.toLocaleString()}` : '-',
+
+        balance: (() => {
+          const products = item.sale?.products || []
+          if (products.length === 0) return '$0'
+
+          const firstInstallPrice = Number(products[0].install_price) || 0
+          const duration = Number(item.sale?.duration) || 36
+          const totalExpected = firstInstallPrice * duration
+          const paid = Number(item.paid_amount) || 0
+          const remaining = totalExpected - paid
+
+          return remaining > 0 ? `$${remaining.toLocaleString()}` : '$0'
+        })(),
+      }))
+
+      meta.value = {
+        current_page: data.current_page,
+        per_page: data.per_page,
+        last_page: data.last_page,
+        total: data.total,
+        from: (data.current_page - 1) * data.per_page + 1,
+        to: (data.current_page - 1) * data.per_page + items.value.length,
+      }
+    })
+    .catch(() => {
+      items.value = []
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+onMounted(() => initData())
+
+const onSearch = () => {
+  meta.value.current_page = 1
+  initData()
+}
+
+const syncInstallments = () => {
+  syncing.value = true
+  api
+    .post('/installments/sync')
+    .then(res => {
+      Swal.fire('✅ Success', res.data.message || 'Installments synced successfully.', 'success')
+      initData()
+    })
+    .catch(err => {
+      Swal.fire('❌ Error', err.response?.data?.message || 'Failed to sync installments.', 'error')
+    })
+    .finally(() => {
+      syncing.value = false
+    })
+}
+const edit = item => {
+  const id = typeof item === 'object' ? item.id : item
+  router.push({ name: 'installment-edit', query: { id } })
+}
+
+const ViewList = item => {
+  const id = typeof item === 'object' ? item.id : item
+  router.push({ name: 'installment-view', query: { id } })
+}
+
+const deleteCallback = item => {
+  dialog.value = true
+  delete_item.value = typeof item === 'object' ? item.id : item
+}
+
+const confirmDeleteCallback = () => {
+  if (!delete_item.value) return
+
+  deleting.value = true
+  api
+    .delete(`/installments/${delete_item.value}`)
+    .then(() => {
+      initData()
+    })
+    .finally(() => {
+      deleting.value = false
+      dialog.value = false
+      delete_item.value = null
+    })
+}
+
+const cancelCallback = () => {
+  dialog.value = false
+  delete_item.value = null
+}
+
+const headers = [
+  { title: t('#'), key: 'no', align: 'left', sortable: false, minWidth: '10px', maxWidth: '30px' },
+
+  {
+    title: t('Invoice No.'),
+    key: 'invoice_number',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
   },
-})
+  {
+    title: t('Customer'),
+    key: 'customer_name',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
+  },
+  { title: t('Deposit'), key: 'deposit', align: 'center', sortable: false, minWidth: '100px', maxWidth: '100px' },
+  { title: t('Date'), key: 'sale_date', align: 'center', sortable: false, minWidth: '130px', maxWidth: '100px' },
 
-const submitting = ref(false)
-const refForm = ref()
+  {
+    title: t('Price'),
+    key: 'total_price',
+    align: 'center',
+    sortable: false,
+    minWidth: '100px',
+    maxWidth: '100px',
+  },
 
-const rules = {
-  required: v => !!v || 'តម្រូវឱ្យបំពេញ',
-}
-
-// Fetch products and assign images
-async function fetchProducts() {
-  try {
-    const res = await api.get('/products?limit=100')
-    if (res.status === 200) {
-      const data = res.data.data.data
-      products.value = data.map(p => {
-        const modelKey = (p.model || '').toUpperCase().replace(/\s+/g, '').replace(/-/g, '')
-        const matchedKey = Object.keys(imageMap).find(key => {
-          const normalizedKey = key.toUpperCase().replace(/\s+/g, '').replace(/-/g, '')
-
-          return modelKey.includes(normalizedKey)
-        })
-
-        return {
-          id: p.id,
-          name: p.model,
-          model: p.model,
-          price: p.price,
-          stock_quantity: p.stock_quantity ?? 0,
-          out_of_stock: !p.stock_quantity || p.stock_quantity <= 0,
-          category: determineCategory(p.model),
-          image: matchedKey ? imageMap[matchedKey] : defaultImage,
-        }
-      })
-    }
-  } catch (err) {
-    console.error('Fetch failed:', err)
-    Swal.fire('Error', 'Failed to load products', 'error')
-  }
-}
-
-// Fetch existing customers
-const customers = ref([])
-async function fetchCustomers() {
-  try {
-    const res = await api.get('/customers')
-    if (res.status === 200) {
-      customers.value = res.data.data
-    }
-  } catch (err) {
-    console.error('Fetch customers failed:', err)
-  }
-}
-
-const filteredProducts = computed(() =>
-  selectedCategory.value === 'All' ? products.value : products.value.filter(p => p.category === selectedCategory.value),
-)
-
-function selectCategory(category) {
-  selectedCategory.value = category
-}
-
-function onProductClick(product) {
-  if (product.out_of_stock) {
-    Swal.fire('អស់ស្តុក', 'ទំនិញអស់ស្តុក', 'warning')
-
-    return
-  }
-  const existing = cart.find(i => i.id === product.id)
-  if (existing) {
-    if (existing.quantity < product.stock_quantity) {
-      existing.quantity++
-    } else {
-      Swal.fire('ស្តុកមិនគ្រប់', 'មិនមានក្នុងស្តុកទៀតទេ។', 'info')
-    }
-  } else {
-    cart.push({ ...product, quantity: 1 })
-    form.data.model = product.model
-    form.data.price = product.price
-  }
-}
-
-function updateQuantity(item) {
-  if (item.quantity < 1) item.quantity = 1
-  if (item.quantity > item.stock_quantity) {
-    Swal.fire('Limit exceeded', 'Quantity exceeds stock.', 'warning')
-    item.quantity = item.stock_quantity
-  }
-}
-
-// Total price
-const totalPrice = computed(() => cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
-
-// Auto-calculate sub_total based on price and discount
-watch([() => form.data.price, () => form.data.discount], ([price, discount]) => {
-  const discountAmount = price * (discount / 100)
-  form.data.sub_total = price - discountAmount
-})
-
-// Submit form
-const onCreate = async () => {
-  if (cart.length === 0) {
-    Swal.fire('កន្រ្តកមិនមានទំនិញ', 'សូមបញ្ចូលទំនិញចូលក្នុងកន្ត្រក', 'warning')
-
-    return
-  }
-
-  const { valid } = await refForm.value?.validate()
-  if (!valid) return
-
-  submitting.value = true
-
-  try {
-    const payload = {
-      ...form.data,
-      products: cart.map(item => ({
-        product_id: item.id,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-    }
-
-    const res = await api.post('/sales', payload)
-
-    if (res.status === 200 || res.data.status === 200) {
-      router.push({
-        name: 'pos-invoice',
-        query: { id: res.data.data.id },
-      })
-    }
-  } catch (err) {
-    console.error(err.response?.data || err)
-    Swal.fire('Error', err.response?.data?.message || 'Failed to create sale', 'error')
-  } finally {
-    submitting.value = false
-  }
-}
-
-onMounted(() => {
-  fetchProducts()
-  fetchCustomers()
-})
+  {
+    title: t('Monthly Fee'),
+    key: 'monthly_fee',
+    align: 'center',
+    sortable: false,
+    minWidth: '120px',
+    maxWidth: '120px',
+  },
+  {
+    title: t('Already Paid'),
+    key: 'paid_amount',
+    align: 'center',
+    sortable: false,
+    minWidth: '120px',
+    maxWidth: '120px',
+  },
+  {
+    title: t('Remaining Balance'),
+    key: 'balance',
+    align: 'center',
+    sortable: false,
+    minWidth: '150px',
+    maxWidth: '500px',
+  },
+  { title: t('Duration'), key: 'duration', align: 'center', sortable: false, minWidth: '100px', maxWidth: '100px' },
+  { title: t('Seller'), key: 'sale_seller', align: 'center', sortable: false, minWidth: '190px', maxWidth: '500px' },
+  { title: t('Actions'), key: 'actions', align: 'center', sortable: false, minWidth: '200px', maxWidth: '500px' },
+]
 </script>
 
 <template>
-  <VCardItem>
-    <VCardTitle class="Sales_department text-primary">
-      {{ $t('Sales_department') }}
-    </VCardTitle>
-    <VForm
-      ref="refForm"
-      @submit.prevent="onCreate"
-    >
+  <ConfirmDialog
+    v-model="dialog"
+    :deleting="deleting"
+    @on-cancel="cancelCallback"
+    @on-confirm-delete="confirmDeleteCallback"
+  />
+
+  <AppDataTable
+    cols="12"
+    create-url="installment-create"
+    :headers="headers"
+    :items="items"
+    :items-per-page="meta.per_page"
+    :items-length="meta.total"
+    :from="meta.from"
+    :current-page="meta.current_page"
+    :to="meta.to"
+    :can-edit="user.can('install_edit')"
+    :can-delete="user.can('install_delete')"
+    :can-create="user.can('install_create')"
+    :can-view="user.can('install_list')"
+    :can-payment="user.can('payments')"
+    btn-submit="Create New"
+    :table-title="t('Installment')"
+    :loading="loading"
+    @on-edit="edit"
+    @on-delete="deleteCallback"
+    @on-view="ViewList"
+  >
+    <template #forFilter>
       <VRow dense>
-        <!-- 🔥 Existing Customer Dropdown -->
         <VCol
-          cols="12"
-          md="6"
-          class="mt-4"
+          cols="8"
+          md="3"
         >
-          <VSelect
-            v-model="form.data.contract_type"
-            :label="$t('Contract Type')"
-            :rules="[rules.required]"
-            :items="['purchase', 'installment']"
-            outlined
-            clearable
+          <AppTextField
+            v-model="search"
+            :placeholder="t('Search')"
+            @keyup.enter="onSearch"
           />
         </VCol>
-
-        <template v-if="form.data.contract_type">
-          <!-- 🔥 New Customer Form if no existing selected -->
-          <VCol
-            v-if="!form.data.customer_id"
-            cols="12"
+        <VCol
+          cols="4"
+          md="2"
+        >
+          <AppSearchButton
+            :title="t('Search')"
+            show-icon
+            @click="onSearch"
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="3"
+          class="text-right"
+        >
+          <VBtn
+            color="primary"
+            :loading="syncing"
+            :disabled="syncing"
+            @click="syncInstallments"
           >
-            <h4 class="mb-2">New Customer Information</h4>
-            <VRow dense>
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="form.data.customer.name"
-                  :label="$t('Customer Name')"
-                  :rules="[rules.required]"
-                  outlined
-                />
-              </VCol>
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="form.data.customer.phone"
-                  :label="$t('Phone')"
-                  outlined
-                />
-              </VCol>
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="form.data.customer.address"
-                  :label="$t('Address')"
-                  :rules="[rules.required]"
-                  outlined
-                />
-              </VCol>
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="form.data.customer.job"
-                  :label="$t('Job')"
-                  :rules="[rules.required]"
-                  outlined
-                />
-              </VCol>
-            </VRow>
-          </VCol>
-          <!-- Sale Form Fields -->
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <VSelect
-              v-model="form.data.model"
-              :label="$t('Model')"
-              :rules="[rules.required]"
-              :items="products.map(p => p.model)"
-              outlined
-              clearable
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <VTextField
-              v-model="form.data.price"
-              :label="$t('Price')"
-              readonly
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.discount"
-              :label="$t('Discount')"
-              :rules="[rules.required]"
-              :items="[0, 5, 10, 20, 30]"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VTextField
-              v-model="form.data.sub_total"
-              :label="$t('Sub_Total')"
-              readonly
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VTextField
-              v-model="form.data.deposit"
-              :label="$t('Deposit')"
-              :rules="[rules.required]"
-              type="number"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VTextField
-              v-model="form.data.date"
-              :rules="[rules.required]"
-              :label="$t('Date')"
-              type="date"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.duration"
-              :label="$t('Duration')"
-              :rules="[rules.required]"
-              :items="['6 ខែ', '12 ខែ', '36 ខែ']"
-              outlined
-            />
-          </VCol>
-
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.seller"
-              :label="$t('Seller')"
-              :rules="[rules.required]"
-              :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin', 'Phoung Chansophol']"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.warranty"
-              :label="$t('Warranty')"
-              :rules="[rules.required]"
-              :items="['ជួសជុល ការថែទាំប្រចាំខែ​ឥតគិតថ្លៃ']"
-              outlined
-              clearable
-            />
-          </VCol>
-        </template>
-        <!-- POS Section -->
-        <VRow>
-          <VCol
-            cols="12"
-            md="8"
-          >
-            <div class="menu mb-4">
-              <VBtn
-                v-for="category in ['All', 'Stand', 'Counter Top', 'Under Sink']"
-                :key="category"
-                :color="selectedCategory === category ? 'primary' : 'grey'"
-                class="mr-2"
-                @click="selectCategory(category)"
-              >
-                {{ category }}
-              </VBtn>
-            </div>
-            <div class="product-list">
-              <div
-                v-for="product in filteredProducts"
-                :key="product.id"
-                class="product-card"
-              >
-                <img
-                  :src="product.image"
-                  :alt="product.name"
-                  class="product-image"
-                />
-                <h4 class="mt-2">
-                  {{ product.name }}
-                </h4>
-                <p class="stock">
-                  <span :class="{ 'text-danger': product.out_of_stock }">
-                    {{ product.out_of_stock ? 'អស់ស្តុក' : product.stock_quantity }}
-                  </span>
-                </p>
-                <p class="price">{{ $t('Price') }}: ${{ product.price }}</p>
-                <VBtn
-                  :disabled="product.out_of_stock"
-                  color="primary"
-                  block
-                  @click="onProductClick(product)"
-                >
-                  ដាក់ចូលកន្ត្រក
-                </VBtn>
-              </div>
-            </div>
-          </VCol>
-
-          <!-- Cart -->
-          <VCol
-            cols="12"
-            md="4"
-          >
-            <div class="cart-summary">
-              <h3>🛒 កន្ត្រកទំនិញ</h3>
-              <div
-                v-if="cart.length === 0"
-                class="empty-cart"
-              >
-                មិនមានទំនិញនៅក្នុងកន្ត្រកទេ
-              </div>
-              <div v-else>
-                <VList>
-                  <VListItem
-                    v-for="item in cart"
-                    :key="item.id"
-                    class="cart-item"
-                  >
-                    <template #prepend>
-                      <VListItemTitle>{{ item.name }}</VListItemTitle>
-                    </template>
-                    <template #append>
-                      <div class="item-controls">
-                        <div class="qty-price">
-                          <input
-                            v-model.number="item.quantity"
-                            type="number"
-                            min="1"
-                            :max="item.stock_quantity"
-                            class="qty-input"
-                            @change="updateQuantity(item)"
-                          />
-                          ${{ (item.price * item.quantity).toFixed(2) }}
-                        </div>
-                        <VBtn
-                          icon
-                          color="red"
-                          @click="cart.splice(cart.indexOf(item), 1)"
-                        >
-                          ❌
-                        </VBtn>
-                      </div>
-                    </template>
-                  </VListItem>
-                </VList>
-                <div class="total-row mt-2">
-                  <strong>Total:</strong>
-                  <strong>${{ totalPrice.toFixed(2) }}</strong>
-                </div>
-
-                <VBtn
-                  block
-                  color="primary"
-                  class="mt-3"
-                  :loading="submitting"
-                  :disabled="cart.length === 0"
-                  @click="onCreate"
-                >
-                  ទូរទាត់ប្រាក់
-                </VBtn>
-              </div>
-            </div>
-          </VCol>
-        </VRow>
+            🔄 {{ t('Sync Installments') }}
+          </VBtn>
+        </VCol>
       </VRow>
-    </VForm>
-  </VCardItem>
+    </template>
+  </AppDataTable>
+  <VRow
+    cols="12"
+    sm="6"
+    class="justify-end"
+  >
+    <span class="mt-3"> {{ $t('Items per page') }} {{ meta?.current_page }} {{ $t('នៃ') }} {{ meta?.total }} </span>
+    <VPagination
+      v-model="meta.current_page"
+      :length="meta.last_page"
+      color="primary"
+      circle
+      total-visible="7"
+      @update:model-value="onPageChange"
+    />
+  </VRow>
 </template>
 
 <route lang="yaml">

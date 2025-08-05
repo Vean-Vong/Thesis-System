@@ -74,13 +74,13 @@ const form = reactive({
     sub_total: null,
     deposit: null,
     date: new Date().toISOString().slice(0, 10),
-    seller: null,
+    seller: '',
     contract_type: '',
-    duration: null,
-    warranty: null,
-    discount: 0,
-
-    customer_id: null, // for existing customer
+    duration: '',
+    warranty: 'ជួសជុល ការថែទាំប្រចាំខែ​ឥតគិតថ្លៃ',
+    discount: null,
+    rental_start_date: new Date().toISOString().slice(0, 10),
+    customer_id: null,
     customer: {
       name: '',
       phone: '',
@@ -90,9 +90,13 @@ const form = reactive({
     },
   },
 })
-
+const loading = ref([])
 const submitting = ref(false)
 const refForm = ref()
+
+// Computed flags for conditional rendering
+const isPurchase = computed(() => form.data.contract_type === 'purchase')
+const isInstallment = computed(() => form.data.contract_type === 'installment')
 
 const rules = {
   required: v => !!v || 'តម្រូវឱ្យបំពេញ',
@@ -100,6 +104,7 @@ const rules = {
 
 // Fetch products and assign images
 async function fetchProducts() {
+  loading.value = true
   try {
     const res = await api.get('/products?limit=100')
     if (res.status === 200) {
@@ -127,11 +132,14 @@ async function fetchProducts() {
   } catch (err) {
     console.error('Fetch failed:', err)
     Swal.fire('Error', 'Failed to load products', 'error')
+  } finally {
+    loading.value = false
   }
 }
 
 // Fetch existing customers
 const customers = ref([])
+
 async function fetchCustomers() {
   try {
     const res = await api.get('/customers')
@@ -183,8 +191,9 @@ function updateQuantity(item) {
 const totalPrice = computed(() => cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
 
 // Auto-calculate sub_total based on price and discount
-watch(cart, () => {
-  const discountAmount = totalPrice.value * (form.data.discount / 100)
+watch([cart, () => form.data.discount], () => {
+  const discountValue = parseFloat(form.data.discount) || 0
+  const discountAmount = totalPrice.value * (discountValue / 100)
   form.data.sub_total = totalPrice.value - discountAmount
 })
 
@@ -204,7 +213,6 @@ const onCreate = async () => {
   try {
     const payload = {
       ...form.data,
-      customer_id: form.data.customer_id || undefined,
       products: cart.map(item => ({
         product_id: item.id,
         quantity: item.quantity,
@@ -212,17 +220,24 @@ const onCreate = async () => {
       })),
     }
 
+    console.log('Payload to send:', payload)
+
     const res = await api.post('/sales', payload)
 
-    if (res.status === 200 || res.data.status === 200) {
+    if ((res.status === 200 || res.data?.status === 200) && res.data?.data?.id) {
+      const saleId = res.data.data.id
       router.push({
         name: 'pos-invoice',
-        query: { id: res.data.data.id },
+        query: { id: saleId },
       })
+    } else {
+      Swal.fire('Error', 'Sale creation succeeded but response data invalid.', 'error')
+      console.error('Unexpected API response data:', res.data)
     }
   } catch (err) {
-    console.error(err.response?.data || err)
-    Swal.fire('Error', err.response?.data?.message || 'Failed to create sale', 'error')
+    console.error('Error in onCreate:', err)
+    const message = err.response?.data?.message || err.message || 'Failed to create sale'
+    Swal.fire('Error', message, 'error')
   } finally {
     submitting.value = false
   }
@@ -261,6 +276,16 @@ onMounted(() => {
                 {{ category }}
               </VBtn>
             </div>
+            <!-- Loading -->
+            <VCard v-if="loading">
+              <VCardText>
+                <VProgressCircular
+                  indeterminate
+                  color="primary"
+                />
+                <span class="ml-3">{{ $t('Loading data...') }}</span>
+              </VCardText>
+            </VCard>
             <div class="product-list">
               <div
                 v-for="product in filteredProducts"
@@ -314,7 +339,9 @@ onMounted(() => {
                     class="cart-item"
                   >
                     <template #prepend>
-                      <VListItemTitle>{{ item.name }}</VListItemTitle>
+                      <VListItemTitle
+                        ><h3>{{ item.name }}</h3></VListItemTitle
+                      >
                     </template>
                     <template #append>
                       <div class="item-controls">
@@ -324,9 +351,10 @@ onMounted(() => {
                             type="number"
                             min="1"
                             :max="item.stock_quantity"
-                            class="qty-input"
+                            class="qty-input w-full p-2 border border-gray-300 rounded"
                             @change="updateQuantity(item)"
                           />
+
                           ${{ (item.price * item.quantity).toFixed(2) }}
                         </div>
                         <VBtn
@@ -341,20 +369,20 @@ onMounted(() => {
                   </VListItem>
                 </VList>
                 <div class="total-row mt-2">
-                  <strong>Total:</strong>
-                  <strong>${{ totalPrice.toFixed(2) }}</strong>
+                  <h4>{{ $t('Sub_Total') }} (Before Discount)</h4>
+                  <h4>${{ totalPrice.toFixed(2) }}</h4>
                 </div>
                 <div class="total-row mt-2">
-                  <strong>Deposit:</strong>
-                  <strong>${{ form.data.deposit || 0 }}</strong>
+                  <h4>{{ $t('Deposit') }}</h4>
+                  <h4>${{ form.data.deposit }}</h4>
                 </div>
                 <div class="total-row mt-2">
-                  <strong>Discount:</strong>
-                  <strong>{{ form.data.discount }}%</strong>
+                  <h4>{{ $t('Discount') }}</h4>
+                  <h4>${{ form.data.discount }}</h4>
                 </div>
-                <div class="total-row mt-2">
-                  <strong>Sub Total:</strong>
-                  <strong>${{ form.data.sub_total?.toFixed(2) || 0 }}</strong>
+                <div class="total-row mt-3">
+                  <h4>{{ $t('Grand_Total') }} (After Discount)</h4>
+                  <h4>${{ form.data.sub_total?.toFixed(2) || 0 }}</h4>
                 </div>
 
                 <VBtn
@@ -374,7 +402,7 @@ onMounted(() => {
         <!-- 🔥 Existing Customer Dropdown -->
         <VCol
           cols="12"
-          md="6"
+          md="2"
           class="mt-4"
         >
           <VSelect
@@ -391,171 +419,179 @@ onMounted(() => {
           <!-- 🔥 New Customer Form if no existing selected -->
           <VCol
             v-if="!form.data.customer_id"
-            cols="12"
+            cols="11"
           >
-            <h4 class="mb-2">New Customer Information</h4>
+            <h4 class="mb-7 mt-4 text-center">{{ $t('Please fill information') }}</h4>
             <VRow dense>
               <VCol
                 cols="12"
-                md="6"
+                md="3"
               >
                 <VTextField
                   v-model="form.data.customer.name"
                   :label="$t('Customer Name')"
                   :rules="[rules.required]"
+                  class="mt-4"
                   outlined
                 />
               </VCol>
               <VCol
                 cols="12"
-                md="6"
+                md="3"
               >
                 <VTextField
                   v-model="form.data.customer.phone"
                   :label="$t('Phone')"
+                  class="mt-4"
                   outlined
                 />
               </VCol>
               <VCol
                 cols="12"
-                md="6"
+                md="3"
               >
                 <VTextField
                   v-model="form.data.customer.address"
                   :label="$t('Address')"
                   :rules="[rules.required]"
+                  class="mt-4"
+                  outlined
+                />
+              </VCol>
+
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VSelect
+                  v-model="form.data.model"
+                  :label="$t('Model')"
+                  :rules="[rules.required]"
+                  :items="products.map(p => p.model)"
+                  outlined
+                  class="mt-4"
+                  clearable
+                />
+              </VCol>
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VTextField
+                  v-model="totalPrice"
+                  :label="$t('Price')"
+                  readonly
+                  class="mt-4"
                   outlined
                 />
               </VCol>
               <VCol
                 cols="12"
-                md="6"
+                md="3"
+              >
+                <VSelect
+                  v-model="form.data.discount"
+                  :label="$t('Discount')"
+                  :rules="[rules.required]"
+                  :items="['0', '5', '10', '20', '30']"
+                  class="mt-4"
+                  outlined
+                />
+              </VCol>
+              <VCol
+                cols="12"
+                md="3"
               >
                 <VTextField
+                  v-model="form.data.sub_total"
+                  :label="$t('Sub_Total')"
+                  readonly
+                  class="mt-4"
+                  outlined
+                />
+              </VCol>
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VSelect
+                  v-model="form.data.warranty"
+                  :label="$t('Warranty')"
+                  :rules="[rules.required]"
+                  :items="['ជួសជុល ការថែទាំប្រចាំខែ​ឥតគិតថ្លៃ']"
+                  outlined
+                  clearable
+                  class="mt-4"
+                />
+              </VCol>
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VTextField
+                  v-if="form.data.contract_type == 'installment'"
                   v-model="form.data.customer.job"
                   :label="$t('Job')"
-                  :rules="[rules.required]"
+                  class="mt-4"
+                  outlined
+                />
+              </VCol>
+
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VSelect
+                  v-if="form.data.contract_type == 'installment'"
+                  v-model="form.data.deposit"
+                  :label="$t('Deposit')"
+                  :items="['100']"
+                  outlined
+                  class="mt-4"
+                  type="number"
+                />
+              </VCol>
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VSelect
+                  v-if="form.data.contract_type == 'installment'"
+                  v-model="form.data.duration"
+                  :label="$t('Duration')"
+                  :items="['0', '6 ខែ', '12 ខែ', '36 ខែ']"
+                  class="mt-4"
                   outlined
                 />
               </VCol>
             </VRow>
-          </VCol>
-          <!-- Sale Form Fields -->
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <VSelect
-              v-model="form.data.model"
-              :label="$t('Model')"
-              :rules="[rules.required]"
-              :items="products.map(p => p.model)"
-              outlined
-              clearable
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <VTextField
-              v-model="form.data.price"
-              :label="$t('Price')"
-              readonly
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.discount"
-              :label="$t('Discount')"
-              :rules="[rules.required]"
-              :items="[0, 5, 10, 20, 30]"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VTextField
-              v-model="form.data.sub_total"
-              :label="$t('Sub_Total')"
-              readonly
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VTextField
-              v-model="form.data.deposit"
-              :label="$t('Deposit')"
-              :rules="[rules.required]"
-              type="number"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VTextField
-              v-model="form.data.date"
-              :rules="[rules.required]"
-              :label="$t('Date')"
-              type="date"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.duration"
-              :label="$t('Duration')"
-              :rules="[rules.required]"
-              :items="['6 ខែ', '12 ខែ', '36 ខែ']"
-              outlined
-            />
-          </VCol>
-
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.seller"
-              :label="$t('Seller')"
-              :rules="[rules.required]"
-              :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin', 'Phoung Chansophol']"
-              outlined
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            md="6"
-            class="mt-4"
-          >
-            <VSelect
-              v-model="form.data.warranty"
-              :label="$t('Warranty')"
-              :rules="[rules.required]"
-              :items="['ជួសជុល ការថែទាំប្រចាំខែ​ឥតគិតថ្លៃ']"
-              outlined
-              clearable
-            />
+            <VRow dense>
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VTextField
+                  v-model="form.data.date"
+                  :rules="[rules.required]"
+                  :label="$t('Date')"
+                  type="date"
+                  class="mt-4"
+                  outlined
+                /> </VCol
+              ><VCol
+                cols="12"
+                md="3"
+              >
+                <VSelect
+                  v-model="form.data.seller"
+                  :label="$t('Seller')"
+                  :rules="[rules.required]"
+                  :items="['Vean Vong', 'Dorn Sann', 'Sarun Oueng', 'Chea Selin', 'Phoung Chansophol']"
+                  outlined
+                  class="mt-4"
+                />
+              </VCol>
+            </VRow>
           </VCol>
         </template>
       </VRow>
@@ -568,5 +604,5 @@ meta:
   title: Sale Create POS
   layout: default
   subject: Auth
-  active: 'pos'
+  active: 'create_sale'
 </route>
