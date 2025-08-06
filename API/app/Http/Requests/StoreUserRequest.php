@@ -26,7 +26,6 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'school_id' => ['sometimes', 'exists:schools,id'],
             "username" => ['required', 'unique:users,username'],
             "email" => ['required', 'email', 'unique:users,email'],
             "photo_path" => ['nullable', 'image'],

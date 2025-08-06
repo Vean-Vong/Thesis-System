@@ -5,6 +5,7 @@ import api from '@/plugins/utilites'
 import Swal from 'sweetalert2'
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import router from '@/router'
+const { t } = useI18n()
 
 // Import product images
 // eslint-disable-next-line import/no-unresolved
@@ -103,6 +104,7 @@ async function fetchProducts() {
   loading.value = true
   try {
     const res = await api.get('/products?limit=100')
+    console.log(res)
     if (res.status === 200) {
       const data = res.data.data.data
       products.value = data.map(p => {
@@ -190,9 +192,33 @@ function selectCategory(category) {
 
 // Total price calculation (using price)
 
+function decreaseProductStock(productId, amount = 1) {
+  const product = products.value.find(p => p.id === productId)
+  if (product) {
+    product.stock_quantity -= amount
+    if (product.stock_quantity < 0) product.stock_quantity = 0
+    product.out_of_stock = product.stock_quantity <= 0
+  }
+}
+
+function increaseProductStock(productId, amount = 1) {
+  const product = products.value.find(p => p.id === productId)
+  if (product) {
+    product.stock_quantity += amount
+    product.out_of_stock = product.stock_quantity <= 0 ? true : false
+  }
+}
+
+function removeFromCart(item) {
+  increaseProductStock(item.id, item.quantity)
+  const index = cart.indexOf(item)
+  if (index > -1) {
+    cart.splice(index, 1)
+  }
+}
+
 function onProductClick(product) {
-  const original = products.value.find(p => p.id === product.id)
-  if (!original || original.stock_quantity <= 0) {
+  if (product.stock_quantity <= 0) {
     Swal.fire('អស់ស្តុក', 'ទំនិញអស់ស្តុក', 'warning')
 
     return
@@ -200,55 +226,50 @@ function onProductClick(product) {
 
   const existing = cart.find(i => i.id === product.id)
   if (existing) {
-    if (original.stock_quantity > 0) {
+    if (product.stock_quantity > 0) {
       existing.quantity++
-      original.stock_quantity--
+      decreaseProductStock(product.id, 1)
     } else {
       Swal.fire('ស្តុកមិនគ្រប់', 'មិនមានក្នុងស្តុកទៀតទេ។', 'info')
     }
   } else {
-    cart.push({
-      ...product,
-      quantity: 1,
-      rental_price: product.rental_price > 0 ? product.rental_price : product.price,
-    })
+    cart.push({ ...product, quantity: 1 })
+    decreaseProductStock(product.id, 1)
     form.data.model = product.model
-    form.data.price = product.rental_price > 0 ? product.rental_price : product.price
-    original.stock_quantity--
+    form.data.price = product.price
   }
-
-  original.out_of_stock = original.stock_quantity <= 0
 }
 
-function updateQuantity(item) {
-  const original = products.value.find(p => p.id === item.id)
-  const cartItem = cart.find(i => i.id === item.id)
-  if (!original || !cartItem) return
+// You must call updateQuantity with old quantity before the change.
+// Example: <input @change="updateQuantity(item, oldQty)" ... />
+function updateQuantity(item, oldQuantity) {
+  if (item.quantity < 1) {
+    item.quantity = 1
+  }
 
-  let newQty = item.quantity
-  if (newQty < 1) newQty = 1
+  const product = products.value.find(p => p.id === item.id)
+  if (!product) return
 
-  const diff = newQty - cartItem.quantity
+  const delta = oldQuantity - item.quantity
 
-  if (diff > 0) {
-    if (original.stock_quantity >= diff) {
-      cartItem.quantity = newQty
-      original.stock_quantity -= diff
-    } else {
+  if (delta > 0) {
+    // Quantity decreased, increase stock
+    product.stock_quantity += delta
+  } else if (delta < 0) {
+    // Quantity increased, decrease stock
+    if (product.stock_quantity + delta < 0) {
       Swal.fire('ស្តុកមិនគ្រប់', 'មិនមានក្នុងស្តុកទៀតទេ។', 'info')
-      item.quantity = cartItem.quantity // reset to last valid
-    }
-  } else if (diff < 0) {
-    cartItem.quantity = newQty
-    original.stock_quantity += Math.abs(diff)
-  }
+      item.quantity = oldQuantity
 
-  original.out_of_stock = original.stock_quantity <= 0
+      return
+    }
+    product.stock_quantity += delta // delta is negative here
+  }
+  product.out_of_stock = product.stock_quantity <= 0
 }
 
-const totalPrice = computed(() =>
-  cart.reduce((sum, item) => sum + (item.rental_price > 0 ? item.rental_price : item.price) * item.quantity, 0),
-)
+// Total price
+const totalPrice = computed(() => cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
 
 // Calculate sub_total with discount
 watch([cart, () => form.data.discount], () => {
@@ -363,14 +384,15 @@ onMounted(() => {
                     {{ product.out_of_stock ? 'អស់ស្តុក' : product.stock_quantity }}
                   </span>
                 </p>
-                <p class="price">{{ $t('Rental Price') }}: ${{ product.rental_price }}</p>
+                <p class="price">${{ product.rental_price }} /{{ t('Month') }}</p>
                 <VBtn
                   :disabled="product.out_of_stock"
                   color="primary"
                   block
                   @click="onProductClick(product)"
                 >
-                  ដាក់ចូលកន្ត្រក
+                  {{ t('Add to Cart') }}
+                  <VIcon end>mdi-cart-plus</VIcon>
                 </VBtn>
               </div>
             </div>
@@ -382,11 +404,15 @@ onMounted(() => {
             md="5"
           >
             <div class="cart-summary">
-              <h3>🛒 កន្ត្រកទំនិញ</h3>
+              <div class="d-flex">
+                <VIcon size="30">mdi-cart</VIcon>
+                <h3 class="ps-3">កន្ត្រកទំនិញ</h3>
+              </div>
               <div
                 v-if="cart.length === 0"
                 class="empty-cart"
               >
+                <VIcon size="50">mdi-cart-off</VIcon>
                 មិនមានទំនិញនៅក្នុងកន្ត្រកទេ
               </div>
               <div v-else>
@@ -405,20 +431,21 @@ onMounted(() => {
                       <div class="item-controls">
                         <div class="qty-price">
                           <input
-                            v-model.number="item.quantity"
+                            :id="'qty-' + item.id"
                             type="number"
                             min="1"
-                            :max="item.stock_quantity"
-                            class="qty-input w-full p-2 border border-gray-300 rounded"
-                            @change="updateQuantity(item)"
+                            :max="item.stock_quantity + item.quantity"
+                            step="1"
+                            v-model.number="item.quantity"
+                            @change="updateQuantity(item, previousQuantity(item))"
+                            class="qty-input"
                           />
-
-                          ${{ (item.price * item.quantity).toFixed(2) }}
+                          <div class="price-display">${{ (item.price * item.quantity).toFixed(2) }}</div>
                         </div>
                         <VBtn
                           icon
                           color="red"
-                          @click="cart.splice(cart.indexOf(item), 1)"
+                          @click="removeFromCart(item)"
                         >
                           ❌
                         </VBtn>
@@ -432,11 +459,11 @@ onMounted(() => {
                 </div>
                 <div class="total-row mt-2">
                   <h4>{{ $t('Deposit') }}</h4>
-                  <h4>${{ form.data.deposit }}</h4>
+                  <h4>${{ form.data.deposit || 0 }}</h4>
                 </div>
                 <div class="total-row mt-2">
                   <h4>{{ $t('Discount') }}</h4>
-                  <h4>${{ form.data.discount }}</h4>
+                  <h4>${{ form.data.discount || 0 }}</h4>
                 </div>
 
                 <div class="total-row mt-3">

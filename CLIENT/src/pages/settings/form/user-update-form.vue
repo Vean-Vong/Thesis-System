@@ -38,14 +38,39 @@ const initForm = async () => {
   form.data.role_id = form.data.roles[0].id
 }
 
+// const onUpdate = async () => {
+//   const { valid } = await refForm.value?.validate()
+//   if (valid) {
+//     submitting.value = true
+//     api
+//       .post('/users-update', form.data)
+//       .then(res => {
+//         if (res.status == 200) router.back()
+//       })
+//       .finally(() => {
+//         submitting.value = false
+//       })
+//   }
+// }
+
 const onUpdate = async () => {
   const { valid } = await refForm.value?.validate()
   if (valid) {
     submitting.value = true
+
+    // Step 1: Clone form data
+    const payload = { ...form.data }
+
+    // Step 2: Remove `photo_path` if it's just a string or null
+    if (typeof payload.photo_path === 'string' || !payload.photo_path) {
+      delete payload.photo_path
+    }
+
+    // Step 3: Submit the cleaned payload
     api
-      .post('/users-update', form.data)
+      .post('/users-update', payload)
       .then(res => {
-        if (res.status == 200) router.back()
+        if (res.status === 200) router.back()
       })
       .finally(() => {
         submitting.value = false
@@ -85,18 +110,6 @@ const onUpdate = async () => {
             :rules="[v => !!v || $t('Email') + $t('required')]"
           />
         </VCol>
-
-        <!-- <VCol cols="12">
-          <AppAutocomplete
-            id="staff_id"
-            v-model="form.data.employee_id"
-            :items="form.options.employees"
-            item-value="id"
-            item-title="name"
-            :label="$t('Select Employee')"
-            chip
-          />
-        </VCol> -->
 
         <VCol cols="12">
           <AppSelect

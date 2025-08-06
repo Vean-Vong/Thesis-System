@@ -1,10 +1,12 @@
 <script setup>
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import api from '@/plugins/utilites'
+import { loadIcon } from '@iconify/vue'
 const refForm = ref()
 const isCurrentPasswordVisible = ref(false)
 const isNewPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
+const loading = ref(false)
 
 const form = ref({
   old_password: null,
@@ -20,15 +22,19 @@ const passwordRequirements = [
 ]
 
 const onUpdate = async () => {
-  const { valid } = await refForm.value?.validate()
-  if (valid) {
-    api.post('/update-password', form.value).then(res => {
+  try {
+    const { valid } = await refForm.value?.validate()
+    if (valid) {
+      loading.value = true
+      const res = await api.post('/update-password', form.value)
       if (res.status == 200) {
         form.value.old_password = null
         form.value.password = null
         form.value.password_confirmation = null
       }
-    })
+    }
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -50,7 +56,7 @@ const onUpdate = async () => {
             <VRow>
               <VCol
                 cols="12"
-                md="6"
+                md="3"
               >
                 <!-- 👉 current password -->
                 <AppTextField
@@ -68,7 +74,7 @@ const onUpdate = async () => {
             <VRow>
               <VCol
                 cols="12"
-                md="6"
+                md="3"
               >
                 <!-- 👉 new password -->
                 <AppTextField
@@ -83,7 +89,7 @@ const onUpdate = async () => {
 
               <VCol
                 cols="12"
-                md="6"
+                md="3"
               >
                 <!-- 👉 confirm password -->
                 <AppTextField
@@ -122,7 +128,11 @@ const onUpdate = async () => {
 
           <!-- 👉 Action Buttons -->
           <VCardText class="d-flex flex-wrap gap-4">
-            <VBtn type="submit">{{ $t('Save changes') }}</VBtn>
+            <VBtn
+              type="submit"
+              :loading="loading"
+              >{{ $t('Save changes') }}</VBtn
+            >
           </VCardText>
         </VForm>
       </VCard>

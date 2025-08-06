@@ -27,7 +27,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'school_id' => ['required', 'exists:schools,id'],
+
             "email" => ['required', 'email', Rule::unique('users', 'email')->ignore(request('id'))],
             "username" => ['required', Rule::unique('users', 'username')->ignore(request('id'))],
             "photo_path" => ['nullable', 'image'],

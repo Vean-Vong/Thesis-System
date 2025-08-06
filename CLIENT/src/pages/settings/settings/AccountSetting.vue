@@ -155,7 +155,7 @@ const getProfileAcc = () => {
           >
             <VRow>
               <VCol
-                md="6"
+                md="3"
                 cols="12"
               >
                 <AppTextField
@@ -165,7 +165,7 @@ const getProfileAcc = () => {
                 />
               </VCol>
               <VCol
-                md="6"
+                md="3"
                 cols="12"
               >
                 <AppTextField
@@ -174,23 +174,6 @@ const getProfileAcc = () => {
                   :rules="[v => !!v || $t('Email') + $t('required')]"
                 />
               </VCol>
-              <!-- <VCol md="6" cols="12">
-                  <AppAutocomplete
-                    label="Organization"
-                    :items="organizations"
-                    item-value="id"
-                    item-title="name"
-                    v-model="accountDataLocal.organization.id"
-                  />
-                </VCol> -->
-              <!-- <VCol md="6" cols="12">
-                  <AppAutocomplete
-                    label="Role"
-                    multiple
-                    :items="roles"
-                    v-model="accountDataLocal.role_name"
-                  />
-                </VCol> -->
             </VRow>
 
             <VCol

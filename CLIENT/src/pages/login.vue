@@ -46,10 +46,7 @@ const logo = ref(
 
 <template>
   <title>Login</title>
-  <VRow
-    no-gutters
-    class="auth-wrapper bg-surface d-flex align-center justify-center vh-100"
-  >
+  <VRow class="auth-wrapper bg-surface d-flex align-center justify-center vh-100">
     <VCol
       cols="12"
       lg="4"

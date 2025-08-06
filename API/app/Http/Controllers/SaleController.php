@@ -353,6 +353,24 @@ class SaleController extends Controller
                 ]);
             }
 
+            // 🔥 Deduct stock quantities from related stocks
+            foreach ($request->input('products') as $item) {
+                $product = Product::with('stocks')->find($item['product_id']);
+                $remainingQty = $item['quantity'];
+
+                if ($product && $product->stocks->isNotEmpty()) {
+                    foreach ($product->stocks as $stock) {
+                        if ($remainingQty <= 0) break;
+
+                        $deduct = min($stock->quantity, $remainingQty);
+                        $stock->quantity -= $deduct;
+                        $stock->save();
+
+                        $remainingQty -= $deduct;
+                    }
+                }
+            }
+
             // Automatically create Installment if contract_type is installment
             if ($sale->contract_type === 'installment') {
                 // Calculate monthly fee

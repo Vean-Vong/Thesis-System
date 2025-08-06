@@ -133,9 +133,16 @@ p {
 }
 
 .empty-cart {
-  text-align: center;
-  color: #999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  font-size: 0.8rem;
+  padding: 180px 0;
+  gap: 10px;
 }
+
 .item-controls {
   display: flex;
   align-items: center;
@@ -261,4 +268,23 @@ p {
   height: 100% !important;
 }
 
+.qty-input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
 
+.qty-input:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 3px #1976d2;
+}
+
+.price-display {
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-width: 80px;
+  text-align: right;
+  color: #4f4f51;
+}

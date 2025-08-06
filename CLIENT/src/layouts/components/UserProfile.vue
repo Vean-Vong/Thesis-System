@@ -3,12 +3,18 @@
 import { useAuthStore } from '@/plugins/auth.module'
 import avatar1 from '@images/avatars/avatar-1.png'
 import { onMounted } from 'vue'
+// eslint-disable-next-line import/extensions
 import constant from '@/constants'
-const user = useAuthStore().user
-const onLogout = () => {
-  useAuthStore().logout()
-}
 
+// Get the store
+const authStore = useAuthStore()
+
+// Make user reactive
+const user = computed(() => authStore.user)
+
+const onLogout = () => {
+  authStore.logout()
+}
 const user_photo_path = computed(() => {
   return `${constant.storagePath}${useAuthStore()._user.photo_path}`
 })

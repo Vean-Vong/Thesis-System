@@ -59,10 +59,7 @@ class User extends Authenticatable
         return $query->where('school_id', auth()->user()->school_id);
     }
 
-    public function school()
-    {
-        return $this->belongsTo(School::class);
-    }
+
 
     public function roles()
     {
