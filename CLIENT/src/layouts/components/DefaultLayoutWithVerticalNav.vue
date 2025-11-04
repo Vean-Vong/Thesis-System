@@ -17,6 +17,8 @@ import { useAuthStore } from '@/plugins/auth.module'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 import router from '@/router'
+// eslint-disable-next-line import/no-unresolved
+import TheCustomizer from '@/@core/components/TheCustomizer.vue'
 
 const setting = useAuthStore().setting
 
@@ -80,7 +82,7 @@ const { width: windowWidth } = useWindowSize()
     </template>
 
     <!-- 👉 Customizer -->
-    <!-- <TheCustomizer /> -->
+    <TheCustomizer />
 
     <!-- 👉 Loading -->
     <!-- <AppLoading /> -->

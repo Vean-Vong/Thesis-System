@@ -1,22 +1,16 @@
 <script setup>
-import { computed, defineProps, useAttrs } from 'vue';
+import { computed, defineProps, useAttrs } from 'vue'
 
-const { modelValue } = defineProps([
-  "modelValue",
-]);
+const { modelValue } = defineProps(['modelValue'])
 
 const elementId = computed(() => {
-  const attrs = useAttrs();
-  const _elementIdToken = attrs.id || attrs.label;
-  return _elementIdToken
-    ? `app-text-field-${_elementIdToken}-${Math.random().toString(36).slice(2, 7)}`
-    : undefined;
-});
+  const attrs = useAttrs()
+  const _elementIdToken = attrs.id || attrs.label
+  return _elementIdToken ? `app-text-field-${_elementIdToken}-${Math.random().toString(36).slice(2, 7)}` : undefined
+})
 
-const label = computed(() => useAttrs().label);
-const required = computed(() => useAttrs().required);
-
-
+const label = computed(() => useAttrs().label)
+const required = computed(() => useAttrs().required)
 
 // const formatDate = (date) => {
 //   if (date) {
@@ -26,20 +20,20 @@ const required = computed(() => useAttrs().required);
 //   }
 //   return null;
 // };
-const emit = defineEmits("update:modelValue");
+const emit = defineEmits('update:modelValue')
 
 const selectedDate = ref(modelValue)
-const isMenuOpen = ref(false);
+const isMenuOpen = ref(false)
 const formattedDate = computed(() => {
-  return selectedDate.value ? selectedDate.value.toLocaleDateString("en") : "";
-});
+  return selectedDate.value ? selectedDate.value.toLocaleDateString('en') : ''
+})
 
-watch(modelValue, (newDate) => {
-  selectedDate.value = newDate;
-});
-watch(selectedDate, (newDate) => {
-  emit("update:modelValue", newDate);
-});
+watch(modelValue, newDate => {
+  selectedDate.value = newDate
+})
+watch(selectedDate, newDate => {
+  emit('update:modelValue', newDate)
+})
 </script>
 
 <template>
@@ -59,7 +53,10 @@ watch(selectedDate, (newDate) => {
     </template>
     <VDatePicker v-model="date"></VDatePicker>
   </VMenu> -->
-  <v-menu v-model="isMenuOpen" :close-on-content-click="false">
+  <v-menu
+    v-model="isMenuOpen"
+    :close-on-content-click="false"
+  >
     <template v-slot:activator="{ props }">
       <v-text-field
         :model-value="formattedDate"
@@ -69,7 +66,12 @@ watch(selectedDate, (newDate) => {
         hide-details
       ></v-text-field>
     </template>
-    <v-date-picker v-model="selectedDate" hide-actions title="" :color="color">
+    <v-date-picker
+      v-model="selectedDate"
+      hide-actions
+      title=""
+      :color="color"
+    >
       <template v-slot:header></template>
     </v-date-picker>
   </v-menu>
